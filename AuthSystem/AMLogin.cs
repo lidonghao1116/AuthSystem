@@ -6,10 +6,10 @@ using System.Text;
 namespace AuthSystem.AuthModel
 {
     /// <summary>
-    /// 登陆检测类的Model
+    /// 本地登陆检测类的Model
     /// </summary>
-    /// 
-    public class AMLogin
+    #region 本地登陆检测类的Model
+    public class AMLogin : AMBase
     {
         private string _Name=""; //登陆用户名---------------------------
         public string Name
@@ -47,6 +47,6 @@ namespace AuthSystem.AuthModel
             get { return _nameCanEmail; }
             set { _nameCanEmail = value; }
         }
-
     }
+    #endregion
 }
