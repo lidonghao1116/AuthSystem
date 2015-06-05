@@ -5,7 +5,8 @@ using System.Text;
 
 namespace DataDao
 {
-    public class Class1
+    public class BaseDao
     {
+        //默认DAO
     }
 }

@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace AuthSystem.AuthForm
 {
     /// <summary>
-    /// 带有权限认证的WinForm 
+    /// 带有权限认证的WinForm ，其它窗口都要从这个窗口继承
     /// </summary>
     public class AFMainForm:AFBase
     {

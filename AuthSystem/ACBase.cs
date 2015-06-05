@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 
-namespace AuthSystem.AuthForm
+namespace AuthSystem.AuthClass
 {
     /// <summary>
-    /// 基础AuthForm类
+    /// 系统中使用的其它类型与方法
     /// </summary>
-    public class AFBase : Form
+    public class ACBase
     {
         //TODO
     }

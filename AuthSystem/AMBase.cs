@@ -10,5 +10,6 @@ namespace AuthSystem.AuthModel
     /// </summary>
     public class AMBase
     {
+        //TODO
     }
 }
