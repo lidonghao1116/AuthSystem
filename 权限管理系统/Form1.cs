@@ -22,7 +22,7 @@ namespace 权限管理系统
             am.Name = textBox1.Text;
             am.PassWord = textBox2.Text;
             AuthSystem.AuthDao.ADLogin al = new AuthSystem.AuthDao.ADLogin();
-            //MessageBox.Show(al.CanLogin(am));
+            MessageBox.Show(al.CanLogin(am));
         }
     }
 }
