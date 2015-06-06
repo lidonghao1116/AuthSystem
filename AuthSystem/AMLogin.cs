@@ -8,8 +8,9 @@ namespace AuthSystem.AuthModel
     /// <summary>
     /// 本地登陆检测类的Model
     /// </summary>
+    /// 
     #region 本地登陆检测类的Model
-    public class AMLogin : AMBase
+    public class AMLogin
     {
         private string _Name=""; //登陆用户名---------------------------
         public string Name
@@ -41,12 +42,7 @@ namespace AuthSystem.AuthModel
             get { return _Other; }
             set { _Other = value; }
         }
-        private bool _nameCanEmail = false;//用户名是否可以有@和.符号---------
-        public bool nameCanEmail
-        {
-            get { return _nameCanEmail; }
-            set { _nameCanEmail = value; }
-        }
+
     }
     #endregion
 }
