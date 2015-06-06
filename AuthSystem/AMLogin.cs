@@ -10,7 +10,7 @@ namespace AuthSystem.AuthModel
     /// </summary>
     /// 
     [NonSerialized]
-    public class AMLogin
+    public class AMLogin:AMBase
     {
         private string _Name=""; //登陆用户名----------------------
         public string Name
@@ -42,6 +42,5 @@ namespace AuthSystem.AuthModel
             get { return _Other; }
             set { _Other = value; }
         }
-
     }
 }

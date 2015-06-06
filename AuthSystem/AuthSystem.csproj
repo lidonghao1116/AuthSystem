@@ -40,9 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ADLogin.cs" />
     <Compile Include="ADBase.cs" />
-    <Compile Include="AFBase.cs" />
-    <Compile Include="AFMainForm.cs" />
+    <Compile Include="AFBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AFMainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AMReData.cs" />
     <Compile Include="AMBase.cs" />
     <Compile Include="AMLogin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
