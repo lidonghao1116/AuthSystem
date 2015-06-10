@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace 权限管理系统.Properties {
+namespace AuthSystem.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace 权限管理系统.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("权限管理系统.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AuthSystem.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -63,9 +63,9 @@ namespace 权限管理系统.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static System.Drawing.Bitmap bg_0018 {
+        internal static System.Drawing.Bitmap bg_0007 {
             get {
-                object obj = ResourceManager.GetObject("bg-0018", resourceCulture);
+                object obj = ResourceManager.GetObject("bg-0007", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace 权限管理系统.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static System.Drawing.Bitmap bg_0068 {
+        internal static System.Drawing.Bitmap bg_0271 {
             get {
-                object obj = ResourceManager.GetObject("bg-0068", resourceCulture);
+                object obj = ResourceManager.GetObject("bg-0271", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

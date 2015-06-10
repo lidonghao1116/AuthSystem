@@ -6,23 +6,24 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
+using AuthSystem.AuthForm;
 namespace 权限管理系统
 {
-    public partial class Form1 : Form
+    public partial class FormMain : AFLogin
     {
-        public Form1()
+        public FormMain()
         {
             InitializeComponent();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            AuthSystem.AuthModel.AMLogin am = new AuthSystem.AuthModel.AMLogin();
-            am.Name = textBox1.Text;
-            am.PassWord = textBox2.Text;
-            AuthSystem.AuthDao.ADLogin al = new AuthSystem.AuthDao.ADLogin();
-            MessageBox.Show(al.CanLogin(am));
+
+            FormMainMain fmm = new FormMainMain();
+            this.Hide();
+            fmm.ShowDialog();
+            Application.Exit();
+            
         }
     }
 }
