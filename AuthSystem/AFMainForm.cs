@@ -30,9 +30,9 @@ namespace AuthSystem.AuthForm
             // panel_zhong
             // 
             this.panel_zhong.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_zhong.Location = new System.Drawing.Point(0, 82);
+            this.panel_zhong.Location = new System.Drawing.Point(0, 25);
             this.panel_zhong.Name = "panel_zhong";
-            this.panel_zhong.Size = new System.Drawing.Size(1019, 478);
+            this.panel_zhong.Size = new System.Drawing.Size(1019, 535);
             this.panel_zhong.TabIndex = 1;
             // 
             // panel_xia
@@ -46,12 +46,12 @@ namespace AuthSystem.AuthForm
             // 
             // panel_shang
             // 
-            this.panel_shang.BackgroundImage = global::AuthSystem.Properties.Resources.bg_0271;
+            this.panel_shang.BackgroundImage = global::AuthSystem.Properties.Resources.bg_0068;
             this.panel_shang.Controls.Add(this.bt_Close);
             this.panel_shang.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_shang.Location = new System.Drawing.Point(0, 0);
             this.panel_shang.Name = "panel_shang";
-            this.panel_shang.Size = new System.Drawing.Size(1019, 82);
+            this.panel_shang.Size = new System.Drawing.Size(1019, 25);
             this.panel_shang.TabIndex = 0;
             this.panel_shang.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.AFMainForm_DBClick);
             this.panel_shang.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AFMainForm_MouseDown);
