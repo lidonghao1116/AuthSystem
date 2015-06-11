@@ -10,7 +10,7 @@ using AuthSystem.AuthForm;
 using System.Data.SqlClient;
 namespace 权限管理系统
 {
-    public partial class FormMain : AFLogin
+    public partial class FormMain : AFMainForm
     {
         public FormMain()
         {

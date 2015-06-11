@@ -11,6 +11,9 @@ namespace AuthSystem.AuthForm
     /// </summary>
     public class AFBase : Form
     {
-        //TODO
+        public AFBase()
+        {
+            //todo
+        }
     }
 }

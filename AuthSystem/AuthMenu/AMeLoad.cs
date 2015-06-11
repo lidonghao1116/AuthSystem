@@ -12,7 +12,7 @@ namespace AuthSystem.AuthMenu
     {
         public AMeLoad()
         {
-            //TODO
+            
         }
     }
 }

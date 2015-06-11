@@ -8,7 +8,7 @@ namespace AuthSystem.AuthMenu
     /// <summary>
     /// 基类：根据权限加载菜单
     /// </summary>
-    class AMeBase
+    public class AMeBase
     {
     }
 }

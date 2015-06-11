@@ -13,60 +13,53 @@ namespace AuthSystem.AuthForm
     /// </summary>
     public class AFMainForm:AFBase
     {
+        private MenuStrip MainMenu;
         #region 1-------初始化------
         public AFMainForm()
         {
             InitializeComponent();
         }
-        private void InitializeComponent()
+        public AFMainForm(AuthModel.AMLogin aml)
         {
+            InitializeComponent();  //初始化界面
+            InitMenu(aml);          //初始化菜单
+        }
+        private void InitializeComponent() //初始化界面
+        {
+            this.MainMenu = new System.Windows.Forms.MenuStrip();
             this.SuspendLayout();
+            // 
+            // MainMenu
+            // 
+            this.MainMenu.Location = new System.Drawing.Point(0, 0);
+            this.MainMenu.Name = "MainMenu";
+            this.MainMenu.Size = new System.Drawing.Size(1019, 24);
+            this.MainMenu.TabIndex = 0;
+            this.MainMenu.Text = "menuStrip1";
             // 
             // AFMainForm
             // 
             this.ClientSize = new System.Drawing.Size(1019, 560);
+            this.Controls.Add(this.MainMenu);
             this.DoubleBuffered = true;
+            this.MainMenuStrip = this.MainMenu;
             this.Name = "AFMainForm";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
-        #endregion
-        #region 2-------本程序中用到的API函数
-        [DllImport("user32.dll")]
-        public static extern bool ReleaseCapture();  //用来释放被当前线程中某个窗口捕获的光标
-
-        [DllImport("user32.dll")]
-        public static extern bool SendMessage(IntPtr hwdn, int wMsg, int mParam, int lParam);//向指定的窗体发送Windows消息
-        #endregion
-        #region 3-------本程序中需要声明的变量
-        public const int WM_SYSCOMMAND = 0x0112;
-        public const int SC_MOVE = 0xF010;
-        public const int HTCAPTION = 0x0002;
-        #endregion
-
-        private void AFMainForm_MouseDown(object sender, MouseEventArgs e)  //按住移动窗口
+        private void InitMenu(AuthModel.AMLogin aml) //初始化菜单
         {
-            ReleaseCapture();
-            SendMessage(this.Handle, WM_SYSCOMMAND, SC_MOVE + HTCAPTION, 0);
+            
         }
+        #endregion
 
-
-        private void AFMainForm_DBClick(object sender, MouseEventArgs e)
-        {
-            if (this.WindowState == FormWindowState.Maximized)
-            {
-                this.WindowState = FormWindowState.Normal;
-            }
-            else if (this.WindowState == FormWindowState.Normal)
-            {
-                this.WindowState = FormWindowState.Maximized;
-            }
-        }
-
+        #region END-------关闭程序
         private void bt_Close_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+        #endregion
 
     }
 }

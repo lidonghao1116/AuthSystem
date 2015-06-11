@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using AuthSystem.AuthForm;
 namespace 权限管理系统
 {
-    public partial class FormMainMain : AFMainForm
+    public partial class FormMainMain : AFBase
     {
         public FormMainMain()
         {
