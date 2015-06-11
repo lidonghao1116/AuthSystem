@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="ACJianChe.cs" />
     <Compile Include="ACBase.cs" />
+    <Compile Include="ADSqlConf.cs" />
     <Compile Include="ADLogin.cs" />
     <Compile Include="ADBase.cs" />
     <Compile Include="AFBase.cs">
@@ -54,6 +55,7 @@
     <Compile Include="AFMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="AMSqlConf.cs" />
     <Compile Include="AMBase.cs" />
     <Compile Include="AMLogin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

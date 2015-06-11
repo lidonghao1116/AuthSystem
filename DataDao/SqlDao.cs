@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace AuthSystem.AuthModel
+namespace DataDao
 {
     /// <summary>
-    /// 基础AuthModel类
+    /// 连接数据库类
     /// </summary>
-    public class AMBase
+    public class SqlDao:BaseDao
     {
-        public AMBase()
+        public SqlDao()
         {
-            //TODO:初始化
+            //TODO：构造函数
         }
+
     }
 }

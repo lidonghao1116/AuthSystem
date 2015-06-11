@@ -39,8 +39,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfDao.cs" />
+    <Compile Include="LoginDao.cs" />
     <Compile Include="BaseDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlDao.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AuthSystem\AuthSystem.csproj">
+      <Project>{db8a784c-ee3d-4992-8ebe-913fc5bd8a5d}</Project>
+      <Name>AuthSystem</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
