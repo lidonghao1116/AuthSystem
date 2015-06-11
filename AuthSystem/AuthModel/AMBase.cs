@@ -8,6 +8,7 @@ namespace AuthSystem.AuthModel
     /// <summary>
     /// 基础AuthModel类
     /// </summary>
+    [Serializable]
     public class AMBase
     {
         public AMBase()

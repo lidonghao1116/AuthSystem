@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using AuthSystem.AuthForm;
+using System.Data.SqlClient;
 namespace 权限管理系统
 {
     public partial class FormMain : AFLogin
@@ -18,12 +19,9 @@ namespace 权限管理系统
 
         private void button1_Click(object sender, EventArgs e)
         {
-
-            FormMainMain fmm = new FormMainMain();
-            this.Hide();
-            fmm.ShowDialog();
-            Application.Exit();
-            
+            AuthSystem.AuthModel.AMSqlConf amsc = new AuthSystem.AuthModel.AMSqlConf();
+            AuthSystem.AuthDao.ADSqlConf.LoadSqlConf(out amsc);
+            MessageBox.Show(amsc.ConnString);
         }
     }
 }

@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data.SqlClient;
 
 namespace AuthSystem.AuthDao
 {
     /// <summary>
-    /// 登陆AuthDao类
+    /// 基础AuthDao类
+    /// 只从Model取数据，不直接与数据库连接
     /// </summary>
-    public class ADLogin:ADBase
+    public class ADBase
     {
-        public string CanLogin(AuthModel.AMLogin Users) //是否能够登陆
+        public ADBase()
         {
-            
-            return "a";
+            //TODO 
         }
     }
 }

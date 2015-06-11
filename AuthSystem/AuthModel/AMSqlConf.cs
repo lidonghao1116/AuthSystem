@@ -8,8 +8,10 @@ namespace AuthSystem.AuthModel
     /// <summary>
     /// 配置文件Model类
     /// </summary>
+    [Serializable]
     public class AMSqlConf:AMBase
     {
+        
         public AMSqlConf()
         {
             //TODO：构造函数
