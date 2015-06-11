@@ -21,7 +21,6 @@ namespace 权限管理系统
         {
             AuthSystem.AuthModel.AMSqlConf amsc = new AuthSystem.AuthModel.AMSqlConf();
             AuthSystem.AuthDao.ADSqlConf.LoadSqlConf(out amsc);
-            MessageBox.Show(amsc.ConnString);
         }
     }
 }

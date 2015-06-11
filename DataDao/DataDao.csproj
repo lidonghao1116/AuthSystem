@@ -39,7 +39,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfDao.cs" />
     <Compile Include="LoginDao.cs" />
     <Compile Include="BaseDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
