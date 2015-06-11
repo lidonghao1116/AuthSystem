@@ -53,6 +53,8 @@
     <Compile Include="AuthForm\AFMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="AuthMenu\AMeBase.cs" />
+    <Compile Include="AuthMenu\AMeLoad.cs" />
     <Compile Include="AuthModel\AMSqlConf.cs" />
     <Compile Include="AuthModel\AMBase.cs" />
     <Compile Include="AuthModel\AMLogin.cs" />

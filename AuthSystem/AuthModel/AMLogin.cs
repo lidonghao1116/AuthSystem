@@ -69,6 +69,14 @@ namespace AuthSystem.AuthModel
             get { return _nameCanEmail; }
             set { _nameCanEmail = value; }
         }
-
+        private bool _AMLogins = false;//指示本对象是否是有效状态------------
+        /// <summary>
+        /// 指示本对象是否是有效状态
+        /// </summary>
+        public bool AMLogins 
+        { 
+            get { return _AMLogins; }
+            set { _AMLogins = value; }
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data.SqlClient;
 using AuthSystem.AuthModel;
 
 namespace DataDao
@@ -22,10 +23,47 @@ namespace DataDao
         public static bool ReadLoginMsg(string Name, out AMLogin AML)
         {
             //构造要保存的AMLogin
-            AMLogin aml = new AMLogin();
+            AMLogin aml = new AMLogin();            //登陆数据对象
+            aml.AMLogins = false;                   //指示本对象为无效对象
             aml.nameCanEmail = false;               //是否可以用EMAIL做用户名
             aml.Name = Name;                        //保存用户名
             //连接数据库
+            AMSqlConf amsc = new AMSqlConf();       //数据库配置对象
+            if (AuthSystem.AuthDao.ADSqlConf.LoadSqlConf(out amsc)) //读取配置成功
+            {
+                SqlConnection sqlConn = new SqlConnection(amsc.ConnString);
+                SqlCommand sqlComm = new SqlCommand();
+                SqlDataReader sqlDR;
+                string CommText = @"Select * from AuthUser where name='" + Name+"'";
+                try
+                {
+                    sqlConn.Open();
+                    sqlComm.CommandText = CommText;
+                    sqlComm.Connection = sqlConn;
+                    sqlDR = sqlComm.ExecuteReader();
+                    while (sqlDR.Read())
+                    {
+                        aml.AMLogins = true; //对象有效
+                        aml.PassWord = sqlDR["password"].ToString(); //取密码
+                    }
+                    AML = aml;
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    AML = aml;
+                    return false;
+                    throw e;
+                }
+                finally
+                {
+                    if (sqlConn.State == System.Data.ConnectionState.Open)
+                    {
+                        sqlConn.Close();
+                    }
+                }
+            }
+
             AML = aml;
             return true;
         }
