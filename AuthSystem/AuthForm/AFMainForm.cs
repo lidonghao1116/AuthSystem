@@ -13,53 +13,65 @@ namespace AuthSystem.AuthForm
     /// </summary>
     public class AFMainForm:AFBase
     {
-        private MenuStrip MainMenu;
+        #region 0-------定义公共变量
+        #endregion
         #region 1-------初始化------
         public AFMainForm()
         {
             InitializeComponent();
         }
-        public AFMainForm(AuthModel.AMLogin aml)
+        /// <summary>
+        /// 初始化界面
+        /// </summary>
+        private void InitializeComponent() 
         {
-            InitializeComponent();  //初始化界面
-            InitMenu(aml);          //初始化菜单
-        }
-        private void InitializeComponent() //初始化界面
-        {
-            this.MainMenu = new System.Windows.Forms.MenuStrip();
-            this.SuspendLayout();
-            // 
-            // MainMenu
-            // 
-            this.MainMenu.Location = new System.Drawing.Point(0, 0);
-            this.MainMenu.Name = "MainMenu";
-            this.MainMenu.Size = new System.Drawing.Size(1019, 24);
-            this.MainMenu.TabIndex = 0;
-            this.MainMenu.Text = "menuStrip1";
-            // 
-            // AFMainForm
-            // 
-            this.ClientSize = new System.Drawing.Size(1019, 560);
-            this.Controls.Add(this.MainMenu);
-            this.DoubleBuffered = true;
-            this.MainMenuStrip = this.MainMenu;
-            this.Name = "AFMainForm";
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
-        }
-        private void InitMenu(AuthModel.AMLogin aml) //初始化菜单
-        {
-            
         }
         #endregion
-
-        #region END-------关闭程序
-        private void bt_Close_Click(object sender, EventArgs e)
+        
+        #region 2-------实现按权限加载菜单
+        /// <summary>
+        /// 加载自动根据用户权限显示的菜单
+        /// </summary>
+        /// <param name="AML">用户AMLogin数据对象</param>
+        /// <param name="MS">全部的菜单MenuStrip对象</param>
+        /// 不完善，还要一个数据库连接对象
+        /// <returns></returns>
+        public bool AuthMenuShow(AuthModel.AMLogin AML, MenuStrip MS)
         {
-            this.Close();
+            if (MS.Name != "MainMenu")  //检测主菜单名字
+            {
+                //return false;
+                throw new Exception("权限菜单名必须为“MainMenu”");
+            }
+            else
+            {
+                this.Controls.RemoveByKey("MainMenu");
+                this.Controls.Add(MS);
+                foreach (ToolStripItem x in MS.Items) //所有菜单隐藏
+                {
+                    x.Visible = false;
+                    if (x.GetType().Name == "ToolStripMenuItem")
+                    {
+                        ToolStripMenuItem tsmi = x as ToolStripMenuItem;
+                        foreach (ToolStripItem y in tsmi.DropDownItems)
+                        {
+                            y.Visible = false;
+                        }
+                    }
+                    else if (x.GetType().Name=="ToolStripComboBox")
+                    {
+                        ToolStripComboBox tscb = x as ToolStripComboBox;
+                        tscb.Items.Clear();
+                    }
+                    else if (x.GetType().Name == "ToolStripTextBox")
+                    {
+                        
+                    }
+                }
+                //根据AML显示有权限的菜单
+                return true;
+            }
         }
         #endregion
-
     }
 }

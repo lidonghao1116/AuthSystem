@@ -8,7 +8,6 @@ namespace AuthSystem.AuthModel
     /// <summary>
     /// 登陆检测类的Model
     /// </summary>
-    /// 
     public class AMLogin:AMBase
     {
         public AMLogin()
