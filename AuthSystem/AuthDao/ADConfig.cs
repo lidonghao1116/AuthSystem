@@ -9,11 +9,11 @@ using System.IO;
 namespace AuthSystem.AuthDao
 {
     /// <summary>
-    /// SQL配置文件保存与加载
+    /// 操作配置文件类
     /// </summary>
-    public class ADSqlConf:ADBase
+    public class ADConfig:ADBase
     {
-        public ADSqlConf()
+        public ADConfig()
         {
             //TODO：构造函数
         }
@@ -22,8 +22,9 @@ namespace AuthSystem.AuthDao
         /// </summary>
         /// <param name="amsc">配置文件对象</param>
         /// <returns>True 或者 False</returns>
-        public static bool LoadSqlConf(out AMSqlConf amsc)
+        public static AMSqlConf LoadSqlConf()
         {
+            AMSqlConf amsc = new AMSqlConf();
             try
             {
                 string FileName = Environment.CurrentDirectory + "\\SysConf.dat";
@@ -32,12 +33,12 @@ namespace AuthSystem.AuthDao
                 BinaryFormatter bf = new BinaryFormatter();
                 amsc = (AMSqlConf)bf.Deserialize(fStr);
                 fStr.Close();
-                return true;
+                return amsc;
             }
             catch (Exception e)
             {
                 amsc = new AMSqlConf();
-                return false;
+                return amsc;
                 throw e;
             }
         }

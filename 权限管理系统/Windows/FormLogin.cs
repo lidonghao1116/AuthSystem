@@ -19,8 +19,7 @@ namespace 权限管理系统
 
         private void button1_Click(object sender, EventArgs e)
         {
-            AuthSystem.AuthModel.AMSqlConf amsc = new AuthSystem.AuthModel.AMSqlConf();
-            AuthSystem.AuthDao.ADSqlConf.LoadSqlConf(out amsc);
+            AuthSystem.AuthModel.AMSqlConf amsc = AuthSystem.AuthDao.ADConfig.LoadSqlConf();
             AuthSystem.AuthModel.AMLogin aml = new AuthSystem.AuthModel.AMLogin();
             AuthSystem.AuthDao.ADLogin ld = new AuthSystem.AuthDao.ADLogin();
             if (ld.GetLoginMsg("alwcel", out aml))
@@ -53,7 +52,12 @@ namespace 权限管理系统
 
         private void button4_Click(object sender, EventArgs e)
         {
-            openFileDialog1.ShowDialog();
+            AuthSystem.AuthModel.AMSqlConf amsc = AuthSystem.AuthDao.ADConfig.LoadSqlConf();//加载数据库配置
+            string sql = @"insert AuthUser values (22,'acc')";
+            AuthSystem.AuthDao.ADSqlOpera adso = new AuthSystem.AuthDao.ADSqlOpera();
+            int x=adso.ExcSqlCommand(sql, amsc);
+            MessageBox.Show(x.ToString());
+
         }
 
     }

@@ -9,7 +9,7 @@ using AuthSystem.AuthMenu;
 namespace AuthSystem.AuthDao
 {
     /// <summary>
-    /// 登陆AuthDao类
+    /// 操作登陆AuthDao类
     /// </summary>
     public class ADLogin:ADBase
     {
@@ -31,10 +31,8 @@ namespace AuthSystem.AuthDao
             aml.nameCanEmail = false;               //是否可以用EMAIL做用户名
             aml.Name = Name;                        //保存用户名
             //连接数据库
-            AMSqlConf amsc = new AMSqlConf();       //数据库配置对象
+            AMSqlConf amsc = ADConfig.LoadSqlConf();       //数据库配置对象
 
-            if (AuthSystem.AuthDao.ADSqlConf.LoadSqlConf(out amsc)) //读取配置成功
-            {
 
                 SqlConnection sqlConn = GetConn(amsc);
                 SqlCommand sqlComm = new SqlCommand();
@@ -67,10 +65,11 @@ namespace AuthSystem.AuthDao
                         sqlConn.Close();
                     }
                 }
-            }
 
             AML = aml;
             return true;
         }
+
+
     }
 }

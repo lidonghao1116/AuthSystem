@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthDao\ADSqlConf.cs" />
+    <Compile Include="AuthDao\ADConfig.cs" />
     <Compile Include="AuthDao\ADLogin.cs" />
     <Compile Include="AuthDao\ADBase.cs" />
     <Compile Include="AuthDao\ADSqlOpera.cs" />
@@ -61,6 +61,7 @@
     <Compile Include="AuthModel\AMSqlConf.cs" />
     <Compile Include="AuthModel\AMBase.cs" />
     <Compile Include="AuthModel\AMLogin.cs" />
+    <Compile Include="AuthModel\AMSqlItems.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
