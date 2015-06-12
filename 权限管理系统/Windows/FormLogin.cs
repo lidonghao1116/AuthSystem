@@ -22,7 +22,7 @@ namespace 权限管理系统
             AuthSystem.AuthModel.AMSqlConf amsc = new AuthSystem.AuthModel.AMSqlConf();
             AuthSystem.AuthDao.ADSqlConf.LoadSqlConf(out amsc);
             AuthSystem.AuthModel.AMLogin aml = new AuthSystem.AuthModel.AMLogin();
-            DataDao.LoginDao ld = new DataDao.LoginDao();
+            AuthSystem.AuthDao.ADLogin ld = new AuthSystem.AuthDao.ADLogin();
             if (ld.GetLoginMsg("alwcel", out aml))
             {
                 MessageBox.Show(aml.AMLogins.ToString());

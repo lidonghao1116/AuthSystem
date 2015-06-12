@@ -89,10 +89,6 @@
       <Project>{db8a784c-ee3d-4992-8ebe-913fc5bd8a5d}</Project>
       <Name>AuthSystem</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DataDao\DataDao.csproj">
-      <Project>{71c4eb16-c904-4e9a-8a12-26544e682bb0}</Project>
-      <Name>DataDao</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\bg-0018.gif" />

@@ -44,6 +44,7 @@
     <Compile Include="AuthDao\ADSqlConf.cs" />
     <Compile Include="AuthDao\ADLogin.cs" />
     <Compile Include="AuthDao\ADBase.cs" />
+    <Compile Include="AuthDao\ADSqlOpera.cs" />
     <Compile Include="AuthForm\AFBase.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 
-namespace DataDao
+namespace AuthSystem.AuthDao
 {
     /// <summary>
-    /// 连接数据库类
+    /// 数据库操作类
     /// </summary>
-    public class SqlDao:BaseDao
+    public class ADSqlOpera:ADBase
     {
-        public SqlDao()
+        public ADSqlOpera()
         {
-            //TODO：构造函数
+            //TODO
         }
         /// <summary>
         /// 从数据库读取所有菜单项
@@ -47,6 +47,5 @@ namespace DataDao
             AuthSystem.AuthModel.AMGroup amg = new AuthSystem.AuthModel.AMGroup();
             return amg;
         }
-
     }
 }
