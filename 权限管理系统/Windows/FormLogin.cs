@@ -22,7 +22,8 @@ namespace 权限管理系统
             AuthSystem.AuthModel.AMSqlConf amsc = new AuthSystem.AuthModel.AMSqlConf();
             AuthSystem.AuthDao.ADSqlConf.LoadSqlConf(out amsc);
             AuthSystem.AuthModel.AMLogin aml = new AuthSystem.AuthModel.AMLogin();
-            if (DataDao.LoginDao.ReadLoginMsg("alwcel", out aml))
+            DataDao.LoginDao ld = new DataDao.LoginDao();
+            if (ld.GetLoginMsg("alwcel", out aml))
             {
                 MessageBox.Show(aml.AMLogins.ToString());
                 MessageBox.Show(aml.Name + ":" + aml.PassWord);
@@ -41,6 +42,18 @@ namespace 权限管理系统
             ToolStripMenuItem ts1 = new ToolStripMenuItem("文件");
             ms.Items.Add(ts1);
             fmm.Show();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            MenuStrip ms = new MenuStrip();
+            AuthSystem.AuthModel.AMMainMenu am = new AuthSystem.AuthModel.AMMainMenu();
+            AuthSystem.AuthModel.AMMainMenus ams = new AuthSystem.AuthModel.AMMainMenus();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.ShowDialog();
         }
 
     }

@@ -12,7 +12,12 @@ namespace AuthSystem.AuthMenu
     {
         public AMeLoad()
         {
-            
+            //TODO
+        }
+        public bool ReShowMenu(AuthModel.AMLogin aml, AuthModel.AMMainMenus amms)
+        {
+
+            return true;
         }
     }
 }

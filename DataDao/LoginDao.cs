@@ -20,7 +20,7 @@ namespace DataDao
         /// <param name="Name">要读取的用户的名字</param>
         /// <param name="AML">返回一个AMLogin，保存了登陆信息</param>
         /// <returns>TRUE返回成功，FALSE返回失败</returns>
-        public static bool ReadLoginMsg(string Name, out AMLogin AML)
+        public bool GetLoginMsg(string Name, out AMLogin AML)
         {
             //构造要保存的AMLogin
             AMLogin aml = new AMLogin();            //登陆数据对象
@@ -29,9 +29,11 @@ namespace DataDao
             aml.Name = Name;                        //保存用户名
             //连接数据库
             AMSqlConf amsc = new AMSqlConf();       //数据库配置对象
+            
             if (AuthSystem.AuthDao.ADSqlConf.LoadSqlConf(out amsc)) //读取配置成功
             {
-                SqlConnection sqlConn = new SqlConnection(amsc.ConnString);
+
+                SqlConnection sqlConn = GetConn(amsc);
                 SqlCommand sqlComm = new SqlCommand();
                 SqlDataReader sqlDR;
                 string CommText = @"Select * from AuthUser where name='" + Name+"'";
