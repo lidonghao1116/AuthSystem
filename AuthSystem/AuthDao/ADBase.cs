@@ -37,7 +37,29 @@ namespace AuthSystem.AuthDao
                 throw;
             }
         }
-        /// <summary>
+
+        /// <summary>-----------------------------------------------------------------------------------------------
+        /// 获取数据库命令对象
+        /// </summary>
+        /// <param name="amsc">数据库的配置对象</param>
+        /// <returns>返回SqlCommand对象</returns>
+        public SqlCommand GetComm(AuthSystem.AuthModel.AMSqlConf amsc)
+        {
+            try
+            {
+                SqlConnection tmpConn = GetConn(amsc);
+                tmpConn.Open();
+                SqlCommand tmpComm = new SqlCommand();
+                tmpComm.Connection = tmpConn;
+                return tmpComm;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>-----------------------------------------------------------------------------------------------
         /// 获取一个数据对象
         /// </summary>
         /// <param name="Command">要执行的SQL语句</param>
