@@ -54,8 +54,7 @@ namespace 权限管理系统
         {
             AuthSystem.AuthModel.AMSqlConf amsc = AuthSystem.AuthDao.ADConfig.LoadSqlConf();//加载数据库配置
             string sql = @"insert AuthUser values (22,'acc')";
-            AuthSystem.AuthDao.ADSqlOpera adso = new AuthSystem.AuthDao.ADSqlOpera();
-            int x=adso.ExcSqlCommand(sql, amsc);
+            int x=AuthSystem.AuthDao.ADSqlOpera.ExcSqlCommand(sql, amsc);
             MessageBox.Show(x.ToString());
 
         }
