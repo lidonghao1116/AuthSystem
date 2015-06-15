@@ -60,5 +60,12 @@ namespace 权限管理系统
 
         }
 
+        private void button5_Click(object sender, EventArgs e)
+        {
+            AFAuthSet afas = new AFAuthSet();
+            afas.Show();
+            
+        }
+
     }
 }

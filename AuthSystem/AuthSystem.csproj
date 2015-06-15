@@ -45,6 +45,9 @@
     <Compile Include="AuthDao\ADLogin.cs" />
     <Compile Include="AuthDao\ADBase.cs" />
     <Compile Include="AuthDao\ADSqlOpera.cs" />
+    <Compile Include="AuthForm\AFAuthSet.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="AuthForm\AFBase.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -70,6 +73,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AuthForm\AFAuthSet.resx">
+      <DependentUpon>AFAuthSet.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AuthForm\AFBase.resx">
       <DependentUpon>AFBase.cs</DependentUpon>
     </EmbeddedResource>
