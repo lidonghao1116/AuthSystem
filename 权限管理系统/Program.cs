@@ -15,7 +15,7 @@ namespace 权限管理系统
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormLogin());
+            Application.Run(new 权限管理系统.Windows.FormTest());
         }
     }
 }

@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthDao\ADAuthOpera.cs" />
     <Compile Include="AuthDao\ADConfig.cs" />
     <Compile Include="AuthDao\ADLogin.cs" />
     <Compile Include="AuthDao\ADBase.cs" />
