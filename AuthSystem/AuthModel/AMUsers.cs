@@ -51,8 +51,8 @@ namespace AuthSystem.AuthModel
         private string _User_Name = "";
         public string User_Name
         {
-            get { return _User_ID; }
-            set { _User_ID = value; }
+            get { return _User_Name; }
+            set { _User_Name = value; }
         }
 
         private string _User_Text = "";
@@ -69,11 +69,11 @@ namespace AuthSystem.AuthModel
             set { _User_Pass = value; }
         }
 
-        private string _User_Phone = "";
-        public string User_Phone
+        private string _User_Tel = "";
+        public string User_Tel
         {
-            get { return _User_Phone; }
-            set { _User_Phone = value; }
+            get { return _User_Tel; }
+            set { _User_Tel = value; }
         }
 
         private string _User_Email = "";
@@ -88,6 +88,34 @@ namespace AuthSystem.AuthModel
         {
             get { return _User_QQ; }
             set { _User_QQ = value; }
+        }
+
+        private bool _User_Status = false;
+        public bool User_Status
+        {
+            get { return _User_Status; }
+            set { _User_Status = value; }
+        }
+
+        private string _User_Group = "";
+        public string User_Group
+        {
+            get { return _User_Group; }
+            set { _User_Group = value; }
+        }
+
+        private string _User_CangKu = "";
+        public string User_CangKu
+        {
+            get { return _User_CangKu; }
+            set { _User_CangKu = value; }
+        }
+
+        private string _User_BeiZhu = "";
+        public string User_BeiZhu
+        {
+            get { return _User_BeiZhu; }
+            set { _User_BeiZhu = value; }
         }
     }
     #endregion

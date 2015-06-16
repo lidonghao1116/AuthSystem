@@ -84,13 +84,6 @@ namespace AuthSystem.AuthDao
             {
                 throw;
             }
-            finally
-            {
-                if (tmpConn.State == System.Data.ConnectionState.Open)
-                {
-                    tmpConn.Close();
-                }
-            }
         }
     }
 }
