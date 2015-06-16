@@ -6,7 +6,7 @@ using System.Text;
 namespace AuthSystem.AuthModel
 {
     /// <summary>
-    /// 基础AuthModel类
+    /// 基础AuthModel类 
     /// </summary>
     [Serializable]
     public class AMBase
