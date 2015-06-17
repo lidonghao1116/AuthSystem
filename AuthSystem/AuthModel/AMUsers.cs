@@ -34,6 +34,7 @@ namespace AuthSystem.AuthModel
 
     }
     #endregion
+
     #region 单个用户对象定义----------------------------------------------------------------------------------------
     /// <summary>
     /// 单个用户对象
@@ -41,6 +42,7 @@ namespace AuthSystem.AuthModel
     public class AMUser : AMBase
     {
         public AMUser() { }
+
         private string _User_ID = "";
         public string User_ID
         {
@@ -76,18 +78,18 @@ namespace AuthSystem.AuthModel
             set { _User_Tel = value; }
         }
 
-        private string _User_Email = "";
-        public string User_Email
-        {
-            get { return _User_Email; }
-            set { _User_Email = value; }
-        }
-
         private string _User_QQ = "";
         public string User_QQ
         {
             get { return _User_QQ; }
             set { _User_QQ = value; }
+        }
+
+        private string _User_Email = "";
+        public string User_Email
+        {
+            get { return _User_Email; }
+            set { _User_Email = value; }
         }
 
         private bool _User_Status = false;

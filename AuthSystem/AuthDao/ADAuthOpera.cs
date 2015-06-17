@@ -130,7 +130,7 @@ namespace AuthSystem.AuthDao
 
         //----------------------------------------------------------------------------------------------------------
         /// <summary>
-        /// 取用名的角色名
+        /// 取用户的角色名
         /// </summary>
         /// <param name="UserName">用户名</param>
         /// <returns></returns>
@@ -195,7 +195,7 @@ namespace AuthSystem.AuthDao
         #region 2-------从数据库取用户的角色(组)数据
         //----------------------------------------------------------------------------------------------------------
         /// <summary>
-        /// 根据用户数据，取用户的权限
+        /// 根据用户数据，取用户的角色对象
         /// </summary>
         /// <param name="amu">用户数据对象</param>
         /// <returns>返回AMGroup对象</returns>
@@ -217,7 +217,8 @@ namespace AuthSystem.AuthDao
                     tmpAmg.Group_Name = SDR["Group_Name"].ToString();
                     tmpAmg.Group_Status = (bool)SDR["Group_Status"];
                     tmpAmg.Group_BeiZhu = SDR["Group_BeiZhu"].ToString();
-                    tmpAmg.Group_GroupRuleID=SDR["Group_GroupRuleID"].ToString();
+                    tmpAmg.Group_Rule_ID = SDR["Group_Rule_ID"].ToString();
+                    tmpAmg.Group_CangKu_ID = SDR["Group_CangKu_ID"].ToString();
                 }
                 SDR.Close();
                 return tmpAmg;
@@ -251,12 +252,14 @@ namespace AuthSystem.AuthDao
                     tmpAmg.Group_Name = "";
                     tmpAmg.Group_Status = false;
                     tmpAmg.Group_BeiZhu = "";
-                    tmpAmg.Group_GroupRuleID = "";
+                    tmpAmg.Group_Rule_ID = "";
+                    tmpAmg.Group_CangKu_ID = "";
                     tmpAmg.Group_ID = tmpSDR["Group_ID"].ToString();
                     tmpAmg.Group_Name = tmpSDR["Group_Name"].ToString();
                     tmpAmg.Group_Status = (bool)tmpSDR["Group_Status"];
                     tmpAmg.Group_BeiZhu = tmpSDR["Group_BeiZhu"].ToString();
-                    tmpAmg.Group_GroupRuleID = tmpSDR["Group_GroupRuleID"].ToString();
+                    tmpAmg.Group_Rule_ID = tmpSDR["Group_Rule_ID"].ToString();
+                    tmpAmg.Group_CangKu_ID = tmpSDR["Group_CangKu_ID"].ToString();
                     tmpAmgs.Add(tmpAmg);
                 }
                 tmpSDR.Close();
@@ -268,6 +271,78 @@ namespace AuthSystem.AuthDao
             }
         }
 
+        //----------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 取所有的Items对象
+        /// </summary>
+        /// <returns>返回AMItems</returns>
+        public static AMItems GetGroupsItems()
+        {
+            if (amsc == null)
+            {
+                throw new Exception("在操作之前，必需先加载AMSqlConf！");
+            }
+            try
+            {
+                AMItems amis = new AMItems();
+                AMItem ami = new AMItem();
+                string sql = @"select * from AuthGroupsItems";
+                SqlDataReader tmpSDR = GetDataReader(sql, amsc);
+                while (tmpSDR.Read())
+                {
+                    ami.Item_ID = "";
+                    ami.Item_Name = "";
+                    ami.Item_NameSpace = "";
+                    ami.Item_BeiZhu = "";
+                    ami.Item_ID = tmpSDR["Item_ID"].ToString();
+                    ami.Item_Name = tmpSDR["Item_Name"].ToString();
+                    ami.Item_NameSpace = tmpSDR["Item_NameSpace"].ToString();
+                    ami.Item_BeiZhu = tmpSDR["Item_BeiZhu"].ToString();
+                    amis.Add(ami);
+                }
+                tmpSDR.Close();
+                return amis;
+
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 取指定角色的所有ItemName的列表
+        /// </summary>
+        /// <param name="amg">角色对象AMGroup</param>
+        /// <returns>List(string)</returns>
+        public static List<string> GetGroupItemsByList(AMGroup amg)
+        {
+            if (amsc == null)
+            {
+                throw new Exception("在操作之前，必需先加载AMSqlConf！");
+            }
+            try
+            {
+                List<string> tmpItems = new List<string>();
+                string tmpGroupID = amg.Group_ID;
+                string sql = @"select * from AuthGroupsItems where Group_ID='" + tmpGroupID + "'";                
+                SqlDataReader tmpSDR = GetDataReader(sql, amsc);
+                while (tmpSDR.Read())
+                {
+                    tmpItems.Add(tmpSDR["Item_Name"].ToString());
+                }
+                tmpSDR.Close();
+                
+                return tmpItems;
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
         //----------------------------------------------------------------------------------------------------------
         /// <summary>
         /// 返回角色的权限
@@ -298,7 +373,10 @@ namespace AuthSystem.AuthDao
                 throw;
             }
         }
+
+
         #endregion
+
 
         #region 3-------从数据库取权限所关联的对象
         //---------------------------------------------------------------------------------------------------------
@@ -376,14 +454,29 @@ namespace AuthSystem.AuthDao
         public static bool SetWindowsAuth(AMUser amu, System.Windows.Forms.Control.ControlCollection con)
         {
             //取用户的角色的权限的对象列表
-
+            AMGroup amg = GetAuthGroup(amu);
+            List<string> tmpGroupItems = GetGroupItemsByList(amg);
+            
             //取当前窗口的所有对象列表
-
+            List<object> tmpWinItems = GetWindowsContrul(amu, con);
+            foreach (object x in tmpWinItems)
+            {
+                if (tmpGroupItems.Contains(((System.Windows.Forms.Control)x).Name))
+                {
+                    ((System.Windows.Forms.Control)x).Enabled = true;
+                }
+                else
+                {
+                    ((System.Windows.Forms.Control)x).Enabled = false;
+                }
+            }
             //把有权限的对象enable属性设置为true;其它对象设置为False；（对比一个表，不关权限的Item表）
 
             return true;
         }
         #endregion
+
+
 
 
 

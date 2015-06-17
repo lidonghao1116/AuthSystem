@@ -11,6 +11,7 @@ namespace AuthSystem.AuthModel
         {
             //TODO
         }
+
         private string _Group_ID = "";
         public string Group_ID
         {
@@ -25,18 +26,25 @@ namespace AuthSystem.AuthModel
             set { _Group_Name = value; }
         }
 
-        private string _Group_GroupRuleID = "";
-        public string Group_GroupRuleID
-        {
-            get { return _Group_GroupRuleID; }
-            set { _Group_GroupRuleID = value; }
-        }
-
         private bool _Group_Status = false;
         public bool Group_Status
         {
             get { return _Group_Status; }
             set { _Group_Status = value; }
+        }
+
+        private string _Group_Rule_ID = "";
+        public string Group_Rule_ID
+        {
+            get { return _Group_Rule_ID; }
+            set { _Group_Rule_ID = value; }
+        }
+
+        private string _Group_CangKu_ID = "";
+        public string Group_CangKu_ID
+        {
+            get { return _Group_CangKu_ID; }
+            set { _Group_CangKu_ID = value; }
         }
 
         private string _Group_BeiZhu = "";
