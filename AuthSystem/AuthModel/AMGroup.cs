@@ -21,15 +21,15 @@ namespace AuthSystem.AuthModel
         private string _Group_Name = "";
         public string Group_Name
         {
-            get { return _Group_ID; }
-            set { _Group_ID = value; }
+            get { return _Group_Name; }
+            set { _Group_Name = value; }
         }
 
-        private List<string> _Group_Rule_ID=null;
-        public List<string> Group_Rule_ID
+        private string _Group_GroupRuleID = "";
+        public string Group_GroupRuleID
         {
-            get { return _Group_Rule_ID; }
-            set { _Group_Rule_ID = value; }
+            get { return _Group_GroupRuleID; }
+            set { _Group_GroupRuleID = value; }
         }
 
         private bool _Group_Status = false;
@@ -67,6 +67,28 @@ namespace AuthSystem.AuthModel
         public void Del(AMGroup amg)
         {
             _AllGroups.Remove(amg);
+        }
+    }
+
+    public class AMGroupRules : AMBase
+    {
+        public AMGroupRules()
+        {
+            //Init
+        }
+        private List<string> _AllAMGroupRules = null;
+        public void Add(string Rule)
+        {
+            _AllAMGroupRules.Add(Rule);
+        }
+        public void Del(string Rule)
+        {
+            _AllAMGroupRules.Remove(Rule);
+        }
+        public List<string> AllAMGroupRules
+        {
+            get { return _AllAMGroupRules; }
+            set { _AllAMGroupRules = value; }
         }
     }
 }

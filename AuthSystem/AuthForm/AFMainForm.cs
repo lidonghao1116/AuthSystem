@@ -27,8 +27,21 @@ namespace AuthSystem.AuthForm
         {
         }
         #endregion
-        
+
+        #region 1-------检查本窗口所有对象权限
+        public void ChechAuth(AuthModel.AMUser amu,out string MSG)
+        {
+            string tmpMSG = "";//返回的信息
+            
+
+            MSG = tmpMSG;
+            
+        }
+
+        #endregion
+
         #region 2-------实现按权限加载菜单
+        //-----------------------------------------------------------------------------
         /// <summary>
         /// 加载自动根据用户权限显示的菜单
         /// </summary>
