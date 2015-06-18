@@ -16,6 +16,7 @@ namespace AuthSystem.AuthForm
 
             InitializeComponent();
             InitMenu();
+            InitData();
             //下面一行进行权限管理
             //AuthSystem.AuthDao.ADAuthOpera.SetWindowsAuth(AuthSystem.AuthGlobal.GlobalAmu, this.Controls);
         }
@@ -26,11 +27,12 @@ namespace AuthSystem.AuthForm
         private Panel panel_Right_Up;
         private DataGridView dgv_Allusers;
         private TreeView treeView1;
+        private ListView listView1;
         private DataGridViewTextBoxColumn ID;
         private DataGridViewTextBoxColumn UserName;
         private DataGridViewTextBoxColumn BuMen;
         private DataGridViewTextBoxColumn Phone;
-        private ListView listView1;
+        private IContainer components;
         private Panel panel_Right;
         #region 1-------界面初始化
         /// <summary>
@@ -40,15 +42,15 @@ namespace AuthSystem.AuthForm
         {
             this.panel_Left = new System.Windows.Forms.Panel();
             this.dgv_Allusers = new System.Windows.Forms.DataGridView();
-            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.UserName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.BuMen = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Phone = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel_Right = new System.Windows.Forms.Panel();
             this.panel_Right_Down = new System.Windows.Forms.Panel();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.panel_Right_Up = new System.Windows.Forms.Panel();
             this.listView1 = new System.Windows.Forms.ListView();
+            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.UserName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BuMen = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Phone = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel_Left.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Allusers)).BeginInit();
             this.panel_Right.SuspendLayout();
@@ -69,6 +71,8 @@ namespace AuthSystem.AuthForm
             // 
             // dgv_Allusers
             // 
+            this.dgv_Allusers.AllowUserToResizeRows = false;
+            this.dgv_Allusers.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.dgv_Allusers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_Allusers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ID,
@@ -77,30 +81,16 @@ namespace AuthSystem.AuthForm
             this.Phone});
             this.dgv_Allusers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_Allusers.Location = new System.Drawing.Point(0, 0);
+            this.dgv_Allusers.MultiSelect = false;
             this.dgv_Allusers.Name = "dgv_Allusers";
+            this.dgv_Allusers.ReadOnly = true;
+            this.dgv_Allusers.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.dgv_Allusers.RowHeadersVisible = false;
+            this.dgv_Allusers.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgv_Allusers.RowTemplate.Height = 23;
+            this.dgv_Allusers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_Allusers.Size = new System.Drawing.Size(520, 558);
             this.dgv_Allusers.TabIndex = 0;
-            // 
-            // ID
-            // 
-            this.ID.HeaderText = "ID";
-            this.ID.Name = "ID";
-            // 
-            // UserName
-            // 
-            this.UserName.HeaderText = "用户名";
-            this.UserName.Name = "UserName";
-            // 
-            // BuMen
-            // 
-            this.BuMen.HeaderText = "部门";
-            this.BuMen.Name = "BuMen";
-            // 
-            // Phone
-            // 
-            this.Phone.HeaderText = "手机";
-            this.Phone.Name = "Phone";
             // 
             // panel_Right
             // 
@@ -148,6 +138,31 @@ namespace AuthSystem.AuthForm
             this.listView1.Size = new System.Drawing.Size(368, 259);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
+            // 
+            // ID
+            // 
+            this.ID.HeaderText = "ID";
+            this.ID.Name = "ID";
+            this.ID.ReadOnly = true;
+            this.ID.Width = 20;
+            // 
+            // UserName
+            // 
+            this.UserName.HeaderText = "用户名";
+            this.UserName.Name = "UserName";
+            this.UserName.ReadOnly = true;
+            // 
+            // BuMen
+            // 
+            this.BuMen.HeaderText = "部门";
+            this.BuMen.Name = "BuMen";
+            this.BuMen.ReadOnly = true;
+            // 
+            // Phone
+            // 
+            this.Phone.HeaderText = "手机";
+            this.Phone.Name = "Phone";
+            this.Phone.ReadOnly = true;
             // 
             // AFAuthSet
             // 
@@ -216,23 +231,16 @@ namespace AuthSystem.AuthForm
         private void InitData()
         {
             //加载所有用户数据
+            
+            
+            AuthModel.AMUsers amus = AuthDao.ADAuthOpera.GetAuthUsers();
+            BindingSource bs = new BindingSource();
+            dgv_Allusers.DataSource = bs;
             //加载所有角色数据
             //加载所有权限数据
         }
         #endregion
 
-        #endregion
-        #region 添加用户的窗口定义---------------------------------------------------------
-        /// <summary>
-        /// 添加用户窗口定义
-        /// </summary>
-        public class AFAuthSetUserSet : AFBase
-        {
-            public AFAuthSetUserSet()
-            {
-                //Init
-            }
-        }
         #endregion
     }
 }

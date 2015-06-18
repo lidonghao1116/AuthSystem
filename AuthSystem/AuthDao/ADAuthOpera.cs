@@ -40,25 +40,14 @@ namespace AuthSystem.AuthDao
             try
             {
                 AMUsers AllAmus = new AMUsers();
-                AMUser tmpAmu = new AMUser();
+                
                 List<AMUser> tmpAmus = new List<AMUser>();
                 //tmpAmus.ListAMUsers.Clear();
                 string sql = @"select * from AuthUsers";
                 SqlDataReader tmpSDR = GetDataReader(sql, amsc);
                 while (tmpSDR.Read())
                 {
-                    //先清空
-                    tmpAmu.User_ID = "";
-                    tmpAmu.User_Name = "";
-                    tmpAmu.User_Text = "";
-                    tmpAmu.User_Pass = "";
-                    tmpAmu.User_Tel = "";
-                    tmpAmu.User_QQ = "";
-                    tmpAmu.User_Email = "";
-                    tmpAmu.User_Status = false;
-                    tmpAmu.User_Group = "";
-                    tmpAmu.User_CangKu = "";
-                    tmpAmu.User_BeiZhu = "";
+                    AMUser tmpAmu = new AMUser();
                     //再赋值
                     tmpAmu.User_ID = tmpSDR["User_ID"].ToString();
                     tmpAmu.User_Name = tmpSDR["User_Name"].ToString();

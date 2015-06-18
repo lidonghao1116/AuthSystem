@@ -88,6 +88,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\DataSources\AuthSystem.AuthModel.AMUsers.datasource" />
     <None Include="Resources\bg-0271.jpg" />
   </ItemGroup>
   <ItemGroup>
