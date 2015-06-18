@@ -219,6 +219,7 @@ namespace AuthSystem.AuthDao
                     tmpAmg.Group_BeiZhu = SDR["Group_BeiZhu"].ToString();
                     tmpAmg.Group_Rule_ID = SDR["Group_Rule_ID"].ToString();
                     tmpAmg.Group_CangKu_ID = SDR["Group_CangKu_ID"].ToString();
+                    tmpAmg.Group_Menu_ID = SDR["Group_Menu_ID"].ToString();
                 }
                 SDR.Close();
                 return tmpAmg;
@@ -254,12 +255,14 @@ namespace AuthSystem.AuthDao
                     tmpAmg.Group_BeiZhu = "";
                     tmpAmg.Group_Rule_ID = "";
                     tmpAmg.Group_CangKu_ID = "";
+                    tmpAmg.Group_Menu_ID = "";
                     tmpAmg.Group_ID = tmpSDR["Group_ID"].ToString();
                     tmpAmg.Group_Name = tmpSDR["Group_Name"].ToString();
                     tmpAmg.Group_Status = (bool)tmpSDR["Group_Status"];
                     tmpAmg.Group_BeiZhu = tmpSDR["Group_BeiZhu"].ToString();
                     tmpAmg.Group_Rule_ID = tmpSDR["Group_Rule_ID"].ToString();
                     tmpAmg.Group_CangKu_ID = tmpSDR["Group_CangKu_ID"].ToString();
+                    tmpAmg.Group_Menu_ID = tmpSDR["Group_Menu_ID"].ToString();
                     tmpAmgs.Add(tmpAmg);
                 }
                 tmpSDR.Close();
@@ -267,6 +270,36 @@ namespace AuthSystem.AuthDao
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 取不用做权限处理的Items的名字
+        /// </summary>
+        /// <returns>返回List String列表</returns>
+        public static List<string> GetItemsNoByList()
+        {
+            if (amsc == null)
+            {
+                throw new Exception("在操作之前，必需先加载AMSqlConf！");
+            }
+            try
+            {
+                List<string> tmpItemsNo = new List<string>();
+                string sql = @"select * from AuthItemsNo";
+                SqlDataReader tmpSDR = GetDataReader(sql, amsc);
+                while (tmpSDR.Read())
+                {
+                    tmpItemsNo.Add(tmpSDR["Item_Name"].ToString());
+                }
+                tmpSDR.Close();
+                return tmpItemsNo;
+            }
+            catch (Exception)
+            {
+                
                 throw;
             }
         }
@@ -374,50 +407,100 @@ namespace AuthSystem.AuthDao
             }
         }
 
-
         #endregion
 
-
-        #region 3-------从数据库取权限所关联的对象
+        #region 3-------从数据库取用户的菜单数据
         //---------------------------------------------------------------------------------------------------------
-        public static void GetAuthRule(AMGroup amg)
+        /// <summary>
+        /// 取所有的菜单项
+        /// </summary>
+        /// <returns>AMMenus</returns>
+        public static AMMenus GetAuthMenus()
         {
-            //TODO
+            if (amsc == null)
+            {
+                throw new Exception("在操作之前，必需先加载AMSqlConf！");
+            }
+            try
+            {
+                AMMenu amm = new AMMenu();
+                AMMenus amms = new AMMenus();
+                string sql = @"select * from AuthMenus";
+                SqlDataReader tmpSDR = GetDataReader(sql, amsc);
+                while (tmpSDR.Read())
+                {
+                    amm.Menu_ID = "";
+                    amm.Menu_Name = "";
+                    amm.Menu_UpItemID = "";
+                    amm.Menu_BeiZhu = "";
+                    amm.Menu_ID = tmpSDR["Menu_ID"].ToString();
+                    amm.Menu_Name = tmpSDR["Menu_Name"].ToString();
+                    amm.Menu_UpItemID = tmpSDR["Menu_UpItemID"].ToString();
+                    amm.Menu_BeiZhu = tmpSDR["Menu_BeiZhu"].ToString();
+                    amms.Add(amm);
+                }
+                tmpSDR.Close();
+                return amms;
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
         }
-        public static void GetAuthRules()
+
+        //---------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 返回指定角色的菜单项
+        /// </summary>
+        /// <param name="amg">角色对象</param>
+        /// <returns>返回List String对象</returns>
+        public static List<string> GetAuthGroupMenusByList(AMGroup amg)
         {
-            //TODO
+            if (amsc == null)
+            {
+                throw new Exception("在操作之前，必需先加载AMSqlConf！");
+            }
+            try
+            {
+                List<string> tmpMenus = new List<string>();
+                string tmpGroupID=amg.Group_ID;
+                string sql = @"select * from AuthGroupsMenus where Group_ID='" + tmpGroupID + "'";
+                SqlDataReader tmpSDR = GetDataReader(sql, amsc);
+                while (tmpSDR.Read())
+                {
+                    tmpMenus.Add(tmpSDR["Menu_Name"].ToString());
+                }
+                tmpSDR.Close();
+                return tmpMenus;
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
         }
+
         #endregion
 
-        #region 4-------从数据库取用户对象的角色的权限的对象的列表
-        public static void GetPubAuthItems(AMUser amu)
-        {
-
-        }
-        #endregion
         #region 9-------窗口所有对象权限
-        public static bool CheckAuth(AMUser amu,out string MSG)
-        {
-            string tmpMSG = "";
-            MSG = tmpMSG;
-            return false;
-
-        }
         //---------------------------------------------------------------------------------------------------------
         /// <summary>
         /// 返回当前用户的窗口的所有控件对象，只遍历三层对象容器
         /// </summary>
-        /// <param name="amu">当前用户对象</param>
         /// <param name="con">当前窗口的controls</param>
         /// <returns>返回object对象list</returns>
-        public static List<object> GetWindowsContrul(AMUser amu,System.Windows.Forms.Control.ControlCollection con)
+        public static List<object> GetWindowsContrul(System.Windows.Forms.Control.ControlCollection con)
         {
             try
             {
                 List<object> tmpObject = new List<object>();
                 for (int x = 0; x < con.Count; x++)
                 {
+                    if (con[x].GetType()==typeof(System.Windows.Forms.MenuStrip))  //去掉菜单获取
+                    {
+                        continue;
+                    }
                     if (con[x].Controls.Count > 0)
                     {
                         tmpObject.Add(con[x]);
@@ -451,14 +534,82 @@ namespace AuthSystem.AuthDao
         }
 
         //---------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 返回当前窗口的所有菜单项，只遍历三层菜单！
+        /// </summary>
+        /// <param name="con"></param>
+        /// <returns></returns>
+        public static List<object> GetWindowsMenu(System.Windows.Forms.Control.ControlCollection con)
+        {
+            try
+            {
+                List<object> tmpLobj = new List<object>();
+                System.Windows.Forms.MenuStrip tmpMenu = new System.Windows.Forms.MenuStrip();
+                foreach (object x in con) //取MenuStrip对象
+                {
+                    if (x.GetType() == typeof(System.Windows.Forms.MenuStrip))
+                    {
+                        tmpMenu = (System.Windows.Forms.MenuStrip)x;
+                        break;
+                    }
+                }
+                for (int x = 0; x < tmpMenu.Items.Count; x++)
+                {
+                    tmpLobj.Add(tmpMenu.Items[x]);
+                    if (((System.Windows.Forms.ToolStripMenuItem)tmpMenu.Items[x]).DropDownItems.Count>0)
+                    {
+                        for (int y = 0; y < ((System.Windows.Forms.ToolStripMenuItem)tmpMenu.Items[x]).DropDownItems.Count; y++)
+                        {
+                            tmpLobj.Add(((System.Windows.Forms.ToolStripMenuItem)tmpMenu.Items[x]).DropDownItems[y]);
+                            if (((System.Windows.Forms.ToolStripMenuItem)(((System.Windows.Forms.ToolStripMenuItem)tmpMenu.Items[x]).DropDownItems[y])).DropDownItems.Count > 0)
+                            {
+                                for (int z = 0; z < ((System.Windows.Forms.ToolStripMenuItem)(((System.Windows.Forms.ToolStripMenuItem)tmpMenu.Items[x]).DropDownItems[y])).DropDownItems.Count; z++)
+                                {
+                                    tmpLobj.Add(((System.Windows.Forms.ToolStripMenuItem)(((System.Windows.Forms.ToolStripMenuItem)tmpMenu.Items[x]).DropDownItems[y])).DropDownItems[z]);
+                                }
+                            }
+                        }
+                    }
+                }
+                return tmpLobj;
+            }
+            catch (Exception e)
+            {
+                
+                throw e;
+            }
+        }
+
+        //---------------------------------------------------------------------------------------------------------
         public static bool SetWindowsAuth(AMUser amu, System.Windows.Forms.Control.ControlCollection con)
         {
+            AMGroup amg = GetAuthGroup(amu); //取用户的角色对象
+
+            //取用户的角色的权限的菜单列表
+            List<string> tmpGroupMenus = GetAuthGroupMenusByList(amg);
+
+            //取当前窗口的所有菜单列表
+            List<object> tmpWinMenus = GetWindowsMenu(con);
+            //有权限的菜单enable为TRUE，没权限的为False；
+            //System.Windows.Forms.MessageBox.Show(tmpGroupMenus.Count.ToString() + "|||" + tmpWinMenus.Count().ToString());
+            foreach (object x in tmpWinMenus)
+            {
+                if (tmpGroupMenus.Contains(((System.Windows.Forms.ToolStripMenuItem)x).Name))
+                {
+                    ((System.Windows.Forms.ToolStripMenuItem)x).Enabled = true;
+                }
+                else
+                {
+                    ((System.Windows.Forms.ToolStripMenuItem)x).Enabled = false;
+                }
+            }
+
             //取用户的角色的权限的对象列表
-            AMGroup amg = GetAuthGroup(amu);
             List<string> tmpGroupItems = GetGroupItemsByList(amg);
-            
+
             //取当前窗口的所有对象列表
-            List<object> tmpWinItems = GetWindowsContrul(amu, con);
+            List<object> tmpWinItems = GetWindowsContrul(con);
+            //把有权限的对象enable属性设置为true;其它对象设置为False；（对比一个表，不关权限的Item表）
             foreach (object x in tmpWinItems)
             {
                 if (tmpGroupItems.Contains(((System.Windows.Forms.Control)x).Name))
@@ -470,58 +621,9 @@ namespace AuthSystem.AuthDao
                     ((System.Windows.Forms.Control)x).Enabled = false;
                 }
             }
-            //把有权限的对象enable属性设置为true;其它对象设置为False；（对比一个表，不关权限的Item表）
+            
 
             return true;
-        }
-        #endregion
-
-
-
-
-
-
-        #region 1-------从数据库取菜单数据
-        //--------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// 从数据库读取所有菜单项
-        /// </summary>
-        /// <param name="amsc">数据库连接配置对象</param>
-        /// <returns>返回AMMainMenus.AMMainMenuValue</returns>
-        public static AuthSystem.AuthModel.AMMainMenus GetAuthMenu(AuthSystem.AuthModel.AMSqlConf amsc)
-        {
-            AuthSystem.AuthModel.AMMainMenus amms = new AuthSystem.AuthModel.AMMainMenus();
-            AuthSystem.AuthModel.AMMainMenu amm = new AuthSystem.AuthModel.AMMainMenu();
-            string CommText = @"select * from AuthMenu";
-            SqlDataReader tmpSDR = GetDataReader(CommText, amsc);
-            amms.AMMainMenuValue.Clear();
-            while (tmpSDR.Read())
-            {
-                amm = null;
-                amm.MenuID = tmpSDR["ID"].ToString();
-                amm.MenuName = tmpSDR["MenuName"].ToString();
-                amm.MenuText = tmpSDR["MenuText"].ToString();
-                amm.MenuType = tmpSDR["MenuType"].ToString();
-                amm.MenuUpID = tmpSDR["MenuUpID"].ToString();
-                amms.AMMainMenuValue.Add(amm);
-            }
-            return amms;
-        }
-        #endregion
-
-        #region 2-------从数据库取权限组数据
-        //--------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// 从数据库读取权限组数据
-        /// </summary>
-        /// <param name="amsc"></param>
-        /// <returns></returns>
-        public static AuthSystem.AuthModel.AMGroup GetAuthGroup(AuthSystem.AuthModel.AMSqlConf amsc)
-        {
-            string CommText = @"select * from AuthGroup";
-            SqlDataReader tmpSDR = GetDataReader(CommText, amsc);
-            AuthSystem.AuthModel.AMGroup amg = new AuthSystem.AuthModel.AMGroup();
-            return amg;
         }
         #endregion
 

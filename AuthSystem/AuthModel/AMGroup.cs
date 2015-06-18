@@ -47,6 +47,13 @@ namespace AuthSystem.AuthModel
             set { _Group_CangKu_ID = value; }
         }
 
+        private string _Group_Menu_ID = "";
+        public string Group_Menu_ID
+        {
+            get { return _Group_Menu_ID; }
+            set { _Group_Menu_ID = value; }
+        }
+
         private string _Group_BeiZhu = "";
         public string Group_BeiZhu
         {

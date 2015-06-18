@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using AuthSystem.AuthModel;
-using AuthSystem.AuthMenu;
 
 namespace AuthSystem.AuthDao
 {

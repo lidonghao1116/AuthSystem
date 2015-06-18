@@ -45,6 +45,7 @@
     <Compile Include="AuthDao\ADConfig.cs" />
     <Compile Include="AuthDao\ADLogin.cs" />
     <Compile Include="AuthDao\ADBase.cs" />
+    <Compile Include="AuthDao\ADManager.cs" />
     <Compile Include="AuthDao\ADSqlOpera.cs" />
     <Compile Include="AuthForm\AFAuthSet.cs">
       <SubType>Form</SubType>
@@ -58,11 +59,9 @@
     <Compile Include="AuthForm\AFMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AuthMenu\AMeBase.cs" />
-    <Compile Include="AuthMenu\AMeLoad.cs" />
     <Compile Include="AuthModel\AMGroup.cs" />
     <Compile Include="AuthModel\AMItem.cs" />
-    <Compile Include="AuthModel\AMMainMenu.cs" />
+    <Compile Include="AuthModel\AMMenu.cs" />
     <Compile Include="AuthModel\AMSqlConf.cs" />
     <Compile Include="AuthModel\AMBase.cs" />
     <Compile Include="AuthModel\AMLogin.cs" />
