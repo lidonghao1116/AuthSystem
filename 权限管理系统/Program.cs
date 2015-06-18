@@ -13,9 +13,12 @@ namespace 权限管理系统
         [STAThread]
         static void Main()
         {
+            AuthSystem.AuthGlobal.GlobalAmsc = AuthSystem.AuthDao.ADConfig.LoadSqlConf();
+            AuthSystem.AuthDao.ADAuthOpera.AMSqlConfig = AuthSystem.AuthGlobal.GlobalAmsc;
+            AuthSystem.AuthGlobal.GlobalAmu = AuthSystem.AuthDao.ADAuthOpera.GetAuthUser("alwcel");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new 权限管理系统.Windows.FormTest());
+            Application.Run(new Windows.FormTest());
         }
     }
 }

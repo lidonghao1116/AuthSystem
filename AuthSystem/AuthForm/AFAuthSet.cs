@@ -13,11 +13,14 @@ namespace AuthSystem.AuthForm
     {
         public AFAuthSet()
         {
+
             InitializeComponent();
             InitMenu();
+            //下面一行进行权限管理
+            //AuthSystem.AuthDao.ADAuthOpera.SetWindowsAuth(AuthSystem.AuthGlobal.GlobalAmu, this.Controls);
         }
 
-        #region 初始化窗口界面与菜单生成---------------------------------------------------
+        #region 初始化------------------------------------------------------------------------------------------------------
         private Panel panel_Left;
         private Panel panel_Right_Down;
         private Panel panel_Right_Up;
@@ -29,6 +32,7 @@ namespace AuthSystem.AuthForm
         private DataGridViewTextBoxColumn Phone;
         private ListView listView1;
         private Panel panel_Right;
+        #region 1-------界面初始化
         /// <summary>
         /// 界面初始化，程序自动生成
         /// </summary>
@@ -160,6 +164,10 @@ namespace AuthSystem.AuthForm
             this.ResumeLayout(false);
 
         }
+        #endregion
+
+        #region 2-------菜单初始化
+        //------------------------------------------------------------------------------------------------------
         /// <summary>
         /// 初始化菜单按钮
         /// </summary>
@@ -194,10 +202,25 @@ namespace AuthSystem.AuthForm
         }
         private void tsb1_Click(object sender, EventArgs e) //添加用户处理
         {
-            AFAuthSetUserSet afasus = new AFAuthSetUserSet();
-            afasus.ShowDialog();
-            afasus.Dispose();
+            AuthModel.AMUser amu = new AuthModel.AMUser();
+            amu.User_ID = "8";
+            amu.User_Name = "acuser";
+            amu.User_Text = "sy";
+            amu.User_Status = true;
+            amu.User_Pass = "ab1321";
+            MessageBox.Show(AuthSystem.AuthDao.ADAuthOpera.AddAuthUser(amu).ToString());
         }
+        #endregion
+
+        #region 3-------数据库初始化
+        private void InitData()
+        {
+            //加载所有用户数据
+            //加载所有角色数据
+            //加载所有权限数据
+        }
+        #endregion
+
         #endregion
         #region 添加用户的窗口定义---------------------------------------------------------
         /// <summary>

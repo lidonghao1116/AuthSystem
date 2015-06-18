@@ -84,5 +84,25 @@ namespace AuthSystem.AuthDao
                 throw;
             }
         }
+        //---------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Bool转换成Int
+        /// </summary>
+        /// <param name="bl"></param>
+        /// <returns></returns>
+        public static int Bool2Int(bool bl)
+        {
+            if (bl)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        
+
     }
 }

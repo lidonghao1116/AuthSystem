@@ -12,6 +12,7 @@ namespace AuthSystem.AuthDao
     /// </summary>
     public class ADAuthOpera:ADSqlOpera
     {
+        #region 0-------初始化与公共变量数据
         public ADAuthOpera()
         {
             //Init
@@ -22,6 +23,7 @@ namespace AuthSystem.AuthDao
             get { return amsc; }
             set { amsc = value; }
         }
+        #endregion
 
         #region 1-------从数据库取用户数据
         //----------------------------------------------------------------------------------------------------------
@@ -190,6 +192,38 @@ namespace AuthSystem.AuthDao
             }
         }
 
+        #endregion
+
+        #region 11------添加用户数据到数据库
+        //---------------------------------------------------------------------------------------------------------
+        public static bool AddAuthUser(AMUser amu)
+        {
+            if (amsc == null)
+            {
+                throw new Exception("在操作之前，必需先加载AMSqlConf！");
+            }
+            try
+            {
+                string DataStr = amu.User_ID + ",'" + amu.User_Name + "','" + amu.User_Text + "','" + amu.User_Pass + "','" + amu.User_Tel + "','" + amu.User_QQ + "','" +
+                    amu.User_Email + "'," + Bool2Int(amu.User_Status)+ ",'" + amu.User_Group + "','" + amu.User_CangKu + "','" + amu.User_BeiZhu+"'";
+                string sql = @"insert into AuthUsers values("+DataStr+")";
+                //string sql = @"insert into AuthUsers values(1,abcd)";
+                if (ExcSqlCommand(sql, amsc) == -1)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+                
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
         #endregion
 
         #region 2-------从数据库取用户的角色(组)数据
@@ -483,7 +517,7 @@ namespace AuthSystem.AuthDao
 
         #endregion
 
-        #region 9-------窗口所有对象权限
+        #region 9-------窗口所有对象权限管理
         //---------------------------------------------------------------------------------------------------------
         /// <summary>
         /// 返回当前用户的窗口的所有控件对象，只遍历三层对象容器
@@ -581,11 +615,18 @@ namespace AuthSystem.AuthDao
         }
 
         //---------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 根据用户的权限，设置窗口内菜单与控件
+        /// </summary>
+        /// <param name="amu">用户对象</param>
+        /// <param name="con">窗口的所有控件</param>
+        /// <returns>True False</returns>
         public static bool SetWindowsAuth(AMUser amu, System.Windows.Forms.Control.ControlCollection con)
         {
-            AMGroup amg = GetAuthGroup(amu); //取用户的角色对象
-
-            //取用户的角色的权限的菜单列表
+            //取用户的角色对象---------------------------------------------------------------------------------
+            AMGroup amg = GetAuthGroup(amu);
+            #region 1-------菜单处理
+            //取用户的角色的权限的菜单列表---------------------------------------------------------------------------------
             List<string> tmpGroupMenus = GetAuthGroupMenusByList(amg);
 
             //取当前窗口的所有菜单列表
@@ -596,32 +637,42 @@ namespace AuthSystem.AuthDao
             {
                 if (tmpGroupMenus.Contains(((System.Windows.Forms.ToolStripMenuItem)x).Name))
                 {
+                    ((System.Windows.Forms.ToolStripMenuItem)x).Visible = true;
                     ((System.Windows.Forms.ToolStripMenuItem)x).Enabled = true;
                 }
                 else
                 {
                     ((System.Windows.Forms.ToolStripMenuItem)x).Enabled = false;
+                    ((System.Windows.Forms.ToolStripMenuItem)x).Visible = false;
                 }
             }
+            #endregion
 
-            //取用户的角色的权限的对象列表
+            #region 2-------控件处理
+            //取用户的角色的权限的对象列表-
             List<string> tmpGroupItems = GetGroupItemsByList(amg);
+
+            //取不用做权限处理的控件列表
+            List<string> tmpGroupItemsNo = GetItemsNoByList();
 
             //取当前窗口的所有对象列表
             List<object> tmpWinItems = GetWindowsContrul(con);
             //把有权限的对象enable属性设置为true;其它对象设置为False；（对比一个表，不关权限的Item表）
             foreach (object x in tmpWinItems)
             {
-                if (tmpGroupItems.Contains(((System.Windows.Forms.Control)x).Name))
+                if (!tmpGroupItemsNo.Contains(((System.Windows.Forms.Control)x).Name))
                 {
-                    ((System.Windows.Forms.Control)x).Enabled = true;
-                }
-                else
-                {
-                    ((System.Windows.Forms.Control)x).Enabled = false;
+                    if (tmpGroupItems.Contains(((System.Windows.Forms.Control)x).Name))
+                    {
+                        ((System.Windows.Forms.Control)x).Enabled = true;
+                    }
+                    else
+                    {
+                        ((System.Windows.Forms.Control)x).Enabled = false;
+                    }
                 }
             }
-            
+            #endregion
 
             return true;
         }

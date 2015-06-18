@@ -11,6 +11,5 @@ namespace AuthSystem.AuthDao
         {
             //Init
         }
-
     }
 }
