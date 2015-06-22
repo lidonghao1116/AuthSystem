@@ -11,6 +11,16 @@ namespace AuthSystem.AuthForm
 {
     public partial class AFAuthSet : AFBase
     {
+        #region 公共变量
+        private AuthModel.AMUser seleAMUser; //当前选择的用户
+        private AuthModel.AMGroup seleAMGroup;//当前选择的角色
+        private bool canLoad = false; //是否可以进行选择切换的处理进程
+        private BindingSource tmpBSgroups = new BindingSource(); //角色的绑定对象
+        private BindingSource tmpBSusers = new BindingSource();  //用户的绑定对象
+        private TreeNode tnMenu = new TreeNode("菜单");   //规则的根节点
+        private TreeNode tnRules = new TreeNode("其它");  //规则的根节点
+        private TreeNode tnCangKu = new TreeNode("仓库"); //规则的根节点
+        #endregion
         public AFAuthSet()
         {
 
@@ -80,6 +90,7 @@ namespace AuthSystem.AuthForm
             this.dgv_Allusers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_Allusers.Size = new System.Drawing.Size(520, 560);
             this.dgv_Allusers.TabIndex = 0;
+            this.dgv_Allusers.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.dgv_Alluser_RowStateChanged);
             // 
             // panel_Right
             // 
@@ -136,6 +147,7 @@ namespace AuthSystem.AuthForm
             this.dgv_AllGroups.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_AllGroups.Size = new System.Drawing.Size(360, 259);
             this.dgv_AllGroups.TabIndex = 0;
+            this.dgv_AllGroups.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.dgv_AllGroups_RowStateChanged);
             // 
             // AFAuthSet
             // 
@@ -144,6 +156,7 @@ namespace AuthSystem.AuthForm
             this.Controls.Add(this.panel_Left);
             this.Name = "AFAuthSet";
             this.Text = "权限管理";
+            this.Load += new System.EventHandler(this.AFAuthSet_Load);
             this.panel_Left.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Allusers)).EndInit();
             this.panel_Right.ResumeLayout(false);
@@ -164,16 +177,16 @@ namespace AuthSystem.AuthForm
         {
             //用户菜单：panel_Left菜单
             ToolStrip tsLe = new ToolStrip();
-            ToolStripButton tsb1 = new ToolStripButton("添加用户",null,new EventHandler(this.tsb1_Click));
+            ToolStripButton tsb1 = new ToolStripButton("添加用户", null, new EventHandler(this.tsb1_Click));
             ToolStripButton tsb2 = new ToolStripButton("修改用户");
             ToolStripButton tsb3 = new ToolStripButton("删除用户");
             tsLe.Items.Add(tsb1);
             tsLe.Items.Add(tsb2);
             tsLe.Items.Add(tsb3);
             panel_Left.Controls.Add(tsLe);
-            
 
-            
+
+
             //角色菜单：panel_Right_Up菜单
             ToolStrip tsRU = new ToolStrip();
             ToolStripButton tsb10 = new ToolStripButton("添加角色");
@@ -206,10 +219,9 @@ namespace AuthSystem.AuthForm
         {
             #region 1--//加载所有用户数据
             AuthModel.AMUsers amus = AuthDao.ADAuthOpera.GetAuthUsers();
-            BindingSource bs = new BindingSource();
-            bs.DataSource = typeof(AuthSystem.AuthModel.AMUser);
-            bs.DataSource = amus.ListAMUsers;
-            dgv_Allusers.DataSource = bs; //绑定数据源
+            tmpBSusers.DataSource = typeof(AuthSystem.AuthModel.AMUser);
+            tmpBSusers.DataSource = amus.ListAMUsers;
+            dgv_Allusers.DataSource = tmpBSusers; //绑定数据源
             dgv_Allusers.Columns[0].HeaderText = "ID";
             dgv_Allusers.Columns[0].Width = 30;
             dgv_Allusers.Columns[1].HeaderText = "登陆名";
@@ -234,7 +246,6 @@ namespace AuthSystem.AuthForm
 
             #region 2--//加载所有角色数据
             AuthModel.AMGroups amgs = AuthDao.ADAuthOpera.GetAuthGroups();
-            BindingSource tmpBSgroups = new BindingSource();
             tmpBSgroups.DataSource = typeof(AuthModel.AMGroup);
             tmpBSgroups.DataSource = amgs.AllGroups;
             DataGridViewCheckBoxColumn dgvcbc = new DataGridViewCheckBoxColumn(false);
@@ -261,13 +272,10 @@ namespace AuthSystem.AuthForm
             #endregion
 
             #region 3--//加载所有权限数据
-            //加载菜单
-            TreeNode tnMenu = new TreeNode("菜单");
+            //加载菜单-------------------------------------------------
             tv_Rules.Nodes.Add(tnMenu);
-            //TODO
 
-            //加载对象权限
-            TreeNode tnRules = new TreeNode("其它"); //根节点
+            //加载对象权限-------------------------------------------------
             tv_Rules.Nodes.Add(tnRules);
             AuthModel.AMRules tnRules_Rules = new AuthModel.AMRules();
             tnRules_Rules = AuthDao.ADAuthOpera.GetAuthRules();
@@ -276,13 +284,69 @@ namespace AuthSystem.AuthForm
                 tnRules.Nodes.Add(tnRules_Rules.AllAMRules[i].Rule_Name);
             }
 
-            //加载仓库列表
-            TreeNode tnCangKu = new TreeNode("仓库");
+            //加载仓库列表-------------------------------------------------
             tv_Rules.Nodes.Add(tnCangKu);
             #endregion
+
         }
-        #endregion
 
         #endregion
+
+        private void AFAuthSet_Load(object sender, EventArgs e)
+        {
+            seleAMUser = AuthDao.ADAuthOpera.GetAuthUser(dgv_Allusers.SelectedRows[0].Cells["User_Name"].Value.ToString());  //设置当前选择的用户
+            for (int i = 0; i < dgv_AllGroups.Rows.Count; i++)
+            {
+                //MessageBox.Show(seleAMUser.User_Group + "|" + dgv_AllGroups.Rows[i].Cells["Group_ID"].Value.ToString());
+                if (seleAMUser.User_Group == dgv_AllGroups.Rows[i].Cells["Group_ID"].Value.ToString())
+                {
+                    dgv_AllGroups.Rows[i].Selected = true;
+                    dgv_AllGroups.Rows[i].Cells[0].Value = true;
+                    break;
+                }
+            }
+            
+            canLoad = true;
+        }
+
+        #endregion
+
+        private void dgv_Alluser_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
+        {
+            if (canLoad)
+            {
+                if (e.Row.Cells["User_Name"].Value != null)
+                {
+                    if (!String.IsNullOrEmpty(seleAMUser.User_Group))
+                    {
+                        seleAMUser = AuthDao.ADAuthOpera.GetAuthUser(e.Row.Cells["User_Name"].Value.ToString());  //设置当前选择的用户
+                        for (int i = 0; i < dgv_AllGroups.Rows.Count - 1; i++)
+                        {
+                            if (seleAMUser.User_Group == dgv_AllGroups.Rows[i].Cells["Group_ID"].Value.ToString())
+                            {
+                                dgv_AllGroups.Rows[i].Selected = true;
+                                dgv_AllGroups.Rows[i].Cells[0].Value = true;
+                            }
+                            else
+                            {
+                                dgv_AllGroups.Rows[i].Cells[0].Value = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void dgv_AllGroups_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
+        {
+            if (canLoad)
+            {
+                if (e.Row.Cells["Group_Name"].Value != null)
+                {
+                    seleAMGroup = AuthDao.ADAuthOpera.GetAuthGroup(e.Row.Cells["Group_ID"].Value.ToString());
+
+                }
+            }
+        }
     }
 }

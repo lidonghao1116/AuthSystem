@@ -293,6 +293,43 @@ namespace AuthSystem.AuthDao
             }
         }
 
+        //----------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 根据角色ID取角色数据
+        /// </summary>
+        /// <param name="GroupID">角色的ID</param>
+        /// <returns>返回AMGroup对象</returns>
+        public static AMGroup GetAuthGroup(string GroupID)
+        {
+            if (amsc == null)
+            {
+                throw new Exception("在操作之前，必需先加载AMSqlConf！");
+            }
+            try
+            {
+                AMGroup tmpAmg = new AMGroup();
+                string sql = @"select * from AuthGroups where Group_ID='" + GroupID + "'";
+                SqlDataReader SDR = GetDataReader(sql, amsc);
+                while (SDR.Read())
+                {
+                    tmpAmg.Group_ID = SDR["Group_ID"].ToString();
+                    tmpAmg.Group_Name = SDR["Group_Name"].ToString();
+                    tmpAmg.Group_Status = (bool)SDR["Group_Status"];
+                    tmpAmg.Group_BeiZhu = SDR["Group_BeiZhu"].ToString();
+                    tmpAmg.Group_Rule_ID = SDR["Group_Rule_ID"].ToString();
+                    tmpAmg.Group_CangKu_ID = SDR["Group_CangKu_ID"].ToString();
+                    tmpAmg.Group_Menu_ID = SDR["Group_Menu_ID"].ToString();
+                }
+                SDR.Close();
+                return tmpAmg;
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+
         #endregion
 
         #region 3-------从数据库取用户的菜单数据
