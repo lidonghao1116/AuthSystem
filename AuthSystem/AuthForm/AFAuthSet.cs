@@ -114,6 +114,7 @@ namespace AuthSystem.AuthForm
             // 
             // tv_Rules
             // 
+            this.tv_Rules.CheckBoxes = true;
             this.tv_Rules.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tv_Rules.Location = new System.Drawing.Point(0, 0);
             this.tv_Rules.Name = "tv_Rules";
@@ -282,6 +283,7 @@ namespace AuthSystem.AuthForm
             for (int i = 0; i < tnRules_Rules.AllAMRules.Count; i++)
             {
                 tnRules.Nodes.Add(tnRules_Rules.AllAMRules[i].Rule_Name);
+                tnRules.Nodes[i].Checked = false;
             }
 
             //加载仓库列表-------------------------------------------------
@@ -302,10 +304,10 @@ namespace AuthSystem.AuthForm
                 {
                     dgv_AllGroups.Rows[i].Selected = true;
                     dgv_AllGroups.Rows[i].Cells[0].Value = true;
+                    //seleAMGroup = AuthDao.ADAuthOpera.GetAuthGroup(dgv_AllGroups.Rows[i].Cells["Group_ID"].Value.ToString());
                     break;
                 }
             }
-            
             canLoad = true;
         }
 
@@ -344,7 +346,23 @@ namespace AuthSystem.AuthForm
                 if (e.Row.Cells["Group_Name"].Value != null)
                 {
                     seleAMGroup = AuthDao.ADAuthOpera.GetAuthGroup(e.Row.Cells["Group_ID"].Value.ToString());
-
+                    //取角色的规则
+                    AuthModel.AMRules tmpAMR = AuthDao.ADAuthOpera.GetAuthRules_ByGroup_ForAMRules(seleAMGroup);
+                    for (int i = 0; i < tnRules.Nodes.Count; i++)
+                    {
+                        tnRules.Nodes[i].Checked = false;
+                        for (int j = 0; j < tmpAMR.AllAMRules.Count; j++)
+                        {
+                            string tmpStr = tmpAMR.AllAMRules[j].Rule_Name;
+                            //MessageBox.Show(tnRules.Nodes[i].Text);
+                            if (tnRules.Nodes[i].Text == tmpStr)
+                            {
+                                tnRules.Nodes[i].Checked = true;
+                            }
+                        }
+                    }
+                    
+                    tv_Rules.Refresh(); //刷新显示界面
                 }
             }
         }

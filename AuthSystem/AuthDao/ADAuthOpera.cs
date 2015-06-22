@@ -409,10 +409,10 @@ namespace AuthSystem.AuthDao
         #region 4-------从数据库取规则
         //----------------------------------------------------------------------------------------------------------
         /// <summary>
-        /// 返回角色的权限ID列表
+        /// 返回角色的权限ID的列表
         /// </summary>
         /// <param name="amg">角色对象</param>
-        /// <returns></returns>
+        /// <returns>返回AMRulesID_ForList对象</returns>
         public static AMRulesID_ForList GetAuthRules_ByGroup(AMGroup amg)
         {
             if (amsc == null)
@@ -423,7 +423,7 @@ namespace AuthSystem.AuthDao
             {
                 AMRulesID_ForList amgrs = new AMRulesID_ForList();
                 string tmpGroupID = amg.Group_ID;
-                string sql = @"select * from AuthGroupsRule where GroupsRule_ID='" + tmpGroupID + "'";
+                string sql = @"select * from AuthGroupsRules where Groups_ID='" + tmpGroupID + "'";
                 SqlDataReader tmpSDR = GetDataReader(sql, amsc);
                 while (tmpSDR.Read())
                 {
@@ -434,6 +434,45 @@ namespace AuthSystem.AuthDao
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 根据角色对象，返回规则对象集
+        /// </summary>
+        /// <param name="amg">角色对象</param>
+        /// <returns>返回AMRules对象</returns>
+        public static AMRules GetAuthRules_ByGroup_ForAMRules(AMGroup amg)
+        {
+            if (amsc == null)
+            {
+                throw new Exception("在操作之前，必需先加载AMSqlConf！");
+            }
+            try
+            {
+                AMRules AllAMRules = new AMRules();
+                List<AMRule> tmpAMRules = new List<AMRule>();
+                string tmpGroupID = amg.Group_ID;
+                string sql = @"select * from AuthGroupsRules where Group_ID='" + tmpGroupID + "'";
+                SqlDataReader tmpSDR = GetDataReader(sql, amsc);
+                while (tmpSDR.Read())
+                {
+                    AMRule tmpAMRule = new AMRule();
+                    tmpAMRule.Rule_ID = tmpSDR["Rule_ID"].ToString();
+                    tmpAMRule.Rule_Name = tmpSDR["Rule_Name"].ToString();
+                    tmpAMRule.Rule_Item_ID = tmpSDR["Rule_Item_ID"].ToString();
+                    tmpAMRule.Rule_BeiZhu = tmpSDR["Rule_BeiZhu"].ToString();
+                    tmpAMRules.Add(tmpAMRule);
+                }
+                tmpSDR.Close();
+                AllAMRules.AllAMRules = tmpAMRules;
+                return AllAMRules;
+            }
+            catch (Exception)
+            {
+                
                 throw;
             }
         }
