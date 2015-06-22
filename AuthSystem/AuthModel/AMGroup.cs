@@ -84,26 +84,4 @@ namespace AuthSystem.AuthModel
             _AllGroups.Remove(amg);
         }
     }
-
-    public class AMGroupRules : AMBase
-    {
-        public AMGroupRules()
-        {
-            //Init
-        }
-        private List<string> _AllAMGroupRules = null;
-        public void Add(string Rule)
-        {
-            _AllAMGroupRules.Add(Rule);
-        }
-        public void Del(string Rule)
-        {
-            _AllAMGroupRules.Remove(Rule);
-        }
-        public List<string> AllAMGroupRules
-        {
-            get { return _AllAMGroupRules; }
-            set { _AllAMGroupRules = value; }
-        }
-    }
 }

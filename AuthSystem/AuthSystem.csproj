@@ -60,6 +60,7 @@
     <Compile Include="AuthModel\AMGroup.cs" />
     <Compile Include="AuthModel\AMItem.cs" />
     <Compile Include="AuthModel\AMMenu.cs" />
+    <Compile Include="AuthModel\AMRules.cs" />
     <Compile Include="AuthModel\AMSqlConf.cs" />
     <Compile Include="AuthModel\AMBase.cs" />
     <Compile Include="AuthModel\AMLogin.cs" />

@@ -125,7 +125,7 @@ namespace AuthSystem.AuthDao
         /// </summary>
         /// <param name="UserName">用户名</param>
         /// <returns></returns>
-        public static string GetAuthUserGroupName(AMUser amu)
+        public static string GetAuthUser_GroupName(AMUser amu)
         {
             if (amsc == null) //判断配置对象是否为空
             {
@@ -156,7 +156,7 @@ namespace AuthSystem.AuthDao
         /// </summary>
         /// <param name="UserName">用户名</param>
         /// <returns></returns>
-        public static string GetAuthUserGroupID(AMUser amu)
+        public static string GetAuthUser_GroupID(AMUser amu)
         {
             if (amsc == null) //判断配置对象是否为空
             {
@@ -183,7 +183,7 @@ namespace AuthSystem.AuthDao
 
         #endregion
 
-        #region 11------添加用户数据到数据库
+        #region 1-1------添加用户数据到数据库
         //---------------------------------------------------------------------------------------------------------
         public static bool AddAuthUser(AMUser amu)
         {
@@ -266,19 +266,14 @@ namespace AuthSystem.AuthDao
             }
             try
             {
-                AMGroup tmpAmg = new AMGroup();
-                AMGroups tmpAmgs = new AMGroups();
+                
+                AMGroups tmpAllAmgs = new AMGroups();
+                List<AMGroup> tmpAmgs = new List<AMGroup>();
                 string sql = @"select * from AuthGroups";
                 SqlDataReader tmpSDR = GetDataReader(sql, amsc);
                 while (tmpSDR.Read())
                 {
-                    tmpAmg.Group_ID = "";
-                    tmpAmg.Group_Name = "";
-                    tmpAmg.Group_Status = false;
-                    tmpAmg.Group_BeiZhu = "";
-                    tmpAmg.Group_Rule_ID = "";
-                    tmpAmg.Group_CangKu_ID = "";
-                    tmpAmg.Group_Menu_ID = "";
+                    AMGroup tmpAmg = new AMGroup();
                     tmpAmg.Group_ID = tmpSDR["Group_ID"].ToString();
                     tmpAmg.Group_Name = tmpSDR["Group_Name"].ToString();
                     tmpAmg.Group_Status = (bool)tmpSDR["Group_Status"];
@@ -289,140 +284,8 @@ namespace AuthSystem.AuthDao
                     tmpAmgs.Add(tmpAmg);
                 }
                 tmpSDR.Close();
-                return tmpAmgs;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        //----------------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// 取不用做权限处理的Items的名字
-        /// </summary>
-        /// <returns>返回List String列表</returns>
-        public static List<string> GetItemsNoByList()
-        {
-            if (amsc == null)
-            {
-                throw new Exception("在操作之前，必需先加载AMSqlConf！");
-            }
-            try
-            {
-                List<string> tmpItemsNo = new List<string>();
-                string sql = @"select * from AuthItemsNo";
-                SqlDataReader tmpSDR = GetDataReader(sql, amsc);
-                while (tmpSDR.Read())
-                {
-                    tmpItemsNo.Add(tmpSDR["Item_Name"].ToString());
-                }
-                tmpSDR.Close();
-                return tmpItemsNo;
-            }
-            catch (Exception)
-            {
-                
-                throw;
-            }
-        }
-
-        //----------------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// 取所有的Items对象
-        /// </summary>
-        /// <returns>返回AMItems</returns>
-        public static AMItems GetGroupsItems()
-        {
-            if (amsc == null)
-            {
-                throw new Exception("在操作之前，必需先加载AMSqlConf！");
-            }
-            try
-            {
-                AMItems amis = new AMItems();
-                AMItem ami = new AMItem();
-                string sql = @"select * from AuthGroupsItems";
-                SqlDataReader tmpSDR = GetDataReader(sql, amsc);
-                while (tmpSDR.Read())
-                {
-                    ami.Item_ID = "";
-                    ami.Item_Name = "";
-                    ami.Item_NameSpace = "";
-                    ami.Item_BeiZhu = "";
-                    ami.Item_ID = tmpSDR["Item_ID"].ToString();
-                    ami.Item_Name = tmpSDR["Item_Name"].ToString();
-                    ami.Item_NameSpace = tmpSDR["Item_NameSpace"].ToString();
-                    ami.Item_BeiZhu = tmpSDR["Item_BeiZhu"].ToString();
-                    amis.Add(ami);
-                }
-                tmpSDR.Close();
-                return amis;
-
-            }
-            catch (Exception)
-            {
-                
-                throw;
-            }
-        }
-
-        //----------------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// 取指定角色的所有ItemName的列表
-        /// </summary>
-        /// <param name="amg">角色对象AMGroup</param>
-        /// <returns>List(string)</returns>
-        public static List<string> GetGroupItemsByList(AMGroup amg)
-        {
-            if (amsc == null)
-            {
-                throw new Exception("在操作之前，必需先加载AMSqlConf！");
-            }
-            try
-            {
-                List<string> tmpItems = new List<string>();
-                string tmpGroupID = amg.Group_ID;
-                string sql = @"select * from AuthGroupsItems where Group_ID='" + tmpGroupID + "'";                
-                SqlDataReader tmpSDR = GetDataReader(sql, amsc);
-                while (tmpSDR.Read())
-                {
-                    tmpItems.Add(tmpSDR["Item_Name"].ToString());
-                }
-                tmpSDR.Close();
-                
-                return tmpItems;
-            }
-            catch (Exception)
-            {
-                
-                throw;
-            }
-        }
-        //----------------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// 返回角色的权限
-        /// </summary>
-        /// <param name="amg">角色对象</param>
-        /// <returns></returns>
-        public static AMGroupRules GetAuthGroupRules(AMGroup amg)
-        {
-            if (amsc == null)
-            {
-                throw new Exception("在操作之前，必需先加载AMSqlConf！");
-            }
-            try
-            {
-                AMGroupRules amgrs = new AMGroupRules();
-                string tmpGroupID=amg.Group_ID;
-                string sql = @"select * from AuthGroupsRule where GroupsRule_ID='" + tmpGroupID + "'";
-                SqlDataReader tmpSDR = GetDataReader(sql, amsc);
-                while (tmpSDR.Read())
-                {
-                    amgrs.Add(tmpSDR["Rule_ID"].ToString());
-                }
-                tmpSDR.Close();
-                return amgrs;
+                tmpAllAmgs.AllGroups = tmpAmgs;
+                return tmpAllAmgs;
             }
             catch (Exception)
             {
@@ -504,6 +367,220 @@ namespace AuthSystem.AuthDao
             }
         }
 
+        #endregion
+
+        #region 4-------从数据库取规则
+        //----------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 返回角色的权限ID列表
+        /// </summary>
+        /// <param name="amg">角色对象</param>
+        /// <returns></returns>
+        public static AMRulesID_ForList GetAuthRules_ByGroup(AMGroup amg)
+        {
+            if (amsc == null)
+            {
+                throw new Exception("在操作之前，必需先加载AMSqlConf！");
+            }
+            try
+            {
+                AMRulesID_ForList amgrs = new AMRulesID_ForList();
+                string tmpGroupID = amg.Group_ID;
+                string sql = @"select * from AuthGroupsRule where GroupsRule_ID='" + tmpGroupID + "'";
+                SqlDataReader tmpSDR = GetDataReader(sql, amsc);
+                while (tmpSDR.Read())
+                {
+                    amgrs.Add(tmpSDR["Rule_ID"].ToString());
+                }
+                tmpSDR.Close();
+                return amgrs;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 取所有的规则Rules
+        /// </summary>
+        /// <returns>返回AMRules对象</returns>
+        public static AMRules GetAuthRules()
+        {
+            if (amsc == null)
+            {
+                throw new Exception("在操作之前，必需先加载AMSqlConf！");
+            }
+            try
+            {
+                AMRules AllAMRules = new AMRules();
+                List<AMRule> tmpRules = new List<AMRule>();
+                string sql = @"select * from AuthRules";
+                SqlDataReader tmpSDR = GetDataReader(sql, amsc);
+                while (tmpSDR.Read())
+                {
+                    AMRule tmpAMRule = new AMRule();
+                    tmpAMRule.Rule_ID = tmpSDR["Rule_ID"].ToString();
+                    tmpAMRule.Rule_Name = tmpSDR["Rule_Name"].ToString();
+                    tmpAMRule.Rule_Item_ID = tmpSDR["Rule_Item_ID"].ToString();
+                    tmpAMRule.Rule_BeiZhu = tmpSDR["Rule_BeiZhu"].ToString();
+                    tmpRules.Add(tmpAMRule);
+                }
+                tmpSDR.Close();
+                AllAMRules.AllAMRules = tmpRules;
+                return AllAMRules;
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 取指定组（角色）的权限规则
+        /// </summary>
+        /// <param name="amg">组（角色）</param>
+        /// <returns>返回AMRules对象</returns>
+        public static AMRules GetAuthRule_ByGroup(AMGroup amg)
+        {
+            if (amsc == null)
+            {
+                throw new Exception("在操作之前，必需先加载AMSqlConf！");
+            }
+            try
+            {
+                AMRules GroupAMRules = new AMRules();
+                List<AMRule> tmpGroupAMRules = new List<AMRule>();
+                string strGroupID = amg.Group_ID;
+                string sql = @"select * from AuthGroupsRules where Group_ID='" + strGroupID + "'";
+                SqlDataReader tmpSDR = GetDataReader(sql, amsc);
+                while (tmpSDR.Read())
+                {
+                    AMRule tmpAMRule = new AMRule();
+                    tmpAMRule.Rule_ID = tmpSDR["Rule_ID"].ToString();
+                    tmpAMRule.Rule_Name = tmpSDR["Rule_Name"].ToString();
+                    tmpAMRule.Rule_Item_ID = tmpSDR["Rule_Item_ID"].ToString();
+                    tmpAMRule.Rule_BeiZhu = tmpSDR["Rule_BeiZhu"].ToString();
+                    tmpGroupAMRules.Add(tmpAMRule);
+                }
+                tmpSDR.Close();
+                GroupAMRules.AllAMRules = tmpGroupAMRules;
+                return GroupAMRules;
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region 5-------从数据库取对象（Item)
+        //----------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 取不用做权限处理的Items的名字
+        /// </summary>
+        /// <returns>返回List String列表</returns>
+        public static List<string> GetAuthNoItems_Name_ForList()
+        {
+            if (amsc == null)
+            {
+                throw new Exception("在操作之前，必需先加载AMSqlConf！");
+            }
+            try
+            {
+                List<string> tmpItemsNo = new List<string>();
+                string sql = @"select * from AuthItemsNo";
+                SqlDataReader tmpSDR = GetDataReader(sql, amsc);
+                while (tmpSDR.Read())
+                {
+                    tmpItemsNo.Add(tmpSDR["Item_Name"].ToString());
+                }
+                tmpSDR.Close();
+                return tmpItemsNo;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 取所有的Items对象
+        /// </summary>
+        /// <returns>返回AMItems</returns>
+        public static AMItems GetAuthItems()
+        {
+            if (amsc == null)
+            {
+                throw new Exception("在操作之前，必需先加载AMSqlConf！");
+            }
+            try
+            {
+                AMItems amis = new AMItems();
+                AMItem ami = new AMItem();
+                string sql = @"select * from AuthGroupsItems";
+                SqlDataReader tmpSDR = GetDataReader(sql, amsc);
+                while (tmpSDR.Read())
+                {
+                    ami.Item_ID = "";
+                    ami.Item_Name = "";
+                    ami.Item_NameSpace = "";
+                    ami.Item_BeiZhu = "";
+                    ami.Item_ID = tmpSDR["Item_ID"].ToString();
+                    ami.Item_Name = tmpSDR["Item_Name"].ToString();
+                    ami.Item_NameSpace = tmpSDR["Item_NameSpace"].ToString();
+                    ami.Item_BeiZhu = tmpSDR["Item_BeiZhu"].ToString();
+                    amis.Add(ami);
+                }
+                tmpSDR.Close();
+                return amis;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 取指定角色的所有ItemName的列表
+        /// </summary>
+        /// <param name="amg">角色对象AMGroup</param>
+        /// <returns>List(string)</returns>
+        public static List<string> GetAuthItems_Name_ForList(AMGroup amg)
+        {
+            if (amsc == null)
+            {
+                throw new Exception("在操作之前，必需先加载AMSqlConf！");
+            }
+            try
+            {
+                List<string> tmpItems = new List<string>();
+                string tmpGroupID = amg.Group_ID;
+                string sql = @"select * from AuthGroupsItems where Group_ID='" + tmpGroupID + "'";
+                SqlDataReader tmpSDR = GetDataReader(sql, amsc);
+                while (tmpSDR.Read())
+                {
+                    tmpItems.Add(tmpSDR["Item_Name"].ToString());
+                }
+                tmpSDR.Close();
+
+                return tmpItems;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
         #endregion
 
         #region 9-------窗口所有对象权限管理
@@ -639,10 +716,10 @@ namespace AuthSystem.AuthDao
 
             #region 2-------控件处理
             //取用户的角色的权限的对象列表-
-            List<string> tmpGroupItems = GetGroupItemsByList(amg);
+            List<string> tmpGroupItems = GetAuthItems_Name_ForList(amg);
 
             //取不用做权限处理的控件列表
-            List<string> tmpGroupItemsNo = GetItemsNoByList();
+            List<string> tmpGroupItemsNo = GetAuthNoItems_Name_ForList();
 
             //取当前窗口的所有对象列表
             List<object> tmpWinItems = GetWindowsContrul(con);
