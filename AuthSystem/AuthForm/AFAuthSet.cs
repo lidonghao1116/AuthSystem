@@ -74,6 +74,8 @@ namespace AuthSystem.AuthForm
             // 
             // dgv_Allusers
             // 
+            this.dgv_Allusers.AllowUserToAddRows = false;
+            this.dgv_Allusers.AllowUserToDeleteRows = false;
             this.dgv_Allusers.AllowUserToResizeRows = false;
             this.dgv_Allusers.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.dgv_Allusers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -90,7 +92,7 @@ namespace AuthSystem.AuthForm
             this.dgv_Allusers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_Allusers.Size = new System.Drawing.Size(520, 560);
             this.dgv_Allusers.TabIndex = 0;
-            this.dgv_Allusers.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.dgv_Alluser_RowStateChanged);
+            this.dgv_Allusers.SelectionChanged += new System.EventHandler(this.dgv_Allusers_SeleChanged);
             // 
             // panel_Right
             // 
@@ -120,6 +122,7 @@ namespace AuthSystem.AuthForm
             this.tv_Rules.Name = "tv_Rules";
             this.tv_Rules.Size = new System.Drawing.Size(360, 299);
             this.tv_Rules.TabIndex = 0;
+            this.tv_Rules.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tv_Rules_AfterCheck);
             // 
             // panel_Right_Up
             // 
@@ -133,6 +136,8 @@ namespace AuthSystem.AuthForm
             // 
             // dgv_AllGroups
             // 
+            this.dgv_AllGroups.AllowUserToAddRows = false;
+            this.dgv_AllGroups.AllowUserToDeleteRows = false;
             this.dgv_AllGroups.AllowUserToResizeRows = false;
             this.dgv_AllGroups.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.dgv_AllGroups.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -148,7 +153,6 @@ namespace AuthSystem.AuthForm
             this.dgv_AllGroups.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_AllGroups.Size = new System.Drawing.Size(360, 259);
             this.dgv_AllGroups.TabIndex = 0;
-            this.dgv_AllGroups.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.dgv_AllGroups_RowStateChanged);
             // 
             // AFAuthSet
             // 
@@ -296,52 +300,31 @@ namespace AuthSystem.AuthForm
 
         private void AFAuthSet_Load(object sender, EventArgs e)
         {
-            seleAMUser = AuthDao.ADAuthOpera.GetAuthUser(dgv_Allusers.SelectedRows[0].Cells["User_Name"].Value.ToString());  //设置当前选择的用户
-            for (int i = 0; i < dgv_AllGroups.Rows.Count; i++)
+            //默认选择用户后，自动更改角色与权限规则
+            if (dgv_Allusers.SelectedRows.Count == 1)
             {
-                //MessageBox.Show(seleAMUser.User_Group + "|" + dgv_AllGroups.Rows[i].Cells["Group_ID"].Value.ToString());
-                if (seleAMUser.User_Group == dgv_AllGroups.Rows[i].Cells["Group_ID"].Value.ToString())
+                seleAMUser = AuthDao.ADAuthOpera.GetAuthUser(dgv_Allusers.SelectedRows[0].Cells["User_Name"].Value.ToString());  //设置当前选择的用户
+                for (int i = 0; i < dgv_AllGroups.Rows.Count; i++)
                 {
-                    dgv_AllGroups.Rows[i].Selected = true;
-                    dgv_AllGroups.Rows[i].Cells[0].Value = true;
-                    //seleAMGroup = AuthDao.ADAuthOpera.GetAuthGroup(dgv_AllGroups.Rows[i].Cells["Group_ID"].Value.ToString());
-                    break;
+                    if (seleAMUser.User_Group == dgv_AllGroups.Rows[i].Cells["Group_ID"].Value.ToString())
+                    {
+                        dgv_AllGroups.Rows[i].Selected = true;
+                        dgv_AllGroups.Rows[i].Cells[0].Value = true;
+                        seleAMGroup = AuthDao.ADAuthOpera.GetAuthGroup(dgv_AllGroups.Rows[i].Cells["Group_ID"].Value.ToString());
+                        break;
+                    }
                 }
+
             }
             canLoad = true;
         }
 
         #endregion
 
-        private void dgv_Alluser_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
-        {
-            if (canLoad)
-            {
-                if (e.Row.Cells["User_Name"].Value != null)
-                {
-                    if (!String.IsNullOrEmpty(seleAMUser.User_Group))
-                    {
-                        seleAMUser = AuthDao.ADAuthOpera.GetAuthUser(e.Row.Cells["User_Name"].Value.ToString());  //设置当前选择的用户
-                        for (int i = 0; i < dgv_AllGroups.Rows.Count - 1; i++)
-                        {
-                            if (seleAMUser.User_Group == dgv_AllGroups.Rows[i].Cells["Group_ID"].Value.ToString())
-                            {
-                                dgv_AllGroups.Rows[i].Selected = true;
-                                dgv_AllGroups.Rows[i].Cells[0].Value = true;
-                            }
-                            else
-                            {
-                                dgv_AllGroups.Rows[i].Cells[0].Value = false;
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         private void dgv_AllGroups_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
         {
-            if (canLoad)
+            if (false)
             {
                 if (e.Row.Cells["Group_Name"].Value != null)
                 {
@@ -366,5 +349,55 @@ namespace AuthSystem.AuthForm
                 }
             }
         }
+
+        #region 当选择的用户更改时，同步更改用户的角色与规则
+        /// <summary>
+        /// 当选择的用户更改时，同步更改用户的角色与规则
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgv_Allusers_SeleChanged(object sender, EventArgs e)
+        {
+            if (canLoad)
+            {
+                seleAMUser = AuthDao.ADAuthOpera.GetAuthUser(dgv_Allusers.SelectedRows[0].Cells["User_Name"].Value.ToString());  //设置当前选择的用户
+                for (int i = 0; i < dgv_AllGroups.Rows.Count - 1; i++)
+                {
+                    if (seleAMUser.User_Group == dgv_AllGroups.Rows[i].Cells["Group_ID"].Value.ToString())
+                    {
+                        dgv_AllGroups.Rows[i].Selected = true;
+                        dgv_AllGroups.Rows[i].Cells[0].Value = true;
+                    }
+                    else
+                    {
+                        dgv_AllGroups.Rows[i].Cells[0].Value = false;
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region 当更改tv_Tree复选框时处理下级同步更改
+        /// <summary>
+        /// 当更改tv_Tree复选框时处理下级同步更改
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tv_Rules_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            foreach (TreeNode x in e.Node.Nodes) //一级
+            {
+                x.Checked = e.Node.Checked;
+                foreach (TreeNode y in x.Nodes)//二级
+                {
+                    y.Checked = x.Checked;
+                    foreach (TreeNode z in y.Nodes)//三级
+                    {
+                        z.Checked = y.Checked;
+                    }
+                }
+            }
+        }
+        #endregion
     }
 }
