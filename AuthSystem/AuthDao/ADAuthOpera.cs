@@ -662,7 +662,11 @@ namespace AuthSystem.AuthDao
         #endregion
 
         #region 5-1-------保存对象到数据库（Item）
-        public static void SaveAuthItems(AMItems amis)
+        /// <summary>
+        /// 保存所有的Items
+        /// </summary>
+        /// <param name="amis"></param>
+        public static bool SaveAuthItems(AMItems amis)
         {
             if (amsc == null)
             {
@@ -670,9 +674,90 @@ namespace AuthSystem.AuthDao
             }
             try
             {
-                string sql="";
-                SqlDataAdapter sda=GetDataAdapter(sql,amsc);
+                AMItem tmpAMItem = new AMItem();  //临时的一个AMItem
+                AMItems svItems = new AMItems();
+                svItems = amis;
+                AMItems dbItems = GetAuthItems(); //数据库中的所有items
+                AMItems gongItems = new AMItems();//共有的数据
+
+                for (int x = 0; x < dbItems.AllAMItems.Count; x++) //循环数据库的对象,保存共有item,从数据库删除其它item
+                {
+                    for (int y = 0; y < svItems.AllAMItems.Count; y++)
+                    {
+                        if (AuthItemIsSame(svItems.AllAMItems[y],dbItems.AllAMItems[x]))
+                        {
+                            //System.Windows.Forms.MessageBox.Show(svItems.AllAMItems[x].Item_Name);
+                            gongItems.AllAMItems.Add(dbItems.AllAMItems[x]);
+                        }
+                    }
+
+                }
+                for (int x = 0; x < gongItems.AllAMItems.Count; x++)//循环共有数据，从要保存的数据中删除
+                {
+                    svItems.AllAMItems.Remove(gongItems.AllAMItems[x]);
+                }
+
+                for (int x = 0; x < amis.AllAMItems.Count; x++)//循环剩下的数据，添加保存到数据库
+                {
+                    AddAuthItem(svItems.AllAMItems[x]);
+                }
+                //到这里，所有的数据就已经保存完成了！
+                return true;
+            }
+            catch (Exception ex)
+            {
                 
+                throw ex;
+            }
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 从数据库删除一个Item
+        /// </summary>
+        /// <param name="ami">要删除的Item对象</param>
+        /// <returns>返回影响的行数!</returns>
+        public static int DelAuthItem(AMItem ami)
+        {
+            if (amsc == null)
+            {
+                throw new Exception("在操作之前，必需先加载AMSqlConf！");
+            }
+            try
+            {
+                string tmpID = ami.Item_ID;
+                string sql = @"delete from AuthItems where Item_ID='" + tmpID + "'";
+                int x=ExcSqlCommand(sql, amsc);
+                return x;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 添加一个Item到数据库
+        /// </summary>
+        /// <param name="ami">要添加的Item</param>
+        /// <returns>返回影响的行数</returns>
+        public static int AddAuthItem(AMItem ami)
+        {
+            if (amsc == null)
+            {
+                throw new Exception("在操作之前，必需先加载AMSqlConf！");
+            }
+            try
+            {
+                string tmpID=ami.Item_ID;
+                string tmpName=ami.Item_Name;
+                string tmpNP=ami.Item_NameSpace;
+                string tmpBZ=ami.Item_BeiZhu;
+                string tmpValue="'"+tmpID+"','"+tmpName+"','"+tmpNP+"','"+tmpBZ+"'";
+                string sql = @"insert into AuthItems values(" + tmpValue + ")";
+                int x = ExcSqlCommand(sql, amsc);
+                return x;
             }
             catch (Exception)
             {
@@ -680,6 +765,27 @@ namespace AuthSystem.AuthDao
                 throw;
             }
         }
+
+        //----------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 比较两个AMItem对象，是否相等
+        /// </summary>
+        /// <param name="ami1"></param>
+        /// <param name="ami2"></param>
+        /// <returns></returns>
+        public static bool AuthItemIsSame(AMItem ami1, AMItem ami2)
+        {
+            if ((ami1.Item_ID == ami2.Item_ID) && (ami1.Item_Name == ami2.Item_Name) && (ami1.Item_NameSpace == ami2.Item_NameSpace) && (ami1.Item_BeiZhu == ami2.Item_BeiZhu))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
+        #endregion
 
         #region 9-------窗口所有对象权限管理
         //---------------------------------------------------------------------------------------------------------
@@ -842,7 +948,6 @@ namespace AuthSystem.AuthDao
             return true;
         }
         #endregion
-
 
     }
 }

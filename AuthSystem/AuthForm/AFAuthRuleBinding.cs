@@ -255,7 +255,22 @@ namespace AuthSystem.AuthForm
         {
             AMItems tmpAMItemsSave = new AMItems();
             tmpAMItemsSave.AllAMItems = (List<AMItem>)ItemsBindingSource.DataSource;
-            MessageBox.Show(tmpAMItemsSave.AllAMItems[0].Item_Name);
+            //MessageBox.Show(tmpAMItemsSave.AllAMItems[0].Item_Name);
+            //bool x=AuthDao.ADAuthOpera.SaveAuthItems(tmpAMItemsSave);
+            //MessageBox.Show(x.ToString());
+            AMItems tmpDBitems = AuthDao.ADAuthOpera.GetAuthItems();
+            for (int x = 0; x < tmpDBitems.AllAMItems.Count; x++)
+            {
+                //MessageBox.Show(tmpDBitems.AllAMItems[x].Item_Name+tmpAMItemsSave.AllAMItems[x].Item_Name);
+                //MessageBox.Show((tmpAMItemsSave.AllAMItems.Contains(tmpDBitems.AllAMItems[x])).ToString());
+                for (int y = 0; y < tmpAMItemsSave.AllAMItems.Count; y++)
+                {
+                    if (AuthDao.ADAuthOpera.AuthItemIsSame(tmpAMItemsSave.AllAMItems[y], tmpDBitems.AllAMItems[x]))
+                    {
+                        MessageBox.Show("same");
+                    }
+                }
+            }
         }
         #endregion
 
