@@ -62,7 +62,7 @@ namespace AuthSystem.AuthDao
 
         //---------------------------------------------------------------------------------------------------------
         /// <summary>
-        /// 获取一个数据对象
+        /// 获取一个数据对象SqlDataReader
         /// </summary>
         /// <param name="Command">要执行的SQL语句</param>
         /// <param name="amsc">数据库的配置对象</param>
@@ -84,6 +84,26 @@ namespace AuthSystem.AuthDao
                 throw;
             }
         }
+
+        //---------------------------------------------------------------------------------------------------------
+        public static SqlDataAdapter GetDataAdapter(string Command, AuthSystem.AuthModel.AMSqlConf amsc)
+        {
+            SqlDataAdapter tmpDataAdapter;
+            SqlConnection tmpConn = new SqlConnection();
+            try
+            {
+                tmpConn = GetConn(amsc);
+                SqlCommand tmpComm = new SqlCommand(Command, tmpConn);
+                tmpDataAdapter = new SqlDataAdapter(tmpComm);
+                return tmpDataAdapter;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+       }
+
+
         //---------------------------------------------------------------------------------------------------------
         /// <summary>
         /// Bool转换成Int

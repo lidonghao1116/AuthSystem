@@ -30,6 +30,13 @@ namespace AuthSystem.AuthModel
             set { _Rule_Item_ID = value; }
         }
 
+        private string _Rule_Up_RuleID = "";
+        public string Rule_Up_RuleID
+        {
+            get { return _Rule_Up_RuleID; }
+            set { _Rule_Up_RuleID = value; }
+        }
+
         private string _Rule_BeiZhu = "";
         public string Rule_BeiZhu
         {

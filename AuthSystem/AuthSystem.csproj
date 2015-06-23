@@ -77,6 +77,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AuthForm\AFAuthRuleBinding.resx">
+      <DependentUpon>AFAuthRuleBinding.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AuthForm\AFAuthSet.resx">
       <DependentUpon>AFAuthSet.cs</DependentUpon>
     </EmbeddedResource>

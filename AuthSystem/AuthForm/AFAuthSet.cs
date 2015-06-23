@@ -18,7 +18,10 @@ namespace AuthSystem.AuthForm
         private BindingSource tmpBSgroups = new BindingSource(); //角色的绑定对象
         private BindingSource tmpBSusers = new BindingSource();  //用户的绑定对象
         private TreeNode tnMenu = new TreeNode("菜单");   //规则的根节点
-        private TreeNode tnRules = new TreeNode("其它");  //规则的根节点
+        private TreeNode tnRules = new TreeNode("其它");
+        private MenuStrip AuthMenu;
+        private ToolStripMenuItem AuthMenu_SupSet;
+        private ToolStripMenuItem AuthMenu_SupSet_ManageRuleItem;  //规则的根节点
         private TreeNode tnCangKu = new TreeNode("仓库"); //规则的根节点
         #endregion
         public AFAuthSet()
@@ -53,12 +56,16 @@ namespace AuthSystem.AuthForm
             this.tv_Rules = new System.Windows.Forms.TreeView();
             this.panel_Right_Up = new System.Windows.Forms.Panel();
             this.dgv_AllGroups = new System.Windows.Forms.DataGridView();
+            this.AuthMenu = new System.Windows.Forms.MenuStrip();
+            this.AuthMenu_SupSet = new System.Windows.Forms.ToolStripMenuItem();
+            this.AuthMenu_SupSet_ManageRuleItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel_Left.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Allusers)).BeginInit();
             this.panel_Right.SuspendLayout();
             this.panel_Right_Down.SuspendLayout();
             this.panel_Right_Up.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_AllGroups)).BeginInit();
+            this.AuthMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel_Left
@@ -67,9 +74,9 @@ namespace AuthSystem.AuthForm
             this.panel_Left.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel_Left.Controls.Add(this.dgv_Allusers);
             this.panel_Left.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel_Left.Location = new System.Drawing.Point(0, 0);
+            this.panel_Left.Location = new System.Drawing.Point(0, 25);
             this.panel_Left.Name = "panel_Left";
-            this.panel_Left.Size = new System.Drawing.Size(522, 562);
+            this.panel_Left.Size = new System.Drawing.Size(522, 537);
             this.panel_Left.TabIndex = 0;
             // 
             // dgv_Allusers
@@ -90,7 +97,7 @@ namespace AuthSystem.AuthForm
             this.dgv_Allusers.RowTemplate.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             this.dgv_Allusers.RowTemplate.Height = 23;
             this.dgv_Allusers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_Allusers.Size = new System.Drawing.Size(520, 560);
+            this.dgv_Allusers.Size = new System.Drawing.Size(520, 535);
             this.dgv_Allusers.TabIndex = 0;
             this.dgv_Allusers.SelectionChanged += new System.EventHandler(this.dgv_Allusers_SeleChanged);
             // 
@@ -99,9 +106,9 @@ namespace AuthSystem.AuthForm
             this.panel_Right.Controls.Add(this.panel_Right_Down);
             this.panel_Right.Controls.Add(this.panel_Right_Up);
             this.panel_Right.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_Right.Location = new System.Drawing.Point(522, 0);
+            this.panel_Right.Location = new System.Drawing.Point(522, 25);
             this.panel_Right.Name = "panel_Right";
-            this.panel_Right.Size = new System.Drawing.Size(362, 562);
+            this.panel_Right.Size = new System.Drawing.Size(362, 537);
             this.panel_Right.TabIndex = 1;
             // 
             // panel_Right_Down
@@ -111,7 +118,7 @@ namespace AuthSystem.AuthForm
             this.panel_Right_Down.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_Right_Down.Location = new System.Drawing.Point(0, 261);
             this.panel_Right_Down.Name = "panel_Right_Down";
-            this.panel_Right_Down.Size = new System.Drawing.Size(362, 301);
+            this.panel_Right_Down.Size = new System.Drawing.Size(362, 276);
             this.panel_Right_Down.TabIndex = 1;
             // 
             // tv_Rules
@@ -120,7 +127,7 @@ namespace AuthSystem.AuthForm
             this.tv_Rules.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tv_Rules.Location = new System.Drawing.Point(0, 0);
             this.tv_Rules.Name = "tv_Rules";
-            this.tv_Rules.Size = new System.Drawing.Size(360, 299);
+            this.tv_Rules.Size = new System.Drawing.Size(360, 274);
             this.tv_Rules.TabIndex = 0;
             this.tv_Rules.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tv_Rules_AfterCheck);
             // 
@@ -154,11 +161,37 @@ namespace AuthSystem.AuthForm
             this.dgv_AllGroups.Size = new System.Drawing.Size(360, 259);
             this.dgv_AllGroups.TabIndex = 0;
             // 
+            // AuthMenu
+            // 
+            this.AuthMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AuthMenu_SupSet});
+            this.AuthMenu.Location = new System.Drawing.Point(0, 0);
+            this.AuthMenu.Name = "AuthMenu";
+            this.AuthMenu.Size = new System.Drawing.Size(884, 25);
+            this.AuthMenu.TabIndex = 2;
+            this.AuthMenu.Text = "AuthMenu";
+            // 
+            // AuthMenu_SupSet
+            // 
+            this.AuthMenu_SupSet.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AuthMenu_SupSet_ManageRuleItem});
+            this.AuthMenu_SupSet.Name = "AuthMenu_SupSet";
+            this.AuthMenu_SupSet.Size = new System.Drawing.Size(68, 21);
+            this.AuthMenu_SupSet.Text = "高级设置";
+            // 
+            // AuthMenu_SupSet_ManageRuleItem
+            // 
+            this.AuthMenu_SupSet_ManageRuleItem.Name = "AuthMenu_SupSet_ManageRuleItem";
+            this.AuthMenu_SupSet_ManageRuleItem.Size = new System.Drawing.Size(172, 22);
+            this.AuthMenu_SupSet_ManageRuleItem.Text = "管理规则对象绑定";
+            this.AuthMenu_SupSet_ManageRuleItem.Click += new System.EventHandler(this.AuthMenu_SupSet_ManageRuleItem_Click);
+            // 
             // AFAuthSet
             // 
             this.ClientSize = new System.Drawing.Size(884, 562);
             this.Controls.Add(this.panel_Right);
             this.Controls.Add(this.panel_Left);
+            this.Controls.Add(this.AuthMenu);
             this.Name = "AFAuthSet";
             this.Text = "权限管理";
             this.Load += new System.EventHandler(this.AFAuthSet_Load);
@@ -168,7 +201,10 @@ namespace AuthSystem.AuthForm
             this.panel_Right_Down.ResumeLayout(false);
             this.panel_Right_Up.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_AllGroups)).EndInit();
+            this.AuthMenu.ResumeLayout(false);
+            this.AuthMenu.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
         #endregion
@@ -399,5 +435,11 @@ namespace AuthSystem.AuthForm
             }
         }
         #endregion
+
+        private void AuthMenu_SupSet_ManageRuleItem_Click(object sender, EventArgs e)
+        {
+            AFAuthRuleBinding afarb = new AFAuthRuleBinding();
+            afarb.ShowDialog();
+        }
     }
 }

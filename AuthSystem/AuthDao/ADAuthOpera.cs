@@ -463,6 +463,7 @@ namespace AuthSystem.AuthDao
                     tmpAMRule.Rule_ID = tmpSDR["Rule_ID"].ToString();
                     tmpAMRule.Rule_Name = tmpSDR["Rule_Name"].ToString();
                     tmpAMRule.Rule_Item_ID = tmpSDR["Rule_Item_ID"].ToString();
+                    tmpAMRule.Rule_Up_RuleID = tmpSDR["Rule_Up_RuleID"].ToString();
                     tmpAMRule.Rule_BeiZhu = tmpSDR["Rule_BeiZhu"].ToString();
                     tmpAMRules.Add(tmpAMRule);
                 }
@@ -500,6 +501,7 @@ namespace AuthSystem.AuthDao
                     tmpAMRule.Rule_ID = tmpSDR["Rule_ID"].ToString();
                     tmpAMRule.Rule_Name = tmpSDR["Rule_Name"].ToString();
                     tmpAMRule.Rule_Item_ID = tmpSDR["Rule_Item_ID"].ToString();
+                    tmpAMRule.Rule_Up_RuleID = tmpSDR["Rule_Up_RuleID"].ToString();
                     tmpAMRule.Rule_BeiZhu = tmpSDR["Rule_BeiZhu"].ToString();
                     tmpRules.Add(tmpAMRule);
                 }
@@ -538,6 +540,7 @@ namespace AuthSystem.AuthDao
                     tmpAMRule.Rule_ID = tmpSDR["Rule_ID"].ToString();
                     tmpAMRule.Rule_Name = tmpSDR["Rule_Name"].ToString();
                     tmpAMRule.Rule_Item_ID = tmpSDR["Rule_Item_ID"].ToString();
+                    tmpAMRule.Rule_Up_RuleID = tmpSDR["Rule_Up_RuleID"].ToString();
                     tmpAMRule.Rule_BeiZhu = tmpSDR["Rule_BeiZhu"].ToString();
                     tmpGroupAMRules.Add(tmpAMRule);
                 }
@@ -598,16 +601,14 @@ namespace AuthSystem.AuthDao
             }
             try
             {
-                AMItems amis = new AMItems();
-                AMItem ami = new AMItem();
-                string sql = @"select * from AuthGroupsItems";
+                AMItems Allamis = new AMItems();
+                List<AMItem> amis = new List<AMItem>();
+                //string sql = @"select * from AuthGroupsItems";
+                string sql = @"select * from AuthItems";
                 SqlDataReader tmpSDR = GetDataReader(sql, amsc);
                 while (tmpSDR.Read())
                 {
-                    ami.Item_ID = "";
-                    ami.Item_Name = "";
-                    ami.Item_NameSpace = "";
-                    ami.Item_BeiZhu = "";
+                    AMItem ami = new AMItem();
                     ami.Item_ID = tmpSDR["Item_ID"].ToString();
                     ami.Item_Name = tmpSDR["Item_Name"].ToString();
                     ami.Item_NameSpace = tmpSDR["Item_NameSpace"].ToString();
@@ -615,7 +616,8 @@ namespace AuthSystem.AuthDao
                     amis.Add(ami);
                 }
                 tmpSDR.Close();
-                return amis;
+                Allamis.AllAMItems = amis;
+                return Allamis;
 
             }
             catch (Exception)
@@ -658,6 +660,26 @@ namespace AuthSystem.AuthDao
             }
         }
         #endregion
+
+        #region 5-1-------保存对象到数据库（Item）
+        public static void SaveAuthItems(AMItems amis)
+        {
+            if (amsc == null)
+            {
+                throw new Exception("在操作之前，必需先加载AMSqlConf！");
+            }
+            try
+            {
+                string sql="";
+                SqlDataAdapter sda=GetDataAdapter(sql,amsc);
+                
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
 
         #region 9-------窗口所有对象权限管理
         //---------------------------------------------------------------------------------------------------------
@@ -768,6 +790,7 @@ namespace AuthSystem.AuthDao
             //取用户的角色对象---------------------------------------------------------------------------------
             AMGroup amg = GetAuthGroup(amu);
             #region 1-------菜单处理
+            /*
             //取用户的角色的权限的菜单列表---------------------------------------------------------------------------------
             List<string> tmpGroupMenus = GetAuthGroupMenusByList(amg);
 
@@ -787,7 +810,7 @@ namespace AuthSystem.AuthDao
                     ((System.Windows.Forms.ToolStripMenuItem)x).Enabled = false;
                     ((System.Windows.Forms.ToolStripMenuItem)x).Visible = false;
                 }
-            }
+            }*/
             #endregion
 
             #region 2-------控件处理
