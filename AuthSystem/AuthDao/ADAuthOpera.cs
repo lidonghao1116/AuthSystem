@@ -520,8 +520,8 @@ namespace AuthSystem.AuthDao
         /// 取指定组（角色）的权限规则
         /// </summary>
         /// <param name="amg">组（角色）</param>
-        /// <returns>返回AMRules对象</returns>
-        public static AMRules GetAuthRule_ByGroup(AMGroup amg)
+        /// <returns>返回List AMRule对象</returns>
+        public static List<AMRule> GetAuthRule_ByGroup(AMGroup amg)
         {
             if (amsc == null)
             {
@@ -529,7 +529,6 @@ namespace AuthSystem.AuthDao
             }
             try
             {
-                AMRules GroupAMRules = new AMRules();
                 List<AMRule> tmpGroupAMRules = new List<AMRule>();
                 string strGroupID = amg.Group_ID;
                 string sql = @"select * from AuthGroupsRules where Group_ID='" + strGroupID + "'";
@@ -545,8 +544,7 @@ namespace AuthSystem.AuthDao
                     tmpGroupAMRules.Add(tmpAMRule);
                 }
                 tmpSDR.Close();
-                GroupAMRules.AllAMRules = tmpGroupAMRules;
-                return GroupAMRules;
+                return tmpGroupAMRules;
             }
             catch (Exception)
             {
@@ -555,6 +553,42 @@ namespace AuthSystem.AuthDao
             }
         }
 
+        //----------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 要把规则取Items
+        /// </summary>
+        /// <param name="amr">规则对象</param>
+        /// <returns>返回List AMItem列表</returns>
+        public static List<AMItem> GetAuthItem_ByRule(AMRule amr)
+        {
+            if (amsc == null)
+            {
+                throw new Exception("在操作之前，必需先加载AMSqlConf！");
+            }
+            try
+            {
+                List<AMItem> tmpAMItems = new List<AMItem>();
+                string tmpRuleID = amr.Rule_ID;
+                string sql = @"select * from AuthRulesItems where Rule_ID='" + tmpRuleID + "'";
+                SqlDataReader tmpSDR = GetDataReader(sql, amsc);
+                while (tmpSDR.Read())
+                {
+                    AMItem tmpAMI = new AMItem();
+                    tmpAMI.Item_ID = tmpSDR["Item_ID"].ToString();
+                    tmpAMI.Item_Name = tmpSDR["Item_Name"].ToString();
+                    tmpAMI.Item_NameSpace = tmpSDR["Item_NameSpace"].ToString();
+                    tmpAMI.Item_BeiZhu = tmpSDR["Item_BeiZhu"].ToString();
+                    tmpAMItems.Add(tmpAMI);
+                }
+                tmpSDR.Close();
+                return tmpAMItems;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         #endregion
 
         #region 5-------从数据库取对象（Item)
@@ -678,7 +712,8 @@ namespace AuthSystem.AuthDao
                 AMItem tmpAMItem = new AMItem();  //临时的一个AMItem
                 AMItems dbItems = GetAuthItems(); //数据库中的所有items
                 List<AMItem> gongItems = new List<AMItem>();//共有的数据
-                List<AMItem> 
+                List<AMItem> tmpSvItems = new List<AMItem>();
+                tmpSvItems = amis.AllAMItems;
 
                 foreach (AMItem x in dbItems.AllAMItems) //保存共有数据
                 {
@@ -697,20 +732,22 @@ namespace AuthSystem.AuthDao
                         DelAuthItem(x);
                     }
                 }
-                System.Windows.Forms.MessageBox.Show(gongItems.Count.ToString());
-                System.Windows.Forms.MessageBox.Show(amis.AllAMItems.Count.ToString());
-                foreach(AMItem x in gongItems) //从要保存的数据中，删除共有的数据
+
+                foreach (AMItem x in tmpSvItems)//循环剩下的数据，添加保存到数据库
                 {
-                    amis.AllAMItems.Remove(x);
+                    bool isAdd = true;
+                    foreach (AMItem y in gongItems)
+                    {
+                        if (AuthItemIsSame(x, y))
+                        {
+                            isAdd = false;
+                        }
+                    }
+                    if (isAdd)
+                    {
+                        AddAuthItem(x);
+                    }
                 }
-
-                System.Windows.Forms.MessageBox.Show(amis.AllAMItems.Count.ToString());
-
-                /*
-                for (int x = 0; x < amis.AllAMItems.Count; x++)//循环剩下的数据，添加保存到数据库
-                {
-                    AddAuthItem(svItems.AllAMItems[x]);
-                }*/
                 //到这里，所有的数据就已经保存完成了！
                 return true;
             }

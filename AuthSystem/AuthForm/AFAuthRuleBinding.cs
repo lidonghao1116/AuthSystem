@@ -17,6 +17,7 @@ namespace AuthSystem.AuthForm
         private AMItems tmpAMItems;
         private bool itemsHasChange = false;//Items是否有更改
         private bool RulesHasChange = false;//Rules是否有更改
+        private AMRule currAMRule;
         #endregion
         #region 1-------界面初始化
         public AFAuthRuleBinding()
@@ -27,10 +28,10 @@ namespace AuthSystem.AuthForm
         }
 
         private System.Windows.Forms.Panel panel_Left;
-        private System.Windows.Forms.ToolStrip toolStrip2;
+        private System.Windows.Forms.ToolStrip ItemstoolStrip;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.Panel panel_Right;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip RulestoolStrip;
         private System.Windows.Forms.DataGridView dgv_Items;
         private System.Windows.Forms.ToolStripButton toolDelItem;
         private System.Windows.Forms.DataGridView dgv_Rules;
@@ -40,26 +41,26 @@ namespace AuthSystem.AuthForm
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AFAuthRuleBinding));
             this.panel_Right = new System.Windows.Forms.Panel();
             this.dgv_Items = new System.Windows.Forms.DataGridView();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.RulestoolStrip = new System.Windows.Forms.ToolStrip();
             this.toolAddItem = new System.Windows.Forms.ToolStripButton();
             this.toolDelItem = new System.Windows.Forms.ToolStripButton();
             this.toolSaveItems = new System.Windows.Forms.ToolStripButton();
             this.panel_Left = new System.Windows.Forms.Panel();
             this.dgv_Rules = new System.Windows.Forms.DataGridView();
-            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.ItemstoolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.panel_Right.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Items)).BeginInit();
-            this.toolStrip1.SuspendLayout();
+            this.RulestoolStrip.SuspendLayout();
             this.panel_Left.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Rules)).BeginInit();
-            this.toolStrip2.SuspendLayout();
+            this.ItemstoolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel_Right
             // 
             this.panel_Right.Controls.Add(this.dgv_Items);
-            this.panel_Right.Controls.Add(this.toolStrip1);
+            this.panel_Right.Controls.Add(this.RulestoolStrip);
             this.panel_Right.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel_Right.Location = new System.Drawing.Point(561, 0);
             this.panel_Right.Name = "panel_Right";
@@ -83,18 +84,20 @@ namespace AuthSystem.AuthForm
             this.dgv_Items.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_Items.Size = new System.Drawing.Size(597, 640);
             this.dgv_Items.TabIndex = 1;
+            this.dgv_Items.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_Items_CellValueChanged);
+            this.dgv_Items.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgv_Items_DirtyState);
             // 
-            // toolStrip1
+            // RulestoolStrip
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.RulestoolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolAddItem,
             this.toolDelItem,
             this.toolSaveItems});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(597, 25);
-            this.toolStrip1.TabIndex = 0;
-            this.toolStrip1.Text = "toolStrip1";
+            this.RulestoolStrip.Location = new System.Drawing.Point(0, 0);
+            this.RulestoolStrip.Name = "RulestoolStrip";
+            this.RulestoolStrip.Size = new System.Drawing.Size(597, 25);
+            this.RulestoolStrip.TabIndex = 0;
+            this.RulestoolStrip.Text = "toolStrip1";
             // 
             // toolAddItem
             // 
@@ -128,7 +131,7 @@ namespace AuthSystem.AuthForm
             // panel_Left
             // 
             this.panel_Left.Controls.Add(this.dgv_Rules);
-            this.panel_Left.Controls.Add(this.toolStrip2);
+            this.panel_Left.Controls.Add(this.ItemstoolStrip);
             this.panel_Left.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_Left.Location = new System.Drawing.Point(0, 0);
             this.panel_Left.Name = "panel_Left";
@@ -137,23 +140,32 @@ namespace AuthSystem.AuthForm
             // 
             // dgv_Rules
             // 
+            this.dgv_Rules.AllowUserToAddRows = false;
+            this.dgv_Rules.AllowUserToDeleteRows = false;
+            this.dgv_Rules.AllowUserToResizeRows = false;
+            this.dgv_Rules.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.dgv_Rules.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_Rules.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_Rules.Location = new System.Drawing.Point(0, 25);
+            this.dgv_Rules.MultiSelect = false;
             this.dgv_Rules.Name = "dgv_Rules";
+            this.dgv_Rules.RowHeadersVisible = false;
+            this.dgv_Rules.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgv_Rules.RowTemplate.Height = 23;
+            this.dgv_Rules.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_Rules.Size = new System.Drawing.Size(1158, 640);
             this.dgv_Rules.TabIndex = 1;
+            this.dgv_Rules.SelectionChanged += new System.EventHandler(this.dgv_Rules_SeleChanged);
             // 
-            // toolStrip2
+            // ItemstoolStrip
             // 
-            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ItemstoolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton2});
-            this.toolStrip2.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(1158, 25);
-            this.toolStrip2.TabIndex = 0;
-            this.toolStrip2.Text = "toolStrip2";
+            this.ItemstoolStrip.Location = new System.Drawing.Point(0, 0);
+            this.ItemstoolStrip.Name = "ItemstoolStrip";
+            this.ItemstoolStrip.Size = new System.Drawing.Size(1158, 25);
+            this.ItemstoolStrip.TabIndex = 0;
+            this.ItemstoolStrip.Text = "toolStrip2";
             // 
             // toolStripButton2
             // 
@@ -173,13 +185,13 @@ namespace AuthSystem.AuthForm
             this.panel_Right.ResumeLayout(false);
             this.panel_Right.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Items)).EndInit();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.RulestoolStrip.ResumeLayout(false);
+            this.RulestoolStrip.PerformLayout();
             this.panel_Left.ResumeLayout(false);
             this.panel_Left.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Rules)).EndInit();
-            this.toolStrip2.ResumeLayout(false);
-            this.toolStrip2.PerformLayout();
+            this.ItemstoolStrip.ResumeLayout(false);
+            this.ItemstoolStrip.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -255,31 +267,82 @@ namespace AuthSystem.AuthForm
         {
             AMItems tmpAMItemsSave = new AMItems();
             tmpAMItemsSave.AllAMItems = (List<AMItem>)ItemsBindingSource.DataSource;
-            //MessageBox.Show(tmpAMItemsSave.AllAMItems[0].Item_Name);
-            //bool x=AuthDao.ADAuthOpera.SaveAuthItems(tmpAMItemsSave);
-            //MessageBox.Show(x.ToString());
-            //AMItems tmpDBitems = AuthDao.ADAuthOpera.GetAuthItems();
-            AuthDao.ADAuthOpera.SaveAuthItems(tmpAMItemsSave);
-            /*
-            for (int x = 0; x < tmpDBitems.AllAMItems.Count; x++)
-            {
-                //MessageBox.Show(tmpDBitems.AllAMItems[x].Item_Name+tmpAMItemsSave.AllAMItems[x].Item_Name);
-                //MessageBox.Show((tmpAMItemsSave.AllAMItems.Contains(tmpDBitems.AllAMItems[x])).ToString());
-                for (int y = 0; y < tmpAMItemsSave.AllAMItems.Count; y++)
-                {
-                    if (AuthDao.ADAuthOpera.AuthItemIsSame(tmpAMItemsSave.AllAMItems[y], tmpDBitems.AllAMItems[x]))
-                    {
-                        MessageBox.Show("same");
-                    }
-                }
-            }*/
+            if (AuthDao.ADAuthOpera.SaveAuthItems(tmpAMItemsSave))
+                MessageBox.Show("Items保存成功!");
+            else
+                MessageBox.Show("Items保存失败");
         }
         #endregion
 
+        #region Rules项选择切换处理
+        /// <summary>
+        /// 切换Rules选择项时，同步更改Items的选择项
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgv_Rules_SeleChanged(object sender, EventArgs e)
+        {
+            if (dgv_Rules.SelectedRows.Count > 0)
+            {
+                //当前选择的规则对象
+                currAMRule=(AMRule)RulesBindingSource[dgv_Rules.SelectedRows[0].Index];
+                List<AMItem> currItems = new List<AMItem>();
+                currItems = AuthDao.ADAuthOpera.GetAuthItem_ByRule(currAMRule);
+                List<string> currItemsID = new List<string>();
+                for (int x = 0; x < dgv_Items.Rows.Count; x++)
+                {
+                    dgv_Items.Rows[x].Cells[0].Value = false;
+                }
 
+                foreach (AMItem x in currItems)
+                {
+                    currItemsID.Add(x.Item_ID);
+                }
+                for (int x = 0; x < dgv_Items.Rows.Count; x++)
+                {
+                    if (currItemsID.Contains(dgv_Items.Rows[x].Cells[1].Value.ToString()))
+                    {
+                        dgv_Items.Rows[x].Cells[0].Value = true;
+                    }
+                    else
+                    {
+                        dgv_Items.Rows[x].Cells[0].Value = false;
+                    }
+                }
+            }
+        }
+        #endregion
 
+        #region Items 勾选与取消勾选时，对所选Rules对应的Items进行更改
+        private void dgv_Items_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                MessageBox.Show(dgv_Items.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+                //当前选择的Rule
+                //保存dgv_Items勾选的对象到当前选择的Rule
+
+            }
+        }
+        /// <summary>
+        /// 两步提交datagridview数据，不然勾选事件不能实时
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgv_Items_DirtyState(object sender, EventArgs e)
+        {
+            if (dgv_Items.IsCurrentCellDirty)
+            {
+                dgv_Items.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+        #endregion
         
 
-        
+
+
+
+
+
     }
 }
