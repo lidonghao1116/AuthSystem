@@ -96,36 +96,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\DataSources\AuthSystem.AuthModel.AMUsers.datasource" />
-    <None Include="Resources\bg-0271.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\bg-0007.gif" />
+    <Folder Include="Resources\" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\bg-0457.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\bg-0296.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\tabrightK.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\menuHoverBg.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\footerBg.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\submit.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\bg-0002.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\bg-0068.gif" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
