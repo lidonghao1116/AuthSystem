@@ -674,33 +674,43 @@ namespace AuthSystem.AuthDao
             }
             try
             {
+                
                 AMItem tmpAMItem = new AMItem();  //临时的一个AMItem
-                AMItems svItems = new AMItems();
-                svItems = amis;
                 AMItems dbItems = GetAuthItems(); //数据库中的所有items
-                AMItems gongItems = new AMItems();//共有的数据
+                List<AMItem> gongItems = new List<AMItem>();//共有的数据
+                List<AMItem> 
 
-                for (int x = 0; x < dbItems.AllAMItems.Count; x++) //循环数据库的对象,保存共有item,从数据库删除其它item
+                foreach (AMItem x in dbItems.AllAMItems) //保存共有数据
                 {
-                    for (int y = 0; y < svItems.AllAMItems.Count; y++)
+                    foreach (AMItem y in amis.AllAMItems)
                     {
-                        if (AuthItemIsSame(svItems.AllAMItems[y],dbItems.AllAMItems[x]))
+                        if (AuthItemIsSame(x, y))
                         {
-                            //System.Windows.Forms.MessageBox.Show(svItems.AllAMItems[x].Item_Name);
-                            gongItems.AllAMItems.Add(dbItems.AllAMItems[x]);
+                            gongItems.Add(x);
                         }
                     }
-
                 }
-                for (int x = 0; x < gongItems.AllAMItems.Count; x++)//循环共有数据，从要保存的数据中删除
+                foreach (AMItem x in dbItems.AllAMItems) //从数据库删除不是共有的数据
                 {
-                    svItems.AllAMItems.Remove(gongItems.AllAMItems[x]);
+                    if (!gongItems.Contains(x))
+                    {
+                        DelAuthItem(x);
+                    }
+                }
+                System.Windows.Forms.MessageBox.Show(gongItems.Count.ToString());
+                System.Windows.Forms.MessageBox.Show(amis.AllAMItems.Count.ToString());
+                foreach(AMItem x in gongItems) //从要保存的数据中，删除共有的数据
+                {
+                    amis.AllAMItems.Remove(x);
                 }
 
+                System.Windows.Forms.MessageBox.Show(amis.AllAMItems.Count.ToString());
+
+                /*
                 for (int x = 0; x < amis.AllAMItems.Count; x++)//循环剩下的数据，添加保存到数据库
                 {
                     AddAuthItem(svItems.AllAMItems[x]);
-                }
+                }*/
                 //到这里，所有的数据就已经保存完成了！
                 return true;
             }

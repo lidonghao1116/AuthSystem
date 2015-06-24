@@ -258,7 +258,9 @@ namespace AuthSystem.AuthForm
             //MessageBox.Show(tmpAMItemsSave.AllAMItems[0].Item_Name);
             //bool x=AuthDao.ADAuthOpera.SaveAuthItems(tmpAMItemsSave);
             //MessageBox.Show(x.ToString());
-            AMItems tmpDBitems = AuthDao.ADAuthOpera.GetAuthItems();
+            //AMItems tmpDBitems = AuthDao.ADAuthOpera.GetAuthItems();
+            AuthDao.ADAuthOpera.SaveAuthItems(tmpAMItemsSave);
+            /*
             for (int x = 0; x < tmpDBitems.AllAMItems.Count; x++)
             {
                 //MessageBox.Show(tmpDBitems.AllAMItems[x].Item_Name+tmpAMItemsSave.AllAMItems[x].Item_Name);
@@ -270,7 +272,7 @@ namespace AuthSystem.AuthForm
                         MessageBox.Show("same");
                     }
                 }
-            }
+            }*/
         }
         #endregion
 
