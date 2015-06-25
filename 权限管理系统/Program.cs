@@ -14,7 +14,6 @@ namespace 权限管理系统
         static void Main()
         {
             AuthSystem.AuthGlobal.GlobalAmsc = AuthSystem.AuthDao.ADConfig.LoadSqlConf();
-            AuthSystem.AuthDao.ADAuthOpera.AMSqlConfig = AuthSystem.AuthGlobal.GlobalAmsc;
             AuthSystem.AuthGlobal.GlobalAmu = AuthSystem.AuthDao.ADAuthOpera.GetAuthUser("alwcel");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

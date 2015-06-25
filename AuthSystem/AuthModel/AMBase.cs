@@ -6,14 +6,18 @@ using System.Text;
 namespace AuthSystem.AuthModel
 {
     /// <summary>
-    /// 基础AuthModel类 
+    /// 基础AuthModel类
     /// </summary>
     [Serializable]
-    public class AMBase
+    public class AMBase:IDisposable
     {
         public AMBase()
         {
             //TODO:初始化
+        }
+        public virtual void Dispose()
+        {
+            //
         }
     }
 }

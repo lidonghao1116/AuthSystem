@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using AuthSystem.AuthModel;
+using AuthSystem.AuthDao;
 
 namespace AuthSystem.AuthForm
 {
@@ -259,9 +261,9 @@ namespace AuthSystem.AuthForm
         private void InitData()
         {
             #region 1--//加载所有用户数据
-            AuthModel.AMUsers amus = AuthDao.ADAuthOpera.GetAuthUsers();
-            tmpBSusers.DataSource = typeof(AuthSystem.AuthModel.AMUser);
-            tmpBSusers.DataSource = amus.ListAMUsers;
+            List<AMUser> amus = ADAuthOpera.GetAuthUsers();
+            tmpBSusers.DataSource = typeof(AMUser);
+            tmpBSusers.DataSource = amus;
             dgv_Allusers.DataSource = tmpBSusers; //绑定数据源
             dgv_Allusers.Columns[0].HeaderText = "ID";
             dgv_Allusers.Columns[0].Width = 30;
@@ -286,9 +288,9 @@ namespace AuthSystem.AuthForm
             #endregion
 
             #region 2--//加载所有角色数据
-            AuthModel.AMGroups amgs = AuthDao.ADAuthOpera.GetAuthGroups();
+            List<AMGroup> amgs = ADAuthOpera.GetAuthGroups();
             tmpBSgroups.DataSource = typeof(AuthModel.AMGroup);
-            tmpBSgroups.DataSource = amgs.AllGroups;
+            tmpBSgroups.DataSource = amgs;
             DataGridViewCheckBoxColumn dgvcbc = new DataGridViewCheckBoxColumn(false);
             dgvcbc.HeaderText = "选择";
             dgvcbc.Width = 30;
@@ -318,11 +320,11 @@ namespace AuthSystem.AuthForm
 
             //加载对象权限-------------------------------------------------
             tv_Rules.Nodes.Add(tnRules);
-            AuthModel.AMRules tnRules_Rules = new AuthModel.AMRules();
+            List<AMRule> tnRules_Rules = new List<AMRule>();
             tnRules_Rules = AuthDao.ADAuthOpera.GetAuthRules();
-            for (int i = 0; i < tnRules_Rules.AllAMRules.Count; i++)
+            for (int i = 0; i < tnRules_Rules.Count; i++)
             {
-                tnRules.Nodes.Add(tnRules_Rules.AllAMRules[i].Rule_Name);
+                tnRules.Nodes.Add(tnRules_Rules[i].Rule_Name);
                 tnRules.Nodes[i].Checked = false;
             }
 
@@ -366,13 +368,13 @@ namespace AuthSystem.AuthForm
                 {
                     seleAMGroup = AuthDao.ADAuthOpera.GetAuthGroup(e.Row.Cells["Group_ID"].Value.ToString());
                     //取角色的规则
-                    AuthModel.AMRules tmpAMR = AuthDao.ADAuthOpera.GetAuthRules_ByGroup_ForAMRules(seleAMGroup);
+                    List<AMRule> tmpAMR = ADAuthOpera.GetAuthRules(seleAMGroup);
                     for (int i = 0; i < tnRules.Nodes.Count; i++)
                     {
                         tnRules.Nodes[i].Checked = false;
-                        for (int j = 0; j < tmpAMR.AllAMRules.Count; j++)
+                        for (int j = 0; j < tmpAMR.Count; j++)
                         {
-                            string tmpStr = tmpAMR.AllAMRules[j].Rule_Name;
+                            string tmpStr = tmpAMR[j].Rule_Name;
                             //MessageBox.Show(tnRules.Nodes[i].Text);
                             if (tnRules.Nodes[i].Text == tmpStr)
                             {

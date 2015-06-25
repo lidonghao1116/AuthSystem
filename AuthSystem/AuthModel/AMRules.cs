@@ -44,46 +44,4 @@ namespace AuthSystem.AuthModel
             set { _Rule_BeiZhu = value; }
         }
     }
-
-    public class AMRules : AMBase
-    {
-        public AMRules() { }
-
-        private List<AMRule> _AllAMRules = null;
-        public List<AMRule> AllAMRules
-        {
-            get { return _AllAMRules; }
-            set { _AllAMRules = value; }
-        }
-        public void Add(AMRule amr)
-        {
-            _AllAMRules.Add(amr);
-        }
-        public void Del(AMRule amr)
-        {
-            _AllAMRules.Remove(amr);
-        }
-    }
-
-    public class AMRulesID_ForList : AMBase
-    {
-        public AMRulesID_ForList()
-        {
-            //Init
-        }
-        private List<string> _AllRulesID = null;
-        public void Add(string Rule)
-        {
-            _AllRulesID.Add(Rule);
-        }
-        public void Del(string Rule)
-        {
-            _AllRulesID.Remove(Rule);
-        }
-        public List<string> AllRulesID
-        {
-            get { return _AllRulesID; }
-            set { _AllRulesID = value; }
-        }
-    }
 }

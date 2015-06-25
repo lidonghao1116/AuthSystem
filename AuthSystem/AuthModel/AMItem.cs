@@ -38,27 +38,11 @@ namespace AuthSystem.AuthModel
         }
     }
 
-    public class AMItems : AMBase
+    public enum AMItemValueType
     {
-        public AMItems() { }
-
-        private List<AMItem> _AllAMItems = null;
-
-        public List<AMItem> AllAMItems
-        {
-            get { return _AllAMItems; }
-            set { _AllAMItems = value; }
-        }
-
-        public void Add(AMItem ami)
-        {
-            _AllAMItems.Add(ami);
-        }
-
-        public void Del(AMItem ami)
-        {
-            _AllAMItems.Remove(ami);
-        }
+        Item_ID,
+        Item_Name,
+        Item_NameSpace,
+        Item_BeiZhu
     }
-
 }

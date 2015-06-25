@@ -14,7 +14,7 @@ namespace AuthSystem.AuthForm
         private BindingSource RulesBindingSource = new BindingSource();
         private ToolStripButton toolSaveItems;//所有Rules的绑定对象
         private BindingSource ItemsBindingSource = new BindingSource();//所有Items的绑定对象
-        private AMItems tmpAMItems;
+        private List<AMItem> tmpAMItems;
         private bool itemsHasChange = false;//Items是否有更改
         private bool RulesHasChange = false;//Rules是否有更改
         private AMRule currAMRule;
@@ -201,9 +201,9 @@ namespace AuthSystem.AuthForm
         //1-初始化Rules数据表内容-------------------------------------------------------------------------------------
         private void InitRules()
         {
-            AMRules tmpAMRules = ADAuthOpera.GetAuthRules();
+            List<AMRule> tmpAMRules = ADAuthOpera.GetAuthRules();
             RulesBindingSource.DataSource = typeof(AMRule);
-            RulesBindingSource.DataSource = tmpAMRules.AllAMRules;
+            RulesBindingSource.DataSource = tmpAMRules;
             dgv_Rules.DataSource = RulesBindingSource;
         }
 
@@ -212,7 +212,7 @@ namespace AuthSystem.AuthForm
         {
             tmpAMItems = ADAuthOpera.GetAuthItems();
             ItemsBindingSource.DataSource = typeof(AMItem);
-            ItemsBindingSource.DataSource = tmpAMItems.AllAMItems;
+            ItemsBindingSource.DataSource = tmpAMItems;
             DataGridViewCheckBoxColumn ItemsDGVCBC = new DataGridViewCheckBoxColumn(false);
             ItemsDGVCBC.Name = "SeleItem";
             ItemsDGVCBC.HeaderText = "选择";
@@ -265,8 +265,8 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void toolSaveItems_Click(object sender, EventArgs e)
         {
-            AMItems tmpAMItemsSave = new AMItems();
-            tmpAMItemsSave.AllAMItems = (List<AMItem>)ItemsBindingSource.DataSource;
+            List<AMItem> tmpAMItemsSave = new List<AMItem>();
+            tmpAMItemsSave = (List<AMItem>)ItemsBindingSource.DataSource;
             if (AuthDao.ADAuthOpera.SaveAuthItems(tmpAMItemsSave))
                 MessageBox.Show("Items保存成功!");
             else
@@ -287,7 +287,7 @@ namespace AuthSystem.AuthForm
                 //当前选择的规则对象
                 currAMRule=(AMRule)RulesBindingSource[dgv_Rules.SelectedRows[0].Index];
                 List<AMItem> currItems = new List<AMItem>();
-                currItems = AuthDao.ADAuthOpera.GetAuthItem_ByRule(currAMRule);
+                currItems = AuthDao.ADAuthOpera.GetAuthItems(currAMRule);
                 List<string> currItemsID = new List<string>();
                 for (int x = 0; x < dgv_Items.Rows.Count; x++)
                 {
@@ -338,11 +338,5 @@ namespace AuthSystem.AuthForm
         }
         #endregion
         
-
-
-
-
-
-
     }
 }

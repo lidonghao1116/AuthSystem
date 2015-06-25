@@ -524,6 +524,7 @@
             this.button6.TabIndex = 8;
             this.button6.Text = "规则对象绑定";
             this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // FormTest
             // 

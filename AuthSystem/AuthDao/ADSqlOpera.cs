@@ -9,7 +9,7 @@ namespace AuthSystem.AuthDao
     /// <summary>
     /// 操作数据库的类
     /// </summary>
-    public class ADSqlOpera:ADBase
+    public class ADSqlOpera:ADDbBase
     {
         public ADSqlOpera()
         {
@@ -24,12 +24,12 @@ namespace AuthSystem.AuthDao
         /// <param name="CommText">SQL语句</param>
         /// <param name="amsc">数据库连接配置对象</param>
         /// <returns>返回影响的行数</returns>
-        public static int ExcSqlCommand(string CommText,AuthModel.AMSqlConf amsc)
+        public static int ExcSqlCommand(string CommText)
         {
             int x = -1;
             try
             {
-                SqlConnection tmpConn = GetConn(amsc);
+                SqlConnection tmpConn = GetConn();
                 tmpConn.Open();
                 SqlCommand tmpComm = new SqlCommand(CommText, tmpConn);
                 x = tmpComm.ExecuteNonQuery();

@@ -5,37 +5,6 @@ using System.Text;
 
 namespace AuthSystem.AuthModel
 {
-    #region 所有用户对象定义----------------------------------------------------------------------------------------
-    /// <summary>
-    /// 所有用户对象
-    /// </summary>
-    public class AMUsers:AMBase
-    {
-        public AMUsers()
-        {
-            //Init
-        }
-        private List<AMUser> _ListAMUsers;
-        public bool Add(AMUser amu)
-        {
-            _ListAMUsers.Add(amu);
-            return true;
-        }
-        public bool Del(AMUser amu)
-        {
-            _ListAMUsers.Remove(amu);
-            return true;
-        }
-        public List<AMUser> ListAMUsers
-        {
-            get { return _ListAMUsers; }
-            set { _ListAMUsers = value; }
-        }
-
-    }
-    #endregion
-
-    #region 单个用户对象定义----------------------------------------------------------------------------------------
     /// <summary>
     /// 单个用户对象
     /// </summary>
@@ -120,5 +89,4 @@ namespace AuthSystem.AuthModel
             set { _User_BeiZhu = value; }
         }
     }
-    #endregion
 }

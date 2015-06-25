@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AuthSystem.AuthModel
 {
-    public class AMGroup:AMBase
+    public class AMGroup : AMBase
     {
         public AMGroup()
         {
@@ -61,27 +61,5 @@ namespace AuthSystem.AuthModel
             set { _Group_BeiZhu = value; }
         }
 
-    }
-    public class AMGroups : AMBase
-    {
-        public AMGroups()
-        {
-            //Init
-        }
-
-        private List<AMGroup> _AllGroups = null;
-        public List<AMGroup> AllGroups 
-        {
-            get { return _AllGroups; }
-            set { _AllGroups = value; }
-        }
-        public void Add(AMGroup amg)
-        {
-            _AllGroups.Add(amg);
-        }
-        public void Del(AMGroup amg)
-        {
-            _AllGroups.Remove(amg);
-        }
     }
 }

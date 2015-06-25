@@ -37,25 +37,4 @@ namespace AuthSystem.AuthModel
             set { _Menu_BeiZhu = value; }
         }
     }
-
-    public class AMMenus : AMBase
-    {
-        public AMMenus() { }
-
-        private List<AMMenu> _AllAMMenu = null;
-        public List<AMMenu> AllAMMenu
-        {
-            get { return _AllAMMenu; }
-            set { _AllAMMenu = value; }
-        }
-
-        public void Add(AMMenu amm)
-        {
-            _AllAMMenu.Add(amm);
-        }
-        public void Del(AMMenu amm)
-        {
-            _AllAMMenu.Remove(amm);
-        }
-    }
 }

@@ -42,5 +42,10 @@ namespace 权限管理系统.Windows
             afas.ShowDialog();
         }
 
+        private void button6_Click(object sender, EventArgs e)
+        {
+            
+        }
+
     }
 }
