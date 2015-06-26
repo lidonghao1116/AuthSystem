@@ -41,6 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthControl\ACPrintView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AuthControl\ACPrintView.Designer.cs">
+      <DependentUpon>ACPrintView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AuthControl\ACRu2It.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AuthControl\ACRu2It.Designer.cs">
+      <DependentUpon>ACRu2It.cs</DependentUpon>
+    </Compile>
     <Compile Include="AuthDao\ADAuthOpera.cs" />
     <Compile Include="AuthDao\ADConfig.cs" />
     <Compile Include="AuthDao\ADBase.cs" />
@@ -76,6 +88,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AuthControl\ACPrintView.resx">
+      <DependentUpon>ACPrintView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AuthControl\ACRu2It.resx">
+      <DependentUpon>ACRu2It.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AuthForm\AFAuthRuleBinding.resx">
       <DependentUpon>AFAuthRuleBinding.cs</DependentUpon>
     </EmbeddedResource>

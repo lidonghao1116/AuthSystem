@@ -8,28 +8,33 @@ using AuthSystem.AuthDao;
 
 namespace AuthSystem.AuthForm
 {
-    public class AFAuthRuleBinding:AFBase
+    public class AFAuthRuleBinding : AFBase
     {
         #region 0-------定义公共变量
-        private BindingSource RulesBindingSource = new BindingSource();
-        private ToolStripButton toolSaveItems;//所有Rules的绑定对象
+        private BindingSource RulesBindingSource = new BindingSource();//所有Rules的绑定对象
+        private ToolStripButton toolSaveItems;
         private BindingSource ItemsBindingSource = new BindingSource();//所有Items的绑定对象
-        private List<AMItem> tmpAMItems;
         private bool itemsHasChange = false;//Items是否有更改
         private bool RulesHasChange = false;//Rules是否有更改
         private AMRule currAMRule;
+        private ToolStripButton toolStripButton1;
+        private ToolStripButton toolStripButton2;
+        private ToolStripButton toolStripButton3;        //当前选择的Rule
+        private bool LoadOver = false;
         #endregion
-        #region 1-------界面初始化
+
+        #region 1-------初始化
         public AFAuthRuleBinding()
         {
-            InitializeComponent();
-            InitRules();
-            InitItems();
+            InitializeComponent(); //初始化界面
+            InitRules();  //初始化规则表
+            InitItems();  //初始化对象表
+            LoadOver = true;//表示初始化完成
         }
-
+        #region 初始化界面
         private System.Windows.Forms.Panel panel_Left;
         private System.Windows.Forms.ToolStrip ItemstoolStrip;
-        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripButton toolSaveRu2It;
         private System.Windows.Forms.Panel panel_Right;
         private System.Windows.Forms.ToolStrip RulestoolStrip;
         private System.Windows.Forms.DataGridView dgv_Items;
@@ -48,7 +53,10 @@ namespace AuthSystem.AuthForm
             this.panel_Left = new System.Windows.Forms.Panel();
             this.dgv_Rules = new System.Windows.Forms.DataGridView();
             this.ItemstoolStrip = new System.Windows.Forms.ToolStrip();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.toolSaveRu2It = new System.Windows.Forms.ToolStripButton();
             this.panel_Right.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Items)).BeginInit();
             this.RulestoolStrip.SuspendLayout();
@@ -62,9 +70,9 @@ namespace AuthSystem.AuthForm
             this.panel_Right.Controls.Add(this.dgv_Items);
             this.panel_Right.Controls.Add(this.RulestoolStrip);
             this.panel_Right.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel_Right.Location = new System.Drawing.Point(561, 0);
+            this.panel_Right.Location = new System.Drawing.Point(458, 0);
             this.panel_Right.Name = "panel_Right";
-            this.panel_Right.Size = new System.Drawing.Size(597, 665);
+            this.panel_Right.Size = new System.Drawing.Size(517, 574);
             this.panel_Right.TabIndex = 1;
             // 
             // dgv_Items
@@ -82,10 +90,8 @@ namespace AuthSystem.AuthForm
             this.dgv_Items.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgv_Items.RowTemplate.Height = 23;
             this.dgv_Items.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_Items.Size = new System.Drawing.Size(597, 640);
+            this.dgv_Items.Size = new System.Drawing.Size(517, 549);
             this.dgv_Items.TabIndex = 1;
-            this.dgv_Items.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_Items_CellValueChanged);
-            this.dgv_Items.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgv_Items_DirtyState);
             // 
             // RulestoolStrip
             // 
@@ -95,7 +101,7 @@ namespace AuthSystem.AuthForm
             this.toolSaveItems});
             this.RulestoolStrip.Location = new System.Drawing.Point(0, 0);
             this.RulestoolStrip.Name = "RulestoolStrip";
-            this.RulestoolStrip.Size = new System.Drawing.Size(597, 25);
+            this.RulestoolStrip.Size = new System.Drawing.Size(517, 25);
             this.RulestoolStrip.TabIndex = 0;
             this.RulestoolStrip.Text = "toolStrip1";
             // 
@@ -135,7 +141,7 @@ namespace AuthSystem.AuthForm
             this.panel_Left.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_Left.Location = new System.Drawing.Point(0, 0);
             this.panel_Left.Name = "panel_Left";
-            this.panel_Left.Size = new System.Drawing.Size(1158, 665);
+            this.panel_Left.Size = new System.Drawing.Size(975, 574);
             this.panel_Left.TabIndex = 0;
             // 
             // dgv_Rules
@@ -153,32 +159,63 @@ namespace AuthSystem.AuthForm
             this.dgv_Rules.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgv_Rules.RowTemplate.Height = 23;
             this.dgv_Rules.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_Rules.Size = new System.Drawing.Size(1158, 640);
+            this.dgv_Rules.Size = new System.Drawing.Size(975, 549);
             this.dgv_Rules.TabIndex = 1;
             this.dgv_Rules.SelectionChanged += new System.EventHandler(this.dgv_Rules_SeleChanged);
             // 
             // ItemstoolStrip
             // 
             this.ItemstoolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton2});
+            this.toolStripButton1,
+            this.toolStripButton2,
+            this.toolStripButton3,
+            this.toolSaveRu2It});
             this.ItemstoolStrip.Location = new System.Drawing.Point(0, 0);
             this.ItemstoolStrip.Name = "ItemstoolStrip";
-            this.ItemstoolStrip.Size = new System.Drawing.Size(1158, 25);
+            this.ItemstoolStrip.Size = new System.Drawing.Size(975, 25);
             this.ItemstoolStrip.TabIndex = 0;
             this.ItemstoolStrip.Text = "toolStrip2";
             // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(61, 22);
+            this.toolStripButton1.Text = "添加Rule";
+            // 
             // toolStripButton2
             // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
             this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton2.Text = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(61, 22);
+            this.toolStripButton2.Text = "删除Rule";
+            // 
+            // toolStripButton3
+            // 
+            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
+            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Size = new System.Drawing.Size(61, 22);
+            this.toolStripButton3.Text = "保存Rule";
+            // 
+            // toolSaveRu2It
+            // 
+            this.toolSaveRu2It.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolSaveRu2It.Image = ((System.Drawing.Image)(resources.GetObject("toolSaveRu2It.Image")));
+            this.toolSaveRu2It.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolSaveRu2It.Name = "toolSaveRu2It";
+            this.toolSaveRu2It.Size = new System.Drawing.Size(60, 22);
+            this.toolSaveRu2It.Text = "保存关系";
+            this.toolSaveRu2It.Click += new System.EventHandler(this.toolSaveRu2It_Click);
             // 
             // AFAuthRuleBinding
             // 
-            this.ClientSize = new System.Drawing.Size(1158, 665);
+            this.ClientSize = new System.Drawing.Size(975, 574);
             this.Controls.Add(this.panel_Right);
             this.Controls.Add(this.panel_Left);
             this.Name = "AFAuthRuleBinding";
@@ -197,23 +234,38 @@ namespace AuthSystem.AuthForm
         }
         #endregion
 
-        #region 2-------自定义初始化
+        #region 初始化数据
         //1-初始化Rules数据表内容-------------------------------------------------------------------------------------
+        /// <summary>
+        /// 初始化Rules数据表内容
+        /// </summary>
         private void InitRules()
         {
             List<AMRule> tmpAMRules = ADAuthOpera.GetAuthRules();
             RulesBindingSource.DataSource = typeof(AMRule);
             RulesBindingSource.DataSource = tmpAMRules;
             dgv_Rules.DataSource = RulesBindingSource;
+            dgv_Rules.Columns[0].HeaderText = "ID";
+            dgv_Rules.Columns[0].Width = 30;
+            dgv_Rules.Columns[1].HeaderText = "Rule名字";
+            dgv_Rules.Columns[1].Width = 100;
+            dgv_Rules.Columns[2].Visible = false;
+            dgv_Rules.Columns[3].HeaderText = "上级RuleID";
+            dgv_Rules.Columns[3].Width = 100;
+            dgv_Rules.Columns[4].HeaderText = "备注";
+            dgv_Rules.Columns[4].Width = 200;
         }
 
         //2-初始化Items数据表内容-------------------------------------------------------------------------------------
+        /// <summary>
+        /// 初始化Items数据表内容
+        /// </summary>
         private void InitItems()
         {
-            tmpAMItems = ADAuthOpera.GetAuthItems();
+            List<AMItem> tmpAMItems = ADAuthOpera.GetAuthItems();
             ItemsBindingSource.DataSource = typeof(AMItem);
             ItemsBindingSource.DataSource = tmpAMItems;
-            DataGridViewCheckBoxColumn ItemsDGVCBC = new DataGridViewCheckBoxColumn(false);
+            DataGridViewCheckBoxColumn ItemsDGVCBC = new DataGridViewCheckBoxColumn(false);  //定义在表前要添加的checkBox列
             ItemsDGVCBC.Name = "SeleItem";
             ItemsDGVCBC.HeaderText = "选择";
             ItemsDGVCBC.Width = 40;
@@ -228,15 +280,12 @@ namespace AuthSystem.AuthForm
             dgv_Items.Columns[4].Width = 100;
             dgv_Items.Columns[4].HeaderText = "备注";
         }
-
         #endregion
-        private void button1_Click(object sender, EventArgs e)
-        {
-            
-        }
-        #region Items按键处理
+        #endregion
+
+        #region Items表的tools按键处理
         /// <summary>
-        /// 添加Item行
+        /// 添加Item新行
         /// </summary>
         private void toolAddItem_Click(object sender, EventArgs e)
         {
@@ -265,16 +314,22 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void toolSaveItems_Click(object sender, EventArgs e)
         {
-            List<AMItem> tmpAMItemsSave = new List<AMItem>();
-            tmpAMItemsSave = (List<AMItem>)ItemsBindingSource.DataSource;
-            if (AuthDao.ADAuthOpera.SaveAuthItems(tmpAMItemsSave))
-                MessageBox.Show("Items保存成功!");
-            else
-                MessageBox.Show("Items保存失败");
+            try
+            {
+                List<AMItem> tmpAMItemsSave = (List<AMItem>)ItemsBindingSource.DataSource;
+                if (ADAuthOpera.SaveAuthItems(tmpAMItemsSave))
+                    MessageBox.Show("Items保存成功!");
+                else
+                    MessageBox.Show("Items保存失败");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
         #endregion
 
-        #region Rules项选择切换处理
+        #region Rules表的选择项切换处理
         /// <summary>
         /// 切换Rules选择项时，同步更改Items的选择项
         /// </summary>
@@ -282,61 +337,45 @@ namespace AuthSystem.AuthForm
         /// <param name="e"></param>
         private void dgv_Rules_SeleChanged(object sender, EventArgs e)
         {
-            if (dgv_Rules.SelectedRows.Count > 0)
+            if (LoadOver)
             {
-                //当前选择的规则对象
-                currAMRule=(AMRule)RulesBindingSource[dgv_Rules.SelectedRows[0].Index];
-                List<AMItem> currItems = new List<AMItem>();
-                currItems = AuthDao.ADAuthOpera.GetAuthItems(currAMRule);
-                List<string> currItemsID = new List<string>();
-                for (int x = 0; x < dgv_Items.Rows.Count; x++)
+                if (dgv_Rules.SelectedRows.Count > 0)
                 {
-                    dgv_Items.Rows[x].Cells[0].Value = false;
-                }
-
-                foreach (AMItem x in currItems)
-                {
-                    currItemsID.Add(x.Item_ID);
-                }
-                for (int x = 0; x < dgv_Items.Rows.Count; x++)
-                {
-                    if (currItemsID.Contains(dgv_Items.Rows[x].Cells[1].Value.ToString()))
+                    currAMRule = (AMRule)RulesBindingSource[dgv_Rules.SelectedRows[0].Index]; //当前被选中的规则对象
+                    List<string> currItemsID = ADAuthOpera.GetAMItemsValue(AMItemValueType.Item_ID, ADAuthOpera.GetAuthItems(currAMRule));//当前选中的规则的所有ItemsID
+                    for (int x = 0; x < dgv_Items.Rows.Count; x++)
                     {
-                        dgv_Items.Rows[x].Cells[0].Value = true;
-                    }
-                    else
-                    {
-                        dgv_Items.Rows[x].Cells[0].Value = false;
+                        if (currItemsID.Contains(dgv_Items.Rows[x].Cells[1].Value.ToString()))
+                        {
+                            dgv_Items.Rows[x].Cells[0].Value = true;
+                        }
+                        else
+                        {
+                            dgv_Items.Rows[x].Cells[0].Value = false;
+                        }
                     }
                 }
             }
         }
         #endregion
 
-        #region Items 勾选与取消勾选时，对所选Rules对应的Items进行更改
-        private void dgv_Items_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        #region 保存对应关系
+        private void toolSaveRu2It_Click(object sender, EventArgs e)
         {
-            if (e.ColumnIndex == 0)
+            dgv_Items.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            AMRule currAMR = (AMRule)RulesBindingSource[dgv_Rules.SelectedRows[0].Index]; //当前被选中的规则对象
+            List<AMItem> tmpSaveItems = new List<AMItem>();
+            for (int i = 0; i <dgv_Items.Rows.Count; i++)
             {
-                MessageBox.Show(dgv_Items.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
-                //当前选择的Rule
-                //保存dgv_Items勾选的对象到当前选择的Rule
-
+                if ((bool)dgv_Items.Rows[i].Cells[0].Value)
+                {
+                    tmpSaveItems.Add((AMItem)ItemsBindingSource[i]);
+                }
             }
-        }
-        /// <summary>
-        /// 两步提交datagridview数据，不然勾选事件不能实时
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void dgv_Items_DirtyState(object sender, EventArgs e)
-        {
-            if (dgv_Items.IsCurrentCellDirty)
-            {
-                dgv_Items.CommitEdit(DataGridViewDataErrorContexts.Commit);
-            }
+            ADAuthOpera.SaveAuthRu2It(tmpSaveItems, currAMR).ToString();
+            //MessageBox.Show(tmpSaveItems.Count.ToString());
         }
         #endregion
-        
+
     }
 }

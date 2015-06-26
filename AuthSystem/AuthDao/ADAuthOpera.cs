@@ -401,6 +401,35 @@ namespace AuthSystem.AuthDao
 
         #endregion
 
+        #region 4to5----规则与对象对应表
+        /// <summary>
+        /// 获取指定Rule_Item_ID的ItemIDs
+        /// </summary>
+        /// <param name="amr">AMRule</param>
+        /// <returns>List.string</returns>
+        public static List<string> GetRu2It_ItemID(AMRule amr)
+        {
+            try
+            {
+                List<string> tmpRu2It = new List<string>();
+                string AMRuleID = amr.Rule_ID;
+                string sql = @"select * from AuthRu2It where Rule_Item_ID='" + amr.Rule_ID + "'";
+                SqlDataReader tmpSDR = GetDataReader(sql);
+                while (tmpSDR.Read())
+                {
+                    tmpRu2It.Add(tmpSDR["Item_ID"].ToString());
+                }
+                tmpSDR.Close();
+                return tmpRu2It;
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+        #endregion
+
         #region 5-------从数据库取对象（Item)
 
         //----------------------------------------------------------------------------------------------------------
@@ -532,6 +561,8 @@ namespace AuthSystem.AuthDao
                 throw;
             }
         }
+
+        
         #endregion
 
         #region 5-1-------保存对象到数据库（Item）
@@ -541,10 +572,6 @@ namespace AuthSystem.AuthDao
         /// <param name="amis"></param>
         public static bool SaveAuthItems(List<AMItem> amis)
         {
-            if (amsc == null)
-            {
-                throw new Exception("在操作之前，必需先加载AMSqlConf！");
-            }
             try
             {
                 
@@ -597,6 +624,32 @@ namespace AuthSystem.AuthDao
             }
         }
 
+        public static bool SaveAuthRu2It(List<AMItem> amis, AMRule amr)
+        {
+            try
+            {
+                string AMRuleID = amr.Rule_Item_ID;
+
+                //当前规则的items的ID的列表
+                List<string> tmpItemsID = GetRu2It_ItemID(amr);
+                //删除以前的
+                string tmpSql = @"delete from AuthRu2It where Rule_Item_ID='" + AMRuleID + "'";
+                ADSqlOpera.ExcSqlCommand(tmpSql);
+                foreach (AMItem x in amis)
+                {
+                    //添加现在的
+                    string tmpSql1 = @"insert into AuthRu2It values('" + AMRuleID + "','" + x.Item_ID + "')";
+                    ADSqlOpera.ExcSqlCommand(tmpSql1);
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
         //----------------------------------------------------------------------------------------------------------
         /// <summary>
         /// 从数据库删除一个Item
