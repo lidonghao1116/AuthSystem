@@ -83,6 +83,29 @@ namespace AuthSystem.AuthPool2Db
             }
         }
 
+        //---------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 返回一个适配器sqlDataAdapter
+        /// </summary>
+        /// <param name="Command">SQL语句</param>
+        /// <param name="amsc">数据库配置对象</param>
+        /// <returns>返回一个SqlDataAdapter</returns>
+        public static SqlDataAdapter GetDataAdapter(string Command)
+        {
+            SqlDataAdapter tmpDataAdapter;
+            SqlConnection tmpConn = new SqlConnection();
+            try
+            {
+                tmpConn = GetConn();
+                SqlCommand tmpComm = new SqlCommand(Command, tmpConn);
+                tmpDataAdapter = new SqlDataAdapter(tmpComm);
+                return tmpDataAdapter;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 
 }

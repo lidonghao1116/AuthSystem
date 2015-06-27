@@ -17,10 +17,10 @@ namespace AuthSystem.AuthPool2Db
         {
             //Init
         }
-        #region 公共数据池操作
+        #region 公共数据池操作-------------------------------------------------------------------------------------------------------
         //-----------------------------------------------------------------------------------------------
         /// <summary>
-        /// 更新所有的池
+        /// 从数据库取所有的池
         /// </summary>
         public static void GetPool()
         {
@@ -34,7 +34,7 @@ namespace AuthSystem.AuthPool2Db
 
         //-----------------------------------------------------------------------------------------------
         /// <summary>
-        /// 单独更新一个数据池
+        /// 从数据库取指定的数据池
         /// </summary>
         /// <param name="apType">要更新的数据池的类型</param>
         public static void GetPool(APPoolType apType)
@@ -64,9 +64,51 @@ namespace AuthSystem.AuthPool2Db
                     break;
             }
         }
+
+        //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 提交数据池数据到数据库
+        /// </summary>
+        public static void UpdatePool()
+        {
+
+        }
+        //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 提交指定数据池数据到数据库
+        /// </summary>
+        /// <param name="apType"></param>
+        public static void UpdatePool(APPoolType apType)
+        {
+            switch (apType)
+            {
+                case APPoolType.AMUsers:
+                    break;
+                case APPoolType.AMGroups:
+                    break;
+                case APPoolType.AMGr2Ca:
+                    break;
+                case APPoolType.AMGr2RU:
+                    break;
+                case APPoolType.AMRules:
+                    break;
+                case APPoolType.AMItems:
+                    break;
+                default:
+                    break;
+            }
+        }
         #endregion
 
-        #region 从数据库取数据到DbPool
+        #region 提交dbPool的数据到数据库---------------------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------
+        private static void UpPoolAMUsers()
+        {
+
+        }
+        #endregion
+
+        #region 从数据库取数据到DbPool-----------------------------------------------------------------------------------------------
         //-----------------------------------------------------------------------------------------------
         /// <summary>
         /// 从数据库取所有用户数据到dbPool
