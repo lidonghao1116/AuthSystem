@@ -10,6 +10,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "权限管理系统", "权�
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthSystem", "AuthSystem\AuthSystem.csproj", "{DB8A784C-EE3D-4992-8EBE-913FC5BD8A5D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthTest", "AuthTest\AuthTest.csproj", "{1956240F-2109-4D7B-A388-33EE22809E36}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DB8A784C-EE3D-4992-8EBE-913FC5BD8A5D} = {DB8A784C-EE3D-4992-8EBE-913FC5BD8A5D}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +29,10 @@ Global
 		{DB8A784C-EE3D-4992-8EBE-913FC5BD8A5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB8A784C-EE3D-4992-8EBE-913FC5BD8A5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB8A784C-EE3D-4992-8EBE-913FC5BD8A5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1956240F-2109-4D7B-A388-33EE22809E36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1956240F-2109-4D7B-A388-33EE22809E36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1956240F-2109-4D7B-A388-33EE22809E36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1956240F-2109-4D7B-A388-33EE22809E36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace 权限管理系统
+namespace AuthTest
 {
     static class Program
     {
@@ -14,13 +14,9 @@ namespace 权限管理系统
         static void Main()
         {
             AuthSystem.AuthPool.APSoftPool.poolSoftSqlConf = AuthSystem.AuthDao.ADConfig.LoadSqlConf();
-            AuthSystem.AuthGlobal.GlobalAmsc = AuthSystem.AuthDao.ADConfig.LoadSqlConf();
-
-            AuthSystem.AuthPool.APSoftPool.poolSoftAMUser = AuthSystem.AuthDao.ADAuthOpera.GetAuthUser("alwcel");
-            AuthSystem.AuthGlobal.GlobalAmu = AuthSystem.AuthDao.ADAuthOpera.GetAuthUser("alwcel");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Windows.FormTest());
+            Application.Run(new Form1());
         }
     }
 }

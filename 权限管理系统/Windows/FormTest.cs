@@ -21,7 +21,7 @@ namespace 权限管理系统.Windows
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("添加!");
+            AuthSystem.AuthPool2Db.AP2DOpera.GetPool(AuthSystem.AuthPool.APPoolType.AMUsers);
             
         }
 
