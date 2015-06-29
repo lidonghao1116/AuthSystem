@@ -303,9 +303,10 @@ namespace AuthSystem.AuthForm
         {
             if (dgv_Rules.SelectedRows.Count > 0)
             {
-                int currIndex = dgv_Rules.SelectedRows[0].Index;
-                dgv_Rules.Rows.RemoveAt(currIndex);//这样才能完全删除，直接操作datatabel不能从数据库中删除。WHY？
+                int x = dgv_Rules.SelectedRows[0].Index;
+                dgv_Rules.Rows.RemoveAt(x);
             }
+            
         }
 
         //----------------------------------------------------------------------------------------------------
