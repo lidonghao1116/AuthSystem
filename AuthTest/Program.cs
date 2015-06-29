@@ -14,6 +14,9 @@ namespace AuthTest
         static void Main()
         {
             AuthSystem.AuthPool.APSoftPool.poolSoftSqlConf = AuthSystem.AuthDao.ADConfig.LoadSqlConf();
+            //从数据库加载数据
+            AuthSystem.AuthPool2Db.AP2DOpera.GetPool();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());

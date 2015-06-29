@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AuthSystem.AuthModel;
+using System.Data;
 
 namespace AuthSystem.AuthPool
 {
@@ -13,24 +14,31 @@ namespace AuthSystem.AuthPool
     {
         public APDbPool()
         {
-            //Init
         }
+        static APDbPool()
+        {
+            poolAll.Tables.Add(poolAMUsers);
+            poolAll.Tables.Add(poolAMGroups);
+            poolAll.Tables.Add(poolGr2Ca);
+            poolAll.Tables.Add(poolGr2Me);
+            poolAll.Tables.Add(poolGr2Ru);
+            poolAll.Tables.Add(poolAMRules);
+            poolAll.Tables.Add(poolRu2It);
+            poolAll.Tables.Add(poolAMItems);
+        }
+        public static DataSet poolAll = new DataSet("poolALL");
+        public static DataTable poolAMUsers = new DataTable("poolAMUsers");         //所有用户
 
-        public static AMUser poolAMUser = null;             //用户
-        public static List<AMUser> poolAMUsers = null;      //所有用户
+        public static DataTable poolAMGroups = new DataTable("poolAMGroups");        //所有角色
 
-        public static AMGroup poolAMGroup = null;           //角色
-        public static List<AMGroup> poolAMGroups = null;    //所有角色
-        public static List<AMX2Y> poolGr2Ca = null;               //角色对应仓库
-        public static List<AMX2Y> poolGr2Ru = null;               //角色对应规则
-        public static List<AMX2Y> poolGr2Me = null;               //角色对应菜单
+        public static DataTable poolGr2Ca = new DataTable("poolGr2Ca");           //角色对应仓库
+        public static DataTable poolGr2Ru = new DataTable("poolGr2Ru");           //角色对应规则
+        public static DataTable poolGr2Me = new DataTable("poolGr2Me");           //角色对应菜单
 
-        public static AMRule poolAMRule = null;             //规则
-        public static List<AMRule> poolAMRules = null;      //所有规则
-        public static List<AMX2Y> poolRu2It = null;               //规则对应对象
+        public static DataTable poolAMRules = new DataTable("poolAMRules");         //所有规则
+        public static DataTable poolRu2It = new DataTable("poolRu2It");           //规则对应对象
 
-        public static AMItem poolAMItem = null;             //对象
-        public static List<AMItem> poolAMItems = null;      //所有对象
+        public static DataTable poolAMItems = new DataTable("poolAMItems");      //所有对象
     }
 
     /// <summary>
@@ -41,8 +49,9 @@ namespace AuthSystem.AuthPool
         AMUsers,
         AMGroups,
         AMGr2Ca,
-        AMGr2RU,
+        AMGr2Ru,
         AMRules,
+        AMRu2It,
         AMItems
     }
 }

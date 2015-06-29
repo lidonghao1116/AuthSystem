@@ -93,10 +93,9 @@ namespace AuthSystem.AuthPool2Db
         public static SqlDataAdapter GetDataAdapter(string Command)
         {
             SqlDataAdapter tmpDataAdapter;
-            SqlConnection tmpConn = new SqlConnection();
+            SqlConnection tmpConn = GetConn();
             try
             {
-                tmpConn = GetConn();
                 SqlCommand tmpComm = new SqlCommand(Command, tmpConn);
                 tmpDataAdapter = new SqlDataAdapter(tmpComm);
                 return tmpDataAdapter;
@@ -106,6 +105,7 @@ namespace AuthSystem.AuthPool2Db
                 throw;
             }
         }
+        
     }
 
 }

@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data;
 using System.Windows.Forms;
 using AuthSystem.AuthModel;
-using AuthSystem.AuthDao;
+using AuthSystem.AuthPool2Soft;
 
 namespace AuthSystem.AuthForm
 {
@@ -241,15 +242,13 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void InitRules()
         {
-            List<AMRule> tmpAMRules = ADAuthOpera.GetAuthRules();
-            RulesBindingSource.DataSource = typeof(AMRule);
-            RulesBindingSource.DataSource = tmpAMRules;
-            dgv_Rules.DataSource = RulesBindingSource;
-            dgv_Rules.Columns[0].HeaderText = "ID";
-            dgv_Rules.Columns[0].Width = 30;
-            dgv_Rules.Columns[1].HeaderText = "Rule名字";
-            dgv_Rules.Columns[1].Width = 100;
-            dgv_Rules.Columns[2].Visible = false;
+            DataTable tmpDT = AuthPool2Soft.AP2SOpera.ReadPool(AuthPool.APPoolType.AMRules);
+            dgv_Rules.DataSource = tmpDT;
+            dgv_Rules.Columns[0].Visible = false;
+            dgv_Rules.Columns[1].HeaderText = "ID";
+            dgv_Rules.Columns[1].Width = 30;
+            dgv_Rules.Columns[2].HeaderText="Rule名字";
+            dgv_Rules.Columns[2].Width = 100;
             dgv_Rules.Columns[3].HeaderText = "上级RuleID";
             dgv_Rules.Columns[3].Width = 100;
             dgv_Rules.Columns[4].HeaderText = "备注";
@@ -262,15 +261,13 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void InitItems()
         {
-            List<AMItem> tmpAMItems = ADAuthOpera.GetAuthItems();
-            ItemsBindingSource.DataSource = typeof(AMItem);
-            ItemsBindingSource.DataSource = tmpAMItems;
+            DataTable tmpDT = AuthPool2Soft.AP2SOpera.ReadPool(AuthPool.APPoolType.AMItems);
             DataGridViewCheckBoxColumn ItemsDGVCBC = new DataGridViewCheckBoxColumn(false);  //定义在表前要添加的checkBox列
             ItemsDGVCBC.Name = "SeleItem";
             ItemsDGVCBC.HeaderText = "选择";
             ItemsDGVCBC.Width = 40;
             dgv_Items.Columns.Add(ItemsDGVCBC);
-            dgv_Items.DataSource = ItemsBindingSource;
+            dgv_Items.DataSource = tmpDT;
             dgv_Items.Columns[1].Width = 30;
             dgv_Items.Columns[1].HeaderText = "ID";
             dgv_Items.Columns[2].Width = 100;
@@ -316,11 +313,7 @@ namespace AuthSystem.AuthForm
         {
             try
             {
-                List<AMItem> tmpAMItemsSave = (List<AMItem>)ItemsBindingSource.DataSource;
-                if (ADAuthOpera.SaveAuthItems(tmpAMItemsSave))
-                    MessageBox.Show("Items保存成功!");
-                else
-                    MessageBox.Show("Items保存失败");
+                
             }
             catch (Exception)
             {
@@ -337,6 +330,7 @@ namespace AuthSystem.AuthForm
         /// <param name="e"></param>
         private void dgv_Rules_SeleChanged(object sender, EventArgs e)
         {
+            /*
             if (LoadOver)
             {
                 if (dgv_Rules.SelectedRows.Count > 0)
@@ -355,13 +349,14 @@ namespace AuthSystem.AuthForm
                         }
                     }
                 }
-            }
+            }*/
         }
         #endregion
 
         #region 保存对应关系
         private void toolSaveRu2It_Click(object sender, EventArgs e)
         {
+            /*
             dgv_Items.CommitEdit(DataGridViewDataErrorContexts.Commit);
             AMRule currAMR = (AMRule)RulesBindingSource[dgv_Rules.SelectedRows[0].Index]; //当前被选中的规则对象
             List<AMItem> tmpSaveItems = new List<AMItem>();
@@ -374,6 +369,7 @@ namespace AuthSystem.AuthForm
             }
             ADAuthOpera.SaveAuthRu2It(tmpSaveItems, currAMR).ToString();
             //MessageBox.Show(tmpSaveItems.Count.ToString());
+            */
         }
         #endregion
 

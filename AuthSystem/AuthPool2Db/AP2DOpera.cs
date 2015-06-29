@@ -13,10 +13,15 @@ namespace AuthSystem.AuthPool2Db
     /// </summary>
     public class AP2DOpera:AP2DBase
     {
-        public AP2DOpera()
+        static AP2DOpera()
         {
-            //Init
+
         }
+
+        #region 公共变量------------------------------------------------------------------------------------------------------------
+
+        #endregion
+
         #region 公共数据池操作-------------------------------------------------------------------------------------------------------
         //-----------------------------------------------------------------------------------------------
         /// <summary>
@@ -29,6 +34,7 @@ namespace AuthSystem.AuthPool2Db
             GetPoolAMGr2Ca();
             GetPoolAMGr2Ru();
             GetPoolAMRules();
+            GetPoolAMRu2It();
             GetPoolAMItems();
         }
 
@@ -51,11 +57,14 @@ namespace AuthSystem.AuthPool2Db
                 case APPoolType.AMGr2Ca:
                     GetPoolAMGr2Ca();
                     break;
-                case APPoolType.AMGr2RU:
+                case APPoolType.AMGr2Ru:
                     GetPoolAMGr2Ru();
                     break;
                 case APPoolType.AMRules:
                     GetPoolAMRules();
+                    break;
+                case APPoolType.AMRu2It:
+                    GetPoolAMRu2It();
                     break;
                 case APPoolType.AMItems:
                     GetPoolAMItems();
@@ -71,7 +80,13 @@ namespace AuthSystem.AuthPool2Db
         /// </summary>
         public static void UpdatePool()
         {
-
+            UpPoolAMUsers();
+            UpPoolAMGroups();
+            UpPoolGr2Ca();
+            UpPoolGr2Ru();
+            UpPoolAMRules();
+            UpPoolRu2It();
+            UpPoolAMItems();
         }
         //-----------------------------------------------------------------------------------------------
         /// <summary>
@@ -80,31 +95,201 @@ namespace AuthSystem.AuthPool2Db
         /// <param name="apType"></param>
         public static void UpdatePool(APPoolType apType)
         {
-            switch (apType)
+            try
             {
-                case APPoolType.AMUsers:
-                    break;
-                case APPoolType.AMGroups:
-                    break;
-                case APPoolType.AMGr2Ca:
-                    break;
-                case APPoolType.AMGr2RU:
-                    break;
-                case APPoolType.AMRules:
-                    break;
-                case APPoolType.AMItems:
-                    break;
-                default:
-                    break;
+                switch (apType)
+                {
+                    case APPoolType.AMUsers:
+                        UpPoolAMUsers();
+                        break;
+                    case APPoolType.AMGroups:
+                        UpPoolAMGroups();
+                        break;
+                    case APPoolType.AMGr2Ca:
+                        UpPoolGr2Ca();
+                        break;
+                    case APPoolType.AMGr2Ru:
+                        UpPoolGr2Ru();
+                        break;
+                    case APPoolType.AMRules:
+                        UpPoolAMRules();
+                        break;
+                    case APPoolType.AMRu2It:
+                        UpPoolRu2It();
+                        break;
+                    case APPoolType.AMItems:
+                        UpPoolAMItems();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception)
+            {
+                
+                throw;
             }
         }
         #endregion
 
         #region 提交dbPool的数据到数据库---------------------------------------------------------------------------------------------
         //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 提交所有用户数据
+        /// </summary>
         private static void UpPoolAMUsers()
         {
+            try
+            {
+                string sql = @"select * from AuthUsers";
+                SqlDataAdapter tmpSDA = GetDataAdapter(sql);
+                SqlCommandBuilder scb = new SqlCommandBuilder(tmpSDA);
+                tmpSDA.Update(APDbPool.poolAll.Tables["poolAMUsers"]);
+                APDbPool.poolAll.Tables["poolAMUsers"].AcceptChanges();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 提交所有角色数据
+        /// </summary>
+        private static void UpPoolAMGroups()
+        {
+            try
+            {
+                string sql = @"select * from AuthGroups";
+                SqlDataAdapter tmpSDA = GetDataAdapter(sql);
+                SqlCommandBuilder scb = new SqlCommandBuilder(tmpSDA);
+                tmpSDA.Update(APDbPool.poolAll.Tables["poolAMGroups"]);
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
 
+        //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 提交所有角色到仓库数据
+        /// </summary>
+        private static void UpPoolGr2Ca()
+        {
+            try
+            {
+                string sql = @"select * from AuthGr2Ca";
+                SqlDataAdapter tmpSDA = GetDataAdapter(sql);
+                SqlCommandBuilder scb = new SqlCommandBuilder(tmpSDA);
+                tmpSDA.Update(APDbPool.poolAll.Tables["poolGr2Ca"]);
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+
+        //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 提交所有角色到规则数据
+        /// </summary>
+        private static void UpPoolGr2Ru()
+        {
+            try
+            {
+                string sql = @"select * from AuthGr2Ru";
+                SqlDataAdapter tmpSDA = GetDataAdapter(sql);
+                SqlCommandBuilder scb = new SqlCommandBuilder(tmpSDA);
+                tmpSDA.Update(APDbPool.poolAll.Tables["poolGr2Ru"]);
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+
+        //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 提交所有角色到菜单数据
+        /// </summary>
+        private static void UpPoolGr2Me()
+        {
+            try
+            {
+                string sql = @"select * from AuthGr2Me";
+                SqlDataAdapter tmpSDA = GetDataAdapter(sql);
+                SqlCommandBuilder scb = new SqlCommandBuilder(tmpSDA);
+                tmpSDA.Update(APDbPool.poolAll.Tables["poolGr2Me"]);
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+
+        //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 提交所有规则数据
+        /// </summary>
+        private static void UpPoolAMRules()
+        {
+            try
+            {
+                string sql = @"select * from AuthRules";
+                SqlDataAdapter tmpSDA = GetDataAdapter(sql);
+                SqlCommandBuilder scb = new SqlCommandBuilder(tmpSDA);
+                tmpSDA.Update(APDbPool.poolAll.Tables["poolAMRules"]);
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+
+        //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 提交所有规则到对象数据
+        /// </summary>
+        private static void UpPoolRu2It()
+        {
+            try
+            {
+                string sql = @"select * from AuthRu2It";
+                SqlDataAdapter tmpSDA = GetDataAdapter(sql);
+                SqlCommandBuilder scb = new SqlCommandBuilder(tmpSDA);
+                tmpSDA.Update(APDbPool.poolAll.Tables["poolRu2It"]);
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+
+        //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 提交所有对象数据
+        /// </summary>
+        private static void UpPoolAMItems()
+        {
+            try
+            {
+                string sql = @"select * from AuthItems";
+                SqlDataAdapter tmpSDA = GetDataAdapter(sql);
+                SqlCommandBuilder scb = new SqlCommandBuilder(tmpSDA);
+                tmpSDA.Update(APDbPool.poolAll.Tables["poolAMItems"]);
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
         }
         #endregion
 
@@ -118,26 +303,11 @@ namespace AuthSystem.AuthPool2Db
             try
             {
                 string sql = @"select * from AuthUsers";
-                SqlDataReader tmpSDR = GetDataReader(sql);
-                List<AMUser> tmpAMUsers = new List<AMUser>();
-                while (tmpSDR.Read())
+                using (SqlDataAdapter tmpSDA = GetDataAdapter(sql))
                 {
-                    AMUser tmpAMUser = new AMUser();
-                    tmpAMUser.User_ID = tmpSDR["User_ID"].ToString();
-                    tmpAMUser.User_Name = tmpSDR["User_Name"].ToString();
-                    tmpAMUser.User_Text = tmpSDR["User_Text"].ToString();
-                    tmpAMUser.User_Pass = tmpSDR["User_Pass"].ToString();
-                    tmpAMUser.User_Tel = tmpSDR["User_Tel"].ToString();
-                    tmpAMUser.User_QQ = tmpSDR["User_QQ"].ToString();
-                    tmpAMUser.User_Email = tmpSDR["User_Email"].ToString();
-                    tmpAMUser.User_Status = (bool)tmpSDR["User_Status"];
-                    tmpAMUser.User_Group = tmpSDR["User_Group"].ToString();
-                    tmpAMUser.User_CangKu = tmpSDR["User_CangKu"].ToString();
-                    tmpAMUser.User_BeiZhu = tmpSDR["User_BeiZhu"].ToString();
-                    tmpAMUsers.Add(tmpAMUser);
+                    APDbPool.poolAll.Tables["poolAMUsers"].Clear();
+                    tmpSDA.Fill(APDbPool.poolAll.Tables["poolAMUsers"]);
                 }
-                tmpSDR.Close();
-                APDbPool.poolAMUsers = tmpAMUsers;
             }
             catch (Exception)
             {
@@ -154,22 +324,11 @@ namespace AuthSystem.AuthPool2Db
             try
             {
                 string sql = @"select * from AuthGroups";
-                SqlDataReader tmpSDR = GetDataReader(sql);
-                List<AMGroup> tmpAMGroups = new List<AMGroup>();
-                while (tmpSDR.Read())
+                using (SqlDataAdapter tmpSDA = GetDataAdapter(sql))
                 {
-                    AMGroup tmpAMGroup = new AMGroup();
-                    tmpAMGroup.Group_ID = tmpSDR["Group_ID"].ToString();
-                    tmpAMGroup.Group_Name = tmpSDR["Group_Name"].ToString();
-                    tmpAMGroup.Group_Status = (bool)tmpSDR["Group_Status"];
-                    tmpAMGroup.Group_BeiZhu = tmpSDR["Group_BeiZhu"].ToString();
-                    tmpAMGroup.Group_Rule_ID = tmpSDR["Group_Rule_ID"].ToString();
-                    tmpAMGroup.Group_CangKu_ID = tmpSDR["Group_CangKu_ID"].ToString();
-                    tmpAMGroup.Group_Menu_ID = tmpSDR["Group_Menu_ID"].ToString();
-                    tmpAMGroups.Add(tmpAMGroup);
+                    APDbPool.poolAll.Tables["poolAMGroups"].Clear();
+                    tmpSDA.Fill(APDbPool.poolAll.Tables["poolAMGroups"]);
                 }
-                tmpSDR.Close();
-                APDbPool.poolAMGroups = tmpAMGroups;
             }
             catch (Exception)
             {
@@ -186,17 +345,11 @@ namespace AuthSystem.AuthPool2Db
             try
             {
                 string sql = @"select * from AuthGr2Ca";
-                SqlDataReader tmpSDR = GetDataReader(sql);
-                List<AMX2Y> tmpAMGr2Cas = new List<AMX2Y>();
-                while (tmpSDR.Read())
+                using (SqlDataAdapter tmpSDA = GetDataAdapter(sql))
                 {
-                    AMX2Y tmpAMGr2Ca = new AMX2Y();
-                    tmpAMGr2Ca.ID1 = tmpSDR["Group_CangKu_ID"].ToString();
-                    tmpAMGr2Ca.ID2 = tmpSDR["CangKu_ID"].ToString();
-                    tmpAMGr2Cas.Add(tmpAMGr2Ca);
+                    APDbPool.poolAll.Tables["poolGr2Ca"].Clear();
+                    tmpSDA.Fill(APDbPool.poolAll.Tables["poolGr2Ca"]);
                 }
-                tmpSDR.Close();
-                APDbPool.poolGr2Ca = tmpAMGr2Cas;
             }
             catch (Exception)
             {
@@ -213,17 +366,11 @@ namespace AuthSystem.AuthPool2Db
             try
             {
                 string sql = @"select * from AuthGr2Ru";
-                SqlDataReader tmpSDR = GetDataReader(sql);
-                List<AMX2Y> tmpAMGr2Rus = new List<AMX2Y>();
-                while (tmpSDR.Read())
+                using (SqlDataAdapter tmpSDA = GetDataAdapter(sql))
                 {
-                    AMX2Y tmpAMGr2Ru = new AMX2Y();
-                    tmpAMGr2Ru.ID1 = tmpSDR["Group_Rule_ID"].ToString();
-                    tmpAMGr2Ru.ID2 = tmpSDR["Rule_ID"].ToString();
-                    tmpAMGr2Rus.Add(tmpAMGr2Ru);
+                    APDbPool.poolAll.Tables["poolGr2Ru"].Clear();
+                    tmpSDA.Fill(APDbPool.poolAll.Tables["poolGr2Ru"]);
                 }
-                tmpSDR.Close();
-                APDbPool.poolGr2Ru = tmpAMGr2Rus; 
             }
             catch (Exception)
             {
@@ -241,17 +388,11 @@ namespace AuthSystem.AuthPool2Db
             try
             {
                 string sql = @"select * from AuthGr2Me";
-                SqlDataReader tmpSDR = GetDataReader(sql);
-                List<AMX2Y> tmpAMGr2Mes = new List<AMX2Y>();
-                while (tmpSDR.Read())
+                using (SqlDataAdapter tmpSDA = GetDataAdapter(sql))
                 {
-                    AMX2Y tmpAMGr2Me = new AMX2Y();
-                    tmpAMGr2Me.ID1 = tmpSDR["Group_Menu_ID"].ToString();
-                    tmpAMGr2Me.ID2 = tmpSDR["Menu_ID"].ToString();
-                    tmpAMGr2Mes.Add(tmpAMGr2Me);
+                    APDbPool.poolAll.Tables["poolGr2Me"].Clear();
+                    tmpSDA.Fill(APDbPool.poolAll.Tables["poolGr2Me"]);
                 }
-                tmpSDR.Close();
-                APDbPool.poolGr2Me = tmpAMGr2Mes;
             }
             catch (Exception)
             {
@@ -268,20 +409,12 @@ namespace AuthSystem.AuthPool2Db
             try
             {
                 string sql = @"select * from AuthRules";
-                SqlDataReader tmpSDR = GetDataReader(sql);
-                List<AMRule> tmpAMRules = new List<AMRule>();
-                while (tmpSDR.Read())
+                using (SqlDataAdapter tmpSDA = GetDataAdapter(sql))
                 {
-                    AMRule tmpAMRule = new AMRule();
-                    tmpAMRule.Rule_ID = tmpSDR["Rule_ID"].ToString();
-                    tmpAMRule.Rule_Name = tmpSDR["Rule_Name"].ToString();
-                    tmpAMRule.Rule_Item_ID = tmpSDR["Rule_Item_ID"].ToString();
-                    tmpAMRule.Rule_Up_RuleID = tmpSDR["Rule_Up_RuleID"].ToString();
-                    tmpAMRule.Rule_BeiZhu = tmpSDR["Rule_BeiZhu"].ToString();
-                    tmpAMRules.Add(tmpAMRule);
+                    APDbPool.poolAll.Tables["poolAMRules"].Clear();
+                    tmpSDA.Fill(APDbPool.poolAll.Tables["poolAMRules"]);
                 }
-                tmpSDR.Close();
-                APDbPool.poolAMRules = tmpAMRules;
+
             }
             catch (Exception)
             {
@@ -299,19 +432,34 @@ namespace AuthSystem.AuthPool2Db
             try
             {
                 string sql = @"select * from AuthItems";
-                SqlDataReader tmpSDR = GetDataReader(sql);
-                List<AMItem> tmpAMItems = new List<AMItem>();
-                while (tmpSDR.Read())
+                using (SqlDataAdapter tmpSDA = GetDataAdapter(sql))
                 {
-                    AMItem tmpAMItem = new AMItem();
-                    tmpAMItem.Item_ID = tmpSDR["Item_ID"].ToString();
-                    tmpAMItem.Item_Name = tmpSDR["Item_Name"].ToString();
-                    tmpAMItem.Item_NameSpace = tmpSDR["Item_NameSpace"].ToString();
-                    tmpAMItem.Item_BeiZhu = tmpSDR["Item_BeiZhu"].ToString();
-                    tmpAMItems.Add(tmpAMItem);
+                    APDbPool.poolAll.Tables["poolAMItems"].Clear();
+                    tmpSDA.Fill(APDbPool.poolAll.Tables["poolAMItems"]);
                 }
-                tmpSDR.Close();
-                APDbPool.poolAMItems = tmpAMItems;
+
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+
+        //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 从数据库取所有规则对应对象数据到dbPool
+        /// </summary>
+        private static void GetPoolAMRu2It()
+        {
+            try
+            {
+                string sql = @"select * from AuthRu2It";
+                using (SqlDataAdapter tmpSDA = GetDataAdapter(sql))
+                {
+                    APDbPool.poolAll.Tables["poolRu2It"].Clear();
+                    tmpSDA.Fill(APDbPool.poolAll.Tables["poolRu2It"]);
+                }
             }
             catch (Exception)
             {

@@ -84,6 +84,7 @@
     <Compile Include="AuthPool2Db\AP2DBase.cs" />
     <Compile Include="AuthPool2Db\AP2DOpera.cs" />
     <Compile Include="AuthPool2Soft\AP2SBase.cs" />
+    <Compile Include="AuthPool2Soft\AP2SOpera.cs" />
     <Compile Include="AuthPool\APBase.cs" />
     <Compile Include="AuthPool\APDbPool.cs" />
     <Compile Include="AuthPool\APSoftPool.cs" />

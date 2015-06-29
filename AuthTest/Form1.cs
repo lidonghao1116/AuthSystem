@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using AuthSystem.AuthPool2Soft;
 
 
 namespace AuthTest
@@ -16,39 +17,36 @@ namespace AuthTest
         public Form1()
         {
             InitializeComponent();
+            //AuthSystem.AuthPool2Db.AP2DOpera.GetPool();//初始化所有数据池！
         }
-        static string sql = @"select * from AuthGr2Ru";
-        SqlDataAdapter sda = AuthSystem.AuthPool2Db.AP2DOpera.GetDataAdapter(sql);
+        
+        
         private void button1_Click(object sender, EventArgs e)
         {
-            
-            /*
-            SqlDataReader sdr = AuthSystem.AuthPool2Db.AP2DOpera.GetDataReader(sql);
-            DataTable dt = new DataTable("AuthUsers1");
-            dt.Load(sdr);
-            dataSet1.Tables.Add(dt);
-            sdr.Close();
-            dataGridView1.DataSource = dataSet1.Tables["AuthUsers1"];
-            MessageBox.Show(dataSet1.Tables.Count.ToString());
-            */
-            
-            sda.Fill(dataSet1, "AuthGr2Ru");
+            DataTable tmpDt = AP2SOpera.ReadPool(AuthSystem.AuthPool.APPoolType.AMUsers);
+            dataGridView1.DataSource = tmpDt;
 
-            dataGridView1.DataSource = dataSet1.Tables["AuthGr2Ru"];
-
-            //SqlCommandBuilder scb = new SqlCommandBuilder(sda);
-            //sda.Update(dataSet1.GetChanges());
-            
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            SqlCommand sqlcomm = AuthSystem.AuthPool2Db.AP2DOpera.GetComm();
-            sqlcomm.CommandText = @"insert into AuthUsers values(@Group_Rule_ID,@Rule_ID)";
-            sqlcomm.Parameters.Add("@Group_Rule_ID", "Group_Rule_ID");
-            sqlcomm.Parameters.Add("@Rule_ID", "Rule_ID");
-            sda.InsertCommand = sqlcomm;
-            sda.Update(dataSet1.Tables[0].GetChanges());
+            AP2SOpera.SavePool((DataTable)dataGridView1.DataSource, AuthSystem.AuthPool.APPoolType.AMUsers);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            AuthSystem.AuthPool2Db.AP2DOpera.GetPool();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            AuthSystem.AuthPool2Db.AP2DOpera.UpdatePool(AuthSystem.AuthPool.APPoolType.AMUsers);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            AuthSystem.AuthForm.AFAuthRuleBinding afarb = new AuthSystem.AuthForm.AFAuthRuleBinding();
+            afarb.ShowDialog();
         }
 
     }
