@@ -12,21 +12,22 @@ namespace AuthSystem.AuthForm
     public class AFAuthRuleBinding : AFBase
     {
         #region 0-------定义公共变量
-        private BindingSource RulesBindingSource = new BindingSource();//所有Rules的绑定对象
+        private DataTable tmpDtItems;   //所有Items数据
+        private DataTable tmpDtRules;   //所有Rules数据
         private ToolStripButton toolSaveItems;
-        private BindingSource ItemsBindingSource = new BindingSource();//所有Items的绑定对象
         private bool itemsHasChange = false;//Items是否有更改
         private bool RulesHasChange = false;//Rules是否有更改
         private AMRule currAMRule;
-        private ToolStripButton toolStripButton1;
-        private ToolStripButton toolStripButton2;
-        private ToolStripButton toolStripButton3;        //当前选择的Rule
+        private ToolStripButton toolRuleAdd;
+        private ToolStripButton toolRuleDel;
+        private ToolStripButton toolRuleSave;        //当前选择的Rule
         private bool LoadOver = false;
         #endregion
 
         #region 1-------初始化
         public AFAuthRuleBinding()
         {
+            AuthSystem.AuthPool2Db.AP2DOpera.GetPool();
             InitializeComponent(); //初始化界面
             InitRules();  //初始化规则表
             InitItems();  //初始化对象表
@@ -54,9 +55,9 @@ namespace AuthSystem.AuthForm
             this.panel_Left = new System.Windows.Forms.Panel();
             this.dgv_Rules = new System.Windows.Forms.DataGridView();
             this.ItemstoolStrip = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.toolRuleAdd = new System.Windows.Forms.ToolStripButton();
+            this.toolRuleDel = new System.Windows.Forms.ToolStripButton();
+            this.toolRuleSave = new System.Windows.Forms.ToolStripButton();
             this.toolSaveRu2It = new System.Windows.Forms.ToolStripButton();
             this.panel_Right.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Items)).BeginInit();
@@ -167,9 +168,9 @@ namespace AuthSystem.AuthForm
             // ItemstoolStrip
             // 
             this.ItemstoolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1,
-            this.toolStripButton2,
-            this.toolStripButton3,
+            this.toolRuleAdd,
+            this.toolRuleDel,
+            this.toolRuleSave,
             this.toolSaveRu2It});
             this.ItemstoolStrip.Location = new System.Drawing.Point(0, 0);
             this.ItemstoolStrip.Name = "ItemstoolStrip";
@@ -177,32 +178,35 @@ namespace AuthSystem.AuthForm
             this.ItemstoolStrip.TabIndex = 0;
             this.ItemstoolStrip.Text = "toolStrip2";
             // 
-            // toolStripButton1
+            // toolRuleAdd
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(61, 22);
-            this.toolStripButton1.Text = "添加Rule";
+            this.toolRuleAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolRuleAdd.Image = ((System.Drawing.Image)(resources.GetObject("toolRuleAdd.Image")));
+            this.toolRuleAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolRuleAdd.Name = "toolRuleAdd";
+            this.toolRuleAdd.Size = new System.Drawing.Size(61, 22);
+            this.toolRuleAdd.Text = "添加Rule";
+            this.toolRuleAdd.Click += new System.EventHandler(this.toolRuleAdd_Click);
             // 
-            // toolStripButton2
+            // toolRuleDel
             // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(61, 22);
-            this.toolStripButton2.Text = "删除Rule";
+            this.toolRuleDel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolRuleDel.Image = ((System.Drawing.Image)(resources.GetObject("toolRuleDel.Image")));
+            this.toolRuleDel.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolRuleDel.Name = "toolRuleDel";
+            this.toolRuleDel.Size = new System.Drawing.Size(61, 22);
+            this.toolRuleDel.Text = "删除Rule";
+            this.toolRuleDel.Click += new System.EventHandler(this.toolRuleDel_Click);
             // 
-            // toolStripButton3
+            // toolRuleSave
             // 
-            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(61, 22);
-            this.toolStripButton3.Text = "保存Rule";
+            this.toolRuleSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolRuleSave.Image = ((System.Drawing.Image)(resources.GetObject("toolRuleSave.Image")));
+            this.toolRuleSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolRuleSave.Name = "toolRuleSave";
+            this.toolRuleSave.Size = new System.Drawing.Size(61, 22);
+            this.toolRuleSave.Text = "保存Rule";
+            this.toolRuleSave.Click += new System.EventHandler(this.toolRuleSave_Click);
             // 
             // toolSaveRu2It
             // 
@@ -242,8 +246,8 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void InitRules()
         {
-            DataTable tmpDT = AuthPool2Soft.AP2SOpera.ReadPool(AuthPool.APPoolType.AMRules);
-            dgv_Rules.DataSource = tmpDT;
+            tmpDtRules = AuthPool2Soft.AP2SOpera.ReadPool(AuthPool.APPoolType.AMRules);
+            dgv_Rules.DataSource = tmpDtRules;
             dgv_Rules.Columns[0].Visible = false;
             dgv_Rules.Columns[1].HeaderText = "ID";
             dgv_Rules.Columns[1].Width = 30;
@@ -261,33 +265,85 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void InitItems()
         {
-            DataTable tmpDT = AuthPool2Soft.AP2SOpera.ReadPool(AuthPool.APPoolType.AMItems);
+            tmpDtItems = AuthPool2Soft.AP2SOpera.ReadPool(AuthPool.APPoolType.AMItems);
             DataGridViewCheckBoxColumn ItemsDGVCBC = new DataGridViewCheckBoxColumn(false);  //定义在表前要添加的checkBox列
             ItemsDGVCBC.Name = "SeleItem";
-            ItemsDGVCBC.HeaderText = "选择";
-            ItemsDGVCBC.Width = 40;
             dgv_Items.Columns.Add(ItemsDGVCBC);
-            dgv_Items.DataSource = tmpDT;
-            dgv_Items.Columns[1].Width = 30;
-            dgv_Items.Columns[1].HeaderText = "ID";
-            dgv_Items.Columns[2].Width = 100;
-            dgv_Items.Columns[2].HeaderText = "Item名字";
-            dgv_Items.Columns[3].Width = 300;
-            dgv_Items.Columns[3].HeaderText = "Item路径";
-            dgv_Items.Columns[4].Width = 100;
-            dgv_Items.Columns[4].HeaderText = "备注";
+            dgv_Items.DataSource = tmpDtItems;
+            dgv_Items.Columns[0].HeaderText = "选择";
+            dgv_Items.Columns[0].Width = 40;
+            dgv_Items.Columns[1].Visible = false;
+            dgv_Items.Columns[2].Width = 30;
+            dgv_Items.Columns[2].HeaderText = "ID";
+            dgv_Items.Columns[3].Width = 100;
+            dgv_Items.Columns[3].HeaderText = "Item名字";
+            dgv_Items.Columns[4].Width = 300;
+            dgv_Items.Columns[4].HeaderText = "Item路径";
+            dgv_Items.Columns[5].Width = 100;
+            dgv_Items.Columns[5].HeaderText = "备注";
         }
         #endregion
         #endregion
 
+        #region Rules表的tools按键处理
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 添加Rules
+        /// </summary>
+        private void toolRuleAdd_Click(object sender, EventArgs e)
+        {
+            tmpDtRules.Rows.Add(tmpDtRules.NewRow());
+        }
+
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 删除Rules
+        /// </summary>
+        private void toolRuleDel_Click(object sender, EventArgs e)
+        {
+            if (dgv_Rules.SelectedRows.Count > 0)
+            {
+                int currIndex = dgv_Rules.SelectedRows[0].Index;
+                dgv_Rules.Rows.RemoveAt(currIndex);//这样才能完全删除，直接操作datatabel不能从数据库中删除。WHY？
+            }
+        }
+
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 保存Rules
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void toolRuleSave_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                AP2SOpera.SavePool(tmpDtRules, AuthPool.APPoolType.AMRules);
+                //AP2SOpera.SavePool((DataTable)dgv_Rules.DataSource, AuthPool.APPoolType.AMRules);
+                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMRules);
+                MessageBox.Show("保存成功！");
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("保存失败！");
+                throw;
+            }
+            
+        }
+
+        #endregion
+
         #region Items表的tools按键处理
+        //----------------------------------------------------------------------------------------------------
         /// <summary>
         /// 添加Item新行
         /// </summary>
         private void toolAddItem_Click(object sender, EventArgs e)
         {
-            ItemsBindingSource.AddNew();
+
         }
+
+        //----------------------------------------------------------------------------------------------------
         /// <summary>
         /// 删除Item行
         /// </summary>
@@ -303,9 +359,11 @@ namespace AuthSystem.AuthForm
             {
                 //取当前选择行
                 int currRow = dgv_Items.SelectedRows[0].Index;
-                ItemsBindingSource.RemoveAt(currRow);
+
             }
         }
+
+        //----------------------------------------------------------------------------------------------------
         /// <summary>
         /// 保存所有Item
         /// </summary>
@@ -372,6 +430,14 @@ namespace AuthSystem.AuthForm
             */
         }
         #endregion
+
+        
+
+        
+
+        
+
+        
 
     }
 }

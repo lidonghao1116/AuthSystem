@@ -19,11 +19,11 @@ namespace AuthTest
             InitializeComponent();
             //AuthSystem.AuthPool2Db.AP2DOpera.GetPool();//初始化所有数据池！
         }
-        
+        private DataTable tmpDt;
         
         private void button1_Click(object sender, EventArgs e)
         {
-            DataTable tmpDt = AP2SOpera.ReadPool(AuthSystem.AuthPool.APPoolType.AMUsers);
+            tmpDt = AP2SOpera.ReadPool(AuthSystem.AuthPool.APPoolType.AMUsers);
             dataGridView1.DataSource = tmpDt;
 
         }
@@ -47,6 +47,12 @@ namespace AuthTest
         {
             AuthSystem.AuthForm.AFAuthRuleBinding afarb = new AuthSystem.AuthForm.AFAuthRuleBinding();
             afarb.ShowDialog();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            int currIndex = dataGridView1.SelectedRows[0].Index;
+            dataGridView1.Rows.RemoveAt(currIndex);
         }
 
     }
