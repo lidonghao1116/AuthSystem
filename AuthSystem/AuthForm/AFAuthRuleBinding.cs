@@ -15,9 +15,6 @@ namespace AuthSystem.AuthForm
         private DataTable tmpDtItems;   //所有Items数据
         private DataTable tmpDtRules;   //所有Rules数据
         private ToolStripButton toolSaveItems;
-        private bool itemsHasChange = false;//Items是否有更改
-        private bool RulesHasChange = false;//Rules是否有更改
-        private int currAMRuleIndex;
         private ToolStripButton toolRuleAdd;
         private ToolStripButton toolRuleDel;
         private ToolStripButton toolRuleSave;        //当前选择的Rule
@@ -459,14 +456,6 @@ namespace AuthSystem.AuthForm
             }
         }
         #endregion
-
-        
-
-        
-
-        
-
-        
 
     }
 }

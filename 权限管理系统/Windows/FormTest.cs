@@ -37,7 +37,7 @@ namespace 权限管理系统.Windows
 
         private void button4_Click(object sender, EventArgs e)
         {
-            AuthSystem.AuthForm.AFAuthSet afas = new AFAuthSet();
+            AuthSystem.AuthForm.AFAuthSet1 afas = new AFAuthSet1();
             
             afas.ShowDialog();
         }

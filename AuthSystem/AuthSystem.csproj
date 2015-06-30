@@ -64,6 +64,9 @@
     <Compile Include="AuthForm\AFAuthSet.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="AuthForm\AFAuthSet1.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="AuthForm\AFAuthSetItemNo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,6 +113,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AuthForm\AFAuthSet.resx">
       <DependentUpon>AFAuthSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AuthForm\AFAuthSet1.resx">
+      <DependentUpon>AFAuthSet1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AuthForm\AFAuthSetItemNo.resx">
       <DependentUpon>AFAuthSetItemNo.cs</DependentUpon>

@@ -70,5 +70,11 @@ namespace AuthTest
             afasin.ShowDialog();
         }
 
+        private void button9_Click(object sender, EventArgs e)
+        {
+            AuthSystem.AuthForm.AFAuthSet afas = new AuthSystem.AuthForm.AFAuthSet();
+            afas.ShowDialog();
+        }
+
     }
 }
