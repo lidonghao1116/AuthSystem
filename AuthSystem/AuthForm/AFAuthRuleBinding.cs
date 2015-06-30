@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Data;
 using System.Windows.Forms;
+using System.Data;
 using AuthSystem.AuthModel;
 using AuthSystem.AuthPool2Soft;
 
@@ -17,11 +17,11 @@ namespace AuthSystem.AuthForm
         private ToolStripButton toolSaveItems;
         private bool itemsHasChange = false;//Items是否有更改
         private bool RulesHasChange = false;//Rules是否有更改
-        private AMRule currAMRule;
+        private int currAMRuleIndex;
         private ToolStripButton toolRuleAdd;
         private ToolStripButton toolRuleDel;
         private ToolStripButton toolRuleSave;        //当前选择的Rule
-        private bool LoadOver = false;
+        private bool LoadOver = false;              //是否初始化完成
         #endregion
 
         #region 1-------初始化
@@ -72,9 +72,9 @@ namespace AuthSystem.AuthForm
             this.panel_Right.Controls.Add(this.dgv_Items);
             this.panel_Right.Controls.Add(this.RulestoolStrip);
             this.panel_Right.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel_Right.Location = new System.Drawing.Point(458, 0);
+            this.panel_Right.Location = new System.Drawing.Point(575, 0);
             this.panel_Right.Name = "panel_Right";
-            this.panel_Right.Size = new System.Drawing.Size(517, 574);
+            this.panel_Right.Size = new System.Drawing.Size(589, 677);
             this.panel_Right.TabIndex = 1;
             // 
             // dgv_Items
@@ -92,7 +92,7 @@ namespace AuthSystem.AuthForm
             this.dgv_Items.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgv_Items.RowTemplate.Height = 23;
             this.dgv_Items.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_Items.Size = new System.Drawing.Size(517, 549);
+            this.dgv_Items.Size = new System.Drawing.Size(589, 652);
             this.dgv_Items.TabIndex = 1;
             // 
             // RulestoolStrip
@@ -103,7 +103,7 @@ namespace AuthSystem.AuthForm
             this.toolSaveItems});
             this.RulestoolStrip.Location = new System.Drawing.Point(0, 0);
             this.RulestoolStrip.Name = "RulestoolStrip";
-            this.RulestoolStrip.Size = new System.Drawing.Size(517, 25);
+            this.RulestoolStrip.Size = new System.Drawing.Size(589, 25);
             this.RulestoolStrip.TabIndex = 0;
             this.RulestoolStrip.Text = "toolStrip1";
             // 
@@ -143,7 +143,7 @@ namespace AuthSystem.AuthForm
             this.panel_Left.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_Left.Location = new System.Drawing.Point(0, 0);
             this.panel_Left.Name = "panel_Left";
-            this.panel_Left.Size = new System.Drawing.Size(975, 574);
+            this.panel_Left.Size = new System.Drawing.Size(1164, 677);
             this.panel_Left.TabIndex = 0;
             // 
             // dgv_Rules
@@ -161,7 +161,7 @@ namespace AuthSystem.AuthForm
             this.dgv_Rules.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgv_Rules.RowTemplate.Height = 23;
             this.dgv_Rules.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_Rules.Size = new System.Drawing.Size(975, 549);
+            this.dgv_Rules.Size = new System.Drawing.Size(1164, 652);
             this.dgv_Rules.TabIndex = 1;
             this.dgv_Rules.SelectionChanged += new System.EventHandler(this.dgv_Rules_SeleChanged);
             // 
@@ -174,7 +174,7 @@ namespace AuthSystem.AuthForm
             this.toolSaveRu2It});
             this.ItemstoolStrip.Location = new System.Drawing.Point(0, 0);
             this.ItemstoolStrip.Name = "ItemstoolStrip";
-            this.ItemstoolStrip.Size = new System.Drawing.Size(975, 25);
+            this.ItemstoolStrip.Size = new System.Drawing.Size(1164, 25);
             this.ItemstoolStrip.TabIndex = 0;
             this.ItemstoolStrip.Text = "toolStrip2";
             // 
@@ -220,10 +220,13 @@ namespace AuthSystem.AuthForm
             // 
             // AFAuthRuleBinding
             // 
-            this.ClientSize = new System.Drawing.Size(975, 574);
+            this.ClientSize = new System.Drawing.Size(1164, 677);
             this.Controls.Add(this.panel_Right);
             this.Controls.Add(this.panel_Left);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "AFAuthRuleBinding";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "设置规则与对象对应关系";
             this.panel_Right.ResumeLayout(false);
             this.panel_Right.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Items)).EndInit();
@@ -320,7 +323,6 @@ namespace AuthSystem.AuthForm
             try
             {
                 AP2SOpera.SavePool(tmpDtRules, AuthPool.APPoolType.AMRules);
-                //AP2SOpera.SavePool((DataTable)dgv_Rules.DataSource, AuthPool.APPoolType.AMRules);
                 AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMRules);
                 MessageBox.Show("保存成功！");
             }
@@ -341,7 +343,7 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void toolAddItem_Click(object sender, EventArgs e)
         {
-
+            tmpDtItems.Rows.Add(tmpDtItems.NewRow());
         }
 
         //----------------------------------------------------------------------------------------------------
@@ -351,16 +353,10 @@ namespace AuthSystem.AuthForm
         private void toolDelItem_Click(object sender, EventArgs e)
         {
             
-            if (dgv_Items.SelectedRows.Count == 0)
+            if (dgv_Items.SelectedRows.Count > 0)
             {
-                MessageBox.Show("请选择要删除的行！");
-                return;
-            }
-            else
-            {
-                //取当前选择行
-                int currRow = dgv_Items.SelectedRows[0].Index;
-
+                int x = dgv_Items.SelectedRows[0].Index;
+                dgv_Items.Rows.RemoveAt(x);
             }
         }
 
@@ -372,10 +368,13 @@ namespace AuthSystem.AuthForm
         {
             try
             {
-                
+                AP2SOpera.SavePool(tmpDtItems, AuthPool.APPoolType.AMItems);
+                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMItems);
+                MessageBox.Show("保存成功！");
             }
             catch (Exception)
             {
+                MessageBox.Show("保存失败！");
                 throw;
             }
         }
@@ -389,16 +388,19 @@ namespace AuthSystem.AuthForm
         /// <param name="e"></param>
         private void dgv_Rules_SeleChanged(object sender, EventArgs e)
         {
-            /*
             if (LoadOver)
             {
                 if (dgv_Rules.SelectedRows.Count > 0)
                 {
-                    currAMRule = (AMRule)RulesBindingSource[dgv_Rules.SelectedRows[0].Index]; //当前被选中的规则对象
-                    List<string> currItemsID = ADAuthOpera.GetAMItemsValue(AMItemValueType.Item_ID, ADAuthOpera.GetAuthItems(currAMRule));//当前选中的规则的所有ItemsID
+                    //当前选中Rule
+                    //currAMRuleIndex = dgv_Rules.SelectedRows[0].Index; //当前被选中行
+                    string currAMRule_Item_ID = dgv_Rules.SelectedRows[0].Cells["Rule_Item_ID"].Value.ToString();
+                    //取Rule的对应数据
+                    List<string> currItemsID = AuthPool2Soft.AP2SOpera.ReadPool_Ru2It(currAMRule_Item_ID);
+                    //勾选数据
                     for (int x = 0; x < dgv_Items.Rows.Count; x++)
                     {
-                        if (currItemsID.Contains(dgv_Items.Rows[x].Cells[1].Value.ToString()))
+                        if (currItemsID.Contains(dgv_Items.Rows[x].Cells[2].Value.ToString()))
                         {
                             dgv_Items.Rows[x].Cells[0].Value = true;
                         }
@@ -408,27 +410,51 @@ namespace AuthSystem.AuthForm
                         }
                     }
                 }
-            }*/
+            }
         }
         #endregion
 
         #region 保存对应关系
         private void toolSaveRu2It_Click(object sender, EventArgs e)
         {
-            /*
             dgv_Items.CommitEdit(DataGridViewDataErrorContexts.Commit);
-            AMRule currAMR = (AMRule)RulesBindingSource[dgv_Rules.SelectedRows[0].Index]; //当前被选中的规则对象
-            List<AMItem> tmpSaveItems = new List<AMItem>();
-            for (int i = 0; i <dgv_Items.Rows.Count; i++)
+            //判断是否有选择Rule
+            if (dgv_Rules.SelectedRows.Count > 0)
             {
-                if ((bool)dgv_Items.Rows[i].Cells[0].Value)
+                //当前选择的Rule的Rule_Item_ID
+                string tmpRule_Item_ID = dgv_Rules.SelectedRows[0].Cells["Rule_Item_ID"].Value.ToString();
+                //循环dgv_Items，勾选的项加入List.String
+                List<string> tmpItemID = new List<string>();
+                List<string> tmpItemIDdel = new List<string>();
+                for (int i = 0; i < dgv_Items.Rows.Count; i++)
                 {
-                    tmpSaveItems.Add((AMItem)ItemsBindingSource[i]);
+                    if ((bool)dgv_Items.Rows[i].Cells[0].Value)
+                    {
+                        tmpItemID.Add(dgv_Items.Rows[i].Cells["Item_ID"].Value.ToString());
+                    }
+                    else
+                    {
+                        tmpItemIDdel.Add(dgv_Items.Rows[i].Cells["Item_ID"].Value.ToString());
+                    }
                 }
+                //循环List.String,删除没勾选行
+                AP2SOpera.DelRowPool_Ru2It(tmpRule_Item_ID);
+                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMRu2It);
+                AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMRu2It);
+                //循环List.String，添加Row到poolRu2It
+                foreach (string x in tmpItemID)
+                {
+                    AP2SOpera.AddRowPool_Ru2It(tmpRule_Item_ID, x);
+                }
+                
+                //更新池到数据库
+                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMRu2It);
+
             }
-            ADAuthOpera.SaveAuthRu2It(tmpSaveItems, currAMR).ToString();
-            //MessageBox.Show(tmpSaveItems.Count.ToString());
-            */
+            else
+            {
+                MessageBox.Show("请选择要保存数据的Rule");
+            }
         }
         #endregion
 

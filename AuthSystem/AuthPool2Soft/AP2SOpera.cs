@@ -16,6 +16,7 @@ namespace AuthSystem.AuthPool2Soft
             
         }
 
+        //-----------------------------------------------------------------------------------------------
         /// <summary>
         /// 从数据池读取数据
         /// </summary>
@@ -62,6 +63,7 @@ namespace AuthSystem.AuthPool2Soft
             }
         }
 
+        //-----------------------------------------------------------------------------------------------
         /// <summary>
         /// 保存数据到数据池
         /// </summary>
@@ -113,5 +115,95 @@ namespace AuthSystem.AuthPool2Soft
                 throw;
             }
         }
+
+        //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 从Ru2It数据池读取Item_ID
+        /// </summary>
+        /// <param name="Rule_Item_ID">参数：Rule_Item_ID</param>
+        /// <returns>List.String</returns>
+        public static List<string> ReadPool_Ru2It(string Rule_Item_ID)
+        {
+            try
+            {
+
+                List<string> tmpStr = new List<string>();
+                var requit = from s1 in AuthPool.APDbPool.poolAll.Tables["poolRu2It"].AsEnumerable()
+                             where s1.Field<string>("Rule_Item_ID") == Rule_Item_ID
+                             select s1;
+                foreach (var x in requit)
+                {
+                    tmpStr.Add(x[2].ToString());
+                }
+                return tmpStr;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 对poolRu2It添加一行
+        /// </summary>
+        /// <param name="Rule_Item_ID">Rule_Item_ID</param>
+        /// <param name="Item_ID">Item_ID</param>
+        public static void AddRowPool_Ru2It(string Rule_Item_ID, string Item_ID)
+        {
+            DataRow tmpDR = APDbPool.poolAll.Tables["poolRu2It"].NewRow();
+            tmpDR[0] = 0;
+            tmpDR[1] = Rule_Item_ID;
+            tmpDR[2] = Item_ID;
+            //检测是否有重复数据，有就不改动
+            bool isAdd = true;
+            foreach (DataRow x in APDbPool.poolAll.Tables["poolRu2It"].Rows)
+            {
+                if (x[1] == tmpDR[1] && x[2] == tmpDR[2])
+                {
+                    isAdd = false;
+                }
+            }
+            //如果不重复，则添加行
+            if (isAdd)
+            {
+                APDbPool.poolAll.Tables["poolRu2It"].Rows.Add(tmpDR);
+            }
+        }
+
+        //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 对poolRu2It删除一行
+        /// </summary>
+        /// <param name="Rule_Item_ID">Rule_Item_ID</param>
+        /// <param name="Item_ID">Item_ID</param>
+        public static void DelRowPool_Ru2It(string Rule_Item_ID, string Item_ID)
+        {
+            foreach (DataRow x in APDbPool.poolAll.Tables["poolRu2It"].Rows)
+            {
+                if (x[1].ToString() == Rule_Item_ID && x[2].ToString() == Item_ID)
+                {
+                    x.Delete();
+                }
+            }
+            //APDbPool.poolAll.Tables["poolRu2It"].AcceptChanges();
+        }
+        /// <summary>
+        /// 对poolRu2It删除Rule_Item_ID对应行
+        /// </summary>
+        /// <param name="Rule_Item_ID">Rule_Item_ID</param>
+        public static void DelRowPool_Ru2It(string Rule_Item_ID)
+        {
+            foreach (DataRow x in APDbPool.poolAll.Tables["poolRu2It"].Rows)
+            {
+                if (x[1].ToString() == Rule_Item_ID)
+                {
+                    //APDbPool.poolAll.Tables["poolRu2It"].Rows.Remove(x);
+                    x.Delete();
+                }
+            }
+            //APDbPool.poolAll.Tables["poolRu2It"].AcceptChanges();
+        }
+
     }
 }

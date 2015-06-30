@@ -55,5 +55,20 @@ namespace AuthTest
             dataGridView1.Rows.RemoveAt(currIndex);
         }
 
+        private void button7_Click(object sender, EventArgs e)
+        {
+            List<string> str1 = AuthSystem.AuthPool2Soft.AP2SOpera.ReadPool_Ru2It("5");
+            foreach (string x in str1)
+            {
+                MessageBox.Show(x);
+            }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            AuthSystem.AuthForm.AFAuthSetItemNo afasin = new AuthSystem.AuthForm.AFAuthSetItemNo();
+            afasin.ShowDialog();
+        }
+
     }
 }
