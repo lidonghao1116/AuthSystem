@@ -50,6 +50,9 @@ namespace AuthSystem.AuthPool2Soft
                     case APPoolType.AMItems:
                         tmpDT = AuthPool.APDbPool.poolAll.Tables["poolAMItems"].Copy();
                         break;
+                    case APPoolType.AMItemsNo:
+                        tmpDT = AuthPool.APDbPool.poolAll.Tables["poolAMItemsNo"].Copy();
+                        break;
                     default:
                         tmpDT = null;
                         break;
@@ -103,6 +106,10 @@ namespace AuthSystem.AuthPool2Soft
                     case APPoolType.AMItems:
                         AuthPool.APDbPool.poolAll.Tables["poolAMItems"].Clear();
                         AuthPool.APDbPool.poolAll.Tables["poolAMItems"].Merge(dataTable, true);
+                        break;
+                    case APPoolType.AMItemsNo:
+                        AuthPool.APDbPool.poolAll.Tables["poolAMItemsNo"].Clear();
+                        AuthPool.APDbPool.poolAll.Tables["poolAMItemsNo"].Merge(dataTable, true);
                         break;
                     default:
                         break;

@@ -36,6 +36,7 @@ namespace AuthSystem.AuthPool2Db
             GetPoolAMRules();
             GetPoolAMRu2It();
             GetPoolAMItems();
+            GetPoolAMItemsNo();
         }
 
         //-----------------------------------------------------------------------------------------------
@@ -69,6 +70,9 @@ namespace AuthSystem.AuthPool2Db
                 case APPoolType.AMItems:
                     GetPoolAMItems();
                     break;
+                case APPoolType.AMItemsNo:
+                    GetPoolAMItemsNo();
+                    break;
                 default:
                     break;
             }
@@ -87,6 +91,7 @@ namespace AuthSystem.AuthPool2Db
             UpPoolAMRules();
             UpPoolRu2It();
             UpPoolAMItems();
+            UpPoolAMItemsNo();
         }
         //-----------------------------------------------------------------------------------------------
         /// <summary>
@@ -119,6 +124,9 @@ namespace AuthSystem.AuthPool2Db
                         break;
                     case APPoolType.AMItems:
                         UpPoolAMItems();
+                        break;
+                    case APPoolType.AMItemsNo:
+                        UpPoolAMItemsNo();
                         break;
                     default:
                         break;
@@ -291,6 +299,25 @@ namespace AuthSystem.AuthPool2Db
                 throw;
             }
         }
+
+        //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 提交所有不做权限处理的对象数据
+        /// </summary>
+        private static void UpPoolAMItemsNo()
+        {
+            try
+            {
+                string sql = @"select * from AuthItemsNo";
+                SqlDataAdapter tmpSDA = GetDataAdapter(sql);
+                SqlCommandBuilder scb = new SqlCommandBuilder(tmpSDA);
+                tmpSDA.Update(APDbPool.poolAll.Tables["poolAMItemsNo"]);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         #endregion
 
         #region 从数据库取数据到DbPool-----------------------------------------------------------------------------------------------
@@ -459,6 +486,28 @@ namespace AuthSystem.AuthPool2Db
                 {
                     APDbPool.poolAll.Tables["poolRu2It"].Clear();
                     tmpSDA.Fill(APDbPool.poolAll.Tables["poolRu2It"]);
+                }
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+
+        //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 从数据库取所有不做权限管理的对象
+        /// </summary>
+        private static void GetPoolAMItemsNo()
+        {
+            try
+            {
+                string sql = @"select * from AuthItemsNo";
+                using (SqlDataAdapter tmpSDA = GetDataAdapter(sql))
+                {
+                    APDbPool.poolAll.Tables["poolAMItemsNo"].Clear();
+                    tmpSDA.Fill(APDbPool.poolAll.Tables["poolAMItemsNo"]);
                 }
             }
             catch (Exception)

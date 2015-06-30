@@ -325,6 +325,7 @@ namespace AuthSystem.AuthForm
                 AP2SOpera.SavePool(tmpDtRules, AuthPool.APPoolType.AMRules);
                 AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMRules);
                 MessageBox.Show("保存成功！");
+                InitRules();
             }
             catch (Exception)
             {
@@ -371,6 +372,7 @@ namespace AuthSystem.AuthForm
                 AP2SOpera.SavePool(tmpDtItems, AuthPool.APPoolType.AMItems);
                 AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMItems);
                 MessageBox.Show("保存成功！");
+                InitItems();
             }
             catch (Exception)
             {
