@@ -17,8 +17,11 @@ namespace AuthSystem.AuthForm
         private ToolStripButton toolSaveItems;
         private ToolStripButton toolRuleAdd;
         private ToolStripButton toolRuleDel;
-        private ToolStripButton toolRuleSave;        //当前选择的Rule
+        private ToolStripButton toolRuleSave;
+        private TableLayoutPanel layoutMain;        //当前选择的Rule
         private bool LoadOver = false;              //是否初始化完成
+        private DataRow tmpRuleRow;                 //临时row
+        private DataRow tmpItemRow;                 //临时row
         #endregion
 
         #region 1-------初始化
@@ -56,22 +59,24 @@ namespace AuthSystem.AuthForm
             this.toolRuleDel = new System.Windows.Forms.ToolStripButton();
             this.toolRuleSave = new System.Windows.Forms.ToolStripButton();
             this.toolSaveRu2It = new System.Windows.Forms.ToolStripButton();
+            this.layoutMain = new System.Windows.Forms.TableLayoutPanel();
             this.panel_Right.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Items)).BeginInit();
             this.RulestoolStrip.SuspendLayout();
             this.panel_Left.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Rules)).BeginInit();
             this.ItemstoolStrip.SuspendLayout();
+            this.layoutMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel_Right
             // 
             this.panel_Right.Controls.Add(this.dgv_Items);
             this.panel_Right.Controls.Add(this.RulestoolStrip);
-            this.panel_Right.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel_Right.Location = new System.Drawing.Point(575, 0);
+            this.panel_Right.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel_Right.Location = new System.Drawing.Point(585, 3);
             this.panel_Right.Name = "panel_Right";
-            this.panel_Right.Size = new System.Drawing.Size(589, 677);
+            this.panel_Right.Size = new System.Drawing.Size(576, 671);
             this.panel_Right.TabIndex = 1;
             // 
             // dgv_Items
@@ -89,7 +94,7 @@ namespace AuthSystem.AuthForm
             this.dgv_Items.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgv_Items.RowTemplate.Height = 23;
             this.dgv_Items.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_Items.Size = new System.Drawing.Size(589, 652);
+            this.dgv_Items.Size = new System.Drawing.Size(576, 646);
             this.dgv_Items.TabIndex = 1;
             // 
             // RulestoolStrip
@@ -100,7 +105,7 @@ namespace AuthSystem.AuthForm
             this.toolSaveItems});
             this.RulestoolStrip.Location = new System.Drawing.Point(0, 0);
             this.RulestoolStrip.Name = "RulestoolStrip";
-            this.RulestoolStrip.Size = new System.Drawing.Size(589, 25);
+            this.RulestoolStrip.Size = new System.Drawing.Size(576, 25);
             this.RulestoolStrip.TabIndex = 0;
             this.RulestoolStrip.Text = "toolStrip1";
             // 
@@ -138,9 +143,9 @@ namespace AuthSystem.AuthForm
             this.panel_Left.Controls.Add(this.dgv_Rules);
             this.panel_Left.Controls.Add(this.ItemstoolStrip);
             this.panel_Left.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_Left.Location = new System.Drawing.Point(0, 0);
+            this.panel_Left.Location = new System.Drawing.Point(3, 3);
             this.panel_Left.Name = "panel_Left";
-            this.panel_Left.Size = new System.Drawing.Size(1164, 677);
+            this.panel_Left.Size = new System.Drawing.Size(576, 671);
             this.panel_Left.TabIndex = 0;
             // 
             // dgv_Rules
@@ -158,7 +163,7 @@ namespace AuthSystem.AuthForm
             this.dgv_Rules.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgv_Rules.RowTemplate.Height = 23;
             this.dgv_Rules.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_Rules.Size = new System.Drawing.Size(1164, 652);
+            this.dgv_Rules.Size = new System.Drawing.Size(576, 646);
             this.dgv_Rules.TabIndex = 1;
             this.dgv_Rules.SelectionChanged += new System.EventHandler(this.dgv_Rules_SeleChanged);
             // 
@@ -171,7 +176,7 @@ namespace AuthSystem.AuthForm
             this.toolSaveRu2It});
             this.ItemstoolStrip.Location = new System.Drawing.Point(0, 0);
             this.ItemstoolStrip.Name = "ItemstoolStrip";
-            this.ItemstoolStrip.Size = new System.Drawing.Size(1164, 25);
+            this.ItemstoolStrip.Size = new System.Drawing.Size(576, 25);
             this.ItemstoolStrip.TabIndex = 0;
             this.ItemstoolStrip.Text = "toolStrip2";
             // 
@@ -215,12 +220,26 @@ namespace AuthSystem.AuthForm
             this.toolSaveRu2It.Text = "保存关系";
             this.toolSaveRu2It.Click += new System.EventHandler(this.toolSaveRu2It_Click);
             // 
+            // layoutMain
+            // 
+            this.layoutMain.ColumnCount = 2;
+            this.layoutMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.layoutMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.layoutMain.Controls.Add(this.panel_Left, 0, 0);
+            this.layoutMain.Controls.Add(this.panel_Right, 1, 0);
+            this.layoutMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layoutMain.Location = new System.Drawing.Point(0, 0);
+            this.layoutMain.Name = "layoutMain";
+            this.layoutMain.RowCount = 1;
+            this.layoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.layoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.layoutMain.Size = new System.Drawing.Size(1164, 677);
+            this.layoutMain.TabIndex = 2;
+            // 
             // AFAuthRuleBinding
             // 
             this.ClientSize = new System.Drawing.Size(1164, 677);
-            this.Controls.Add(this.panel_Right);
-            this.Controls.Add(this.panel_Left);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Controls.Add(this.layoutMain);
             this.Name = "AFAuthRuleBinding";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "设置规则与对象对应关系";
@@ -234,6 +253,7 @@ namespace AuthSystem.AuthForm
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Rules)).EndInit();
             this.ItemstoolStrip.ResumeLayout(false);
             this.ItemstoolStrip.PerformLayout();
+            this.layoutMain.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -248,6 +268,7 @@ namespace AuthSystem.AuthForm
         {
             tmpDtRules = AuthPool2Soft.AP2SOpera.ReadPool(AuthPool.APPoolType.AMRules);
             dgv_Rules.DataSource = tmpDtRules;
+            tmpRuleRow = tmpDtRules.NewRow();
             dgv_Rules.Columns[0].Visible = false;
             dgv_Rules.Columns[1].HeaderText = "ID";
             dgv_Rules.Columns[1].Width = 30;
@@ -270,6 +291,7 @@ namespace AuthSystem.AuthForm
             ItemsDGVCBC.Name = "SeleItem";
             dgv_Items.Columns.Add(ItemsDGVCBC);
             dgv_Items.DataSource = tmpDtItems;
+            tmpItemRow = tmpDtItems.NewRow();
             dgv_Items.Columns[0].HeaderText = "选择";
             dgv_Items.Columns[0].Width = 40;
             dgv_Items.Columns[1].Visible = false;
@@ -292,7 +314,7 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void toolRuleAdd_Click(object sender, EventArgs e)
         {
-            tmpDtRules.Rows.Add(tmpDtRules.NewRow());
+            tmpDtRules.Rows.Add(tmpRuleRow);
         }
 
         //----------------------------------------------------------------------------------------------------
@@ -341,7 +363,7 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void toolAddItem_Click(object sender, EventArgs e)
         {
-            tmpDtItems.Rows.Add(tmpDtItems.NewRow());
+            tmpDtItems.Rows.Add(tmpItemRow);
         }
 
         //----------------------------------------------------------------------------------------------------

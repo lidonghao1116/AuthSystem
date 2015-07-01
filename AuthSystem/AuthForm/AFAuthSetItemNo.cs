@@ -19,6 +19,7 @@ namespace AuthSystem.AuthForm
             InitData();             //初始化数据
         }
         private DataTable tmpDtItemNo;
+        private DataRow tmpAddRow;
 
         #region 窗口初始化
 
@@ -30,6 +31,7 @@ namespace AuthSystem.AuthForm
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AFAuthSetItemNo));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolMenu = new System.Windows.Forms.ToolStrip();
             this.toolAddItem = new System.Windows.Forms.ToolStripButton();
             this.toolDelItem = new System.Windows.Forms.ToolStripButton();
@@ -92,6 +94,8 @@ namespace AuthSystem.AuthForm
             this.dgv_ItemsNo.Name = "dgv_ItemsNo";
             this.dgv_ItemsNo.RowHeadersVisible = false;
             this.dgv_ItemsNo.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dgv_ItemsNo.RowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgv_ItemsNo.RowTemplate.Height = 23;
             this.dgv_ItemsNo.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_ItemsNo.Size = new System.Drawing.Size(828, 543);
@@ -102,7 +106,6 @@ namespace AuthSystem.AuthForm
             this.ClientSize = new System.Drawing.Size(828, 568);
             this.Controls.Add(this.dgv_ItemsNo);
             this.Controls.Add(this.toolMenu);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "AFAuthSetItemNo";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "设置不进行权限管理的对象";
@@ -123,7 +126,7 @@ namespace AuthSystem.AuthForm
             //从数据池取数据
             tmpDtItemNo = AP2SOpera.ReadPool(AuthPool.APPoolType.AMItemsNo);
             dgv_ItemsNo.DataSource = tmpDtItemNo;
-
+            tmpAddRow = tmpDtItemNo.NewRow();
             dgv_ItemsNo.Columns[0].Visible = false;
             dgv_ItemsNo.Columns[1].HeaderText = "ID";
             dgv_ItemsNo.Columns[1].Width = 40;
@@ -142,7 +145,7 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void toolAddItem_Click(object sender, EventArgs e)
         {
-            tmpDtItemNo.Rows.Add(tmpDtItemNo.NewRow());
+            tmpDtItemNo.Rows.Add(tmpAddRow);
         }
 
         //-----------------------------------------------------------------------------------------
@@ -169,7 +172,6 @@ namespace AuthSystem.AuthForm
         {
             try
             {
-                dgv_ItemsNo.CommitEdit(DataGridViewDataErrorContexts.Commit);
                 //先保存到数据池
                 AP2SOpera.SavePool(tmpDtItemNo, AuthPool.APPoolType.AMItemsNo);
                 //再提交数据池更新

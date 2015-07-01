@@ -153,7 +153,6 @@ namespace AuthSystem.AuthPool2Db
                 SqlDataAdapter tmpSDA = GetDataAdapter(sql);
                 SqlCommandBuilder scb = new SqlCommandBuilder(tmpSDA);
                 tmpSDA.Update(APDbPool.poolAll.Tables["poolAMUsers"]);
-                APDbPool.poolAll.Tables["poolAMUsers"].AcceptChanges();
             }
             catch (Exception)
             {

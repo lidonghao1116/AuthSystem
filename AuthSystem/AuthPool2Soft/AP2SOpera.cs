@@ -81,7 +81,7 @@ namespace AuthSystem.AuthPool2Soft
                 {
                     case APPoolType.AMUsers:
                         AuthPool.APDbPool.poolAll.Tables["poolAMUsers"].Clear();
-                        AuthPool.APDbPool.poolAll.Tables["poolAMUsers"].Merge(dataTable,true);
+                        AuthPool.APDbPool.poolAll.Tables["poolAMUsers"].Merge(dataTable, true);
                         break;
                     case APPoolType.AMGroups:
                         AuthPool.APDbPool.poolAll.Tables["poolAMGroups"].Clear();
@@ -211,6 +211,5 @@ namespace AuthSystem.AuthPool2Soft
             }
             //APDbPool.poolAll.Tables["poolRu2It"].AcceptChanges();
         }
-
     }
 }
