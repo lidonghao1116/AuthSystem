@@ -172,6 +172,7 @@ namespace AuthSystem.AuthForm
         {
             try
             {
+                dgv_ItemsNo.DataSource = tmpDtItemNo;
                 //先保存到数据池
                 AP2SOpera.SavePool(tmpDtItemNo, AuthPool.APPoolType.AMItemsNo);
                 //再提交数据池更新

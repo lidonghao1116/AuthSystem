@@ -341,6 +341,7 @@ namespace AuthSystem.AuthForm
         {
             try
             {
+                dgv_Rules.DataSource = tmpDtRules;
                 AP2SOpera.SavePool(tmpDtRules, AuthPool.APPoolType.AMRules);
                 AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMRules);
                 MessageBox.Show("保存成功！");

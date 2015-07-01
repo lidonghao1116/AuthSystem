@@ -399,6 +399,7 @@ namespace AuthSystem.AuthForm
         {
             try
             {
+                dgv_Users.DataSource = Users_DataTable;
                 AP2SOpera.SavePool(Users_DataTable, AuthPool.APPoolType.AMUsers);
                 AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMUsers);
                 MessageBox.Show("保存成功!");
