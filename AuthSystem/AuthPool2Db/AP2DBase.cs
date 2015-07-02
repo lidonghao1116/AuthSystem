@@ -32,7 +32,7 @@ namespace AuthSystem.AuthPool2Db
                 SqlConnection tmpSqlConn = new SqlConnection(GetSqlConf().ConnString);
                 return tmpSqlConn;
             }
-            catch
+            catch(Exception)
             {
                 throw;
             }
@@ -63,7 +63,6 @@ namespace AuthSystem.AuthPool2Db
         /// 获取一个数据对象SqlDataReader
         /// </summary>
         /// <param name="Command">要执行的SQL语句</param>
-        /// <param name="amsc">数据库的配置对象</param>
         /// <returns>返回一个SqlDataReader对象</returns>
         public static SqlDataReader GetDataReader(string Command)
         {
@@ -97,6 +96,27 @@ namespace AuthSystem.AuthPool2Db
             try
             {
                 SqlCommand tmpComm = new SqlCommand(Command, tmpConn);
+                tmpDataAdapter = new SqlDataAdapter(tmpComm);
+                return tmpDataAdapter;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 返回一个适配器sqlDataAdapter
+        /// </summary>
+        /// <param name="Command">SQL语句</param>
+        /// <param name="conn">数据库连接对象</param>
+        /// <returns>返回一个SqlDataReader对象</returns>
+        public static SqlDataAdapter GetDataAdapter(string Command, SqlConnection conn)
+        {
+            SqlDataAdapter tmpDataAdapter;
+            try
+            {
+                SqlCommand tmpComm = new SqlCommand(Command, conn);
                 tmpDataAdapter = new SqlDataAdapter(tmpComm);
                 return tmpDataAdapter;
             }

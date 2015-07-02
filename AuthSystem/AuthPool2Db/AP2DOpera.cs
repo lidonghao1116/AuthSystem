@@ -168,7 +168,8 @@ namespace AuthSystem.AuthPool2Db
             try
             {
                 string sql = @"select * from AuthGroups";
-                SqlDataAdapter tmpSDA = GetDataAdapter(sql);
+                SqlConnection tmpConn = GetConn();   
+                SqlDataAdapter tmpSDA = GetDataAdapter(sql,tmpConn);
                 SqlCommandBuilder scb = new SqlCommandBuilder(tmpSDA);
                 tmpSDA.Update(APDbPool.poolAll.Tables["poolAMGroups"]);
             }

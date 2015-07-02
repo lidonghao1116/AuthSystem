@@ -133,7 +133,6 @@ namespace AuthSystem.AuthPool2Soft
         {
             try
             {
-
                 List<string> tmpStr = new List<string>();
                 var requit = from s1 in AuthPool.APDbPool.poolAll.Tables["poolRu2It"].AsEnumerable()
                              where s1.Field<string>("Rule_Item_ID") == Rule_Item_ID

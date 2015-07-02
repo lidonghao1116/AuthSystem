@@ -121,12 +121,10 @@ namespace AuthSystem.AuthForm
         #region 数据初始化
         private void InitData()
         {
-            //更新ItemsNo的数据池
-            AuthSystem.AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMItemsNo);
+            AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMItemsNo);
             //从数据池取数据
             tmpDtItemNo = AP2SOpera.ReadPool(AuthPool.APPoolType.AMItemsNo);
             dgv_ItemsNo.DataSource = tmpDtItemNo;
-            tmpAddRow = tmpDtItemNo.NewRow();
             dgv_ItemsNo.Columns[0].Visible = false;
             dgv_ItemsNo.Columns[1].HeaderText = "ID";
             dgv_ItemsNo.Columns[1].Width = 40;
@@ -139,13 +137,23 @@ namespace AuthSystem.AuthForm
 
         }
         #endregion
+
+        #region 工具菜单的按键处理
         //-----------------------------------------------------------------------------------------
         /// <summary>
         /// 添加Item
         /// </summary>
         private void toolAddItem_Click(object sender, EventArgs e)
         {
-            tmpDtItemNo.Rows.Add(tmpAddRow);
+            try
+            {
+                tmpAddRow = tmpDtItemNo.NewRow();
+                tmpDtItemNo.Rows.Add(tmpAddRow);
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show(x.Message);
+            }
         }
 
         //-----------------------------------------------------------------------------------------
@@ -172,13 +180,10 @@ namespace AuthSystem.AuthForm
         {
             try
             {
-                dgv_ItemsNo.DataSource = tmpDtItemNo;
-                //先保存到数据池
-                AP2SOpera.SavePool(tmpDtItemNo, AuthPool.APPoolType.AMItemsNo);
-                //再提交数据池更新
-                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMItemsNo);
+                dgv_ItemsNo.DataSource = null;
+                AP2SOpera.SavePool(tmpDtItemNo, AuthPool.APPoolType.AMItemsNo);//保存到数据池
+                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMItemsNo);//提交数据池更新
                 InitData();
-                MessageBox.Show("保存成功！");
             }
             catch (Exception)
             {
@@ -186,5 +191,6 @@ namespace AuthSystem.AuthForm
                 throw;
             }
         }
+        #endregion
     }
 }

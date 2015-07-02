@@ -27,7 +27,6 @@ namespace AuthSystem.AuthForm
         #region 1-------初始化
         public AFAuthRuleBinding()
         {
-            AuthSystem.AuthPool2Db.AP2DOpera.GetPool();
             InitializeComponent(); //初始化界面
             InitRules();  //初始化规则表
             InitItems();  //初始化对象表
@@ -266,9 +265,9 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void InitRules()
         {
-            tmpDtRules = AuthPool2Soft.AP2SOpera.ReadPool(AuthPool.APPoolType.AMRules);
+            AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMRules);
+            tmpDtRules = AP2SOpera.ReadPool(AuthPool.APPoolType.AMRules);
             dgv_Rules.DataSource = tmpDtRules;
-            tmpRuleRow = tmpDtRules.NewRow();
             dgv_Rules.Columns[0].Visible = false;
             dgv_Rules.Columns[1].HeaderText = "ID";
             dgv_Rules.Columns[1].Width = 30;
@@ -286,12 +285,12 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void InitItems()
         {
-            tmpDtItems = AuthPool2Soft.AP2SOpera.ReadPool(AuthPool.APPoolType.AMItems);
+            AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMItems);
+            tmpDtItems = AP2SOpera.ReadPool(AuthPool.APPoolType.AMItems);
             DataGridViewCheckBoxColumn ItemsDGVCBC = new DataGridViewCheckBoxColumn(false);  //定义在表前要添加的checkBox列
             ItemsDGVCBC.Name = "SeleItem";
             dgv_Items.Columns.Add(ItemsDGVCBC);
             dgv_Items.DataSource = tmpDtItems;
-            tmpItemRow = tmpDtItems.NewRow();
             dgv_Items.Columns[0].HeaderText = "选择";
             dgv_Items.Columns[0].Width = 40;
             dgv_Items.Columns[1].Visible = false;
@@ -314,7 +313,15 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void toolRuleAdd_Click(object sender, EventArgs e)
         {
-            tmpDtRules.Rows.Add(tmpRuleRow);
+            try
+            {
+                tmpRuleRow = tmpDtRules.NewRow();
+                tmpDtRules.Rows.Add(tmpRuleRow);
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show(x.Message);
+            }
         }
 
         //----------------------------------------------------------------------------------------------------
@@ -341,16 +348,14 @@ namespace AuthSystem.AuthForm
         {
             try
             {
-                dgv_Rules.DataSource = tmpDtRules;
+                dgv_Rules.DataSource = null;
                 AP2SOpera.SavePool(tmpDtRules, AuthPool.APPoolType.AMRules);
                 AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMRules);
-                MessageBox.Show("保存成功！");
                 InitRules();
             }
-            catch (Exception)
+            catch (Exception x)
             {
-                MessageBox.Show("保存失败！");
-                throw;
+                MessageBox.Show(x.Message);
             }
             
         }
@@ -364,7 +369,15 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void toolAddItem_Click(object sender, EventArgs e)
         {
-            tmpDtItems.Rows.Add(tmpItemRow);
+            try
+            {
+                tmpItemRow = tmpDtItems.NewRow();
+                tmpDtItems.Rows.Add(tmpItemRow);
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show(x.Message);
+            }
         }
 
         //----------------------------------------------------------------------------------------------------
@@ -389,9 +402,9 @@ namespace AuthSystem.AuthForm
         {
             try
             {
+                dgv_Items.DataSource = null;
                 AP2SOpera.SavePool(tmpDtItems, AuthPool.APPoolType.AMItems);
                 AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMItems);
-                MessageBox.Show("保存成功！");
                 InitItems();
             }
             catch (Exception)

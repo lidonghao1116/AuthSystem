@@ -21,6 +21,8 @@ namespace AuthSystem.AuthForm
         private DataTable Ru2It_DataTable;
         private DataRow tmpUsersAddRow;
         private DataRow tmpGroupsAddRow;
+        private ToolStripSeparator toolStripSeparator1;
+        private bool LoadOver = false; //是否初始化完成
         #endregion
 
         #region 1-----初始化
@@ -33,6 +35,7 @@ namespace AuthSystem.AuthForm
             InitData_Users();       //用户初始化
             InitData_Groups();      //角色初始化
             InitData_Rules();       //规则初始化
+            
         }
         
         #region 0--界面初始化
@@ -52,6 +55,9 @@ namespace AuthSystem.AuthForm
         private System.Windows.Forms.ToolStripButton toolUsersAdd;
         private System.Windows.Forms.ToolStripButton toolUsersDel;
         private System.Windows.Forms.ToolStripButton toolUsersSave;
+        private ToolStripButton toolGroupsAdd;
+        private ToolStripButton toolGroupsDel;
+        private ToolStripButton toolGroupsSave;
 
         private void InitializeComponent()
         {
@@ -68,18 +74,23 @@ namespace AuthSystem.AuthForm
             this.panelGroups = new System.Windows.Forms.Panel();
             this.dgv_Groups = new System.Windows.Forms.DataGridView();
             this.toolGroups = new System.Windows.Forms.ToolStrip();
+            this.toolGroupsAdd = new System.Windows.Forms.ToolStripButton();
+            this.toolGroupsDel = new System.Windows.Forms.ToolStripButton();
+            this.toolGroupsSave = new System.Windows.Forms.ToolStripButton();
             this.panelRules = new System.Windows.Forms.Panel();
             this.treeRules = new System.Windows.Forms.TreeView();
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.menu_1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_1_1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_1_2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.layoutMain.SuspendLayout();
             this.panelUsers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Users)).BeginInit();
             this.toolUsers.SuspendLayout();
             this.panelGroups.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Groups)).BeginInit();
+            this.toolGroups.SuspendLayout();
             this.panelRules.SuspendLayout();
             this.menuMain.SuspendLayout();
             this.SuspendLayout();
@@ -133,13 +144,15 @@ namespace AuthSystem.AuthForm
             this.dgv_Users.Size = new System.Drawing.Size(560, 635);
             this.dgv_Users.TabIndex = 1;
             this.dgv_Users.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgv_Users_CellStateChange);
+            this.dgv_Users.SelectionChanged += new System.EventHandler(this.dgv_Users_SeleChanged);
             // 
             // toolUsers
             // 
             this.toolUsers.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolUsersAdd,
             this.toolUsersDel,
-            this.toolUsersSave});
+            this.toolUsersSave,
+            this.toolStripSeparator1});
             this.toolUsers.Location = new System.Drawing.Point(0, 0);
             this.toolUsers.Name = "toolUsers";
             this.toolUsers.Size = new System.Drawing.Size(560, 25);
@@ -206,14 +219,49 @@ namespace AuthSystem.AuthForm
             this.dgv_Groups.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_Groups.Size = new System.Drawing.Size(579, 301);
             this.dgv_Groups.TabIndex = 1;
+            this.dgv_Groups.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgv_Groups_CellStateChange);
             // 
             // toolGroups
             // 
+            this.toolGroups.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolGroupsAdd,
+            this.toolGroupsDel,
+            this.toolGroupsSave});
             this.toolGroups.Location = new System.Drawing.Point(0, 0);
             this.toolGroups.Name = "toolGroups";
             this.toolGroups.Size = new System.Drawing.Size(579, 25);
             this.toolGroups.TabIndex = 0;
             this.toolGroups.Text = "toolStrip2";
+            // 
+            // toolGroupsAdd
+            // 
+            this.toolGroupsAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolGroupsAdd.Image = ((System.Drawing.Image)(resources.GetObject("toolGroupsAdd.Image")));
+            this.toolGroupsAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolGroupsAdd.Name = "toolGroupsAdd";
+            this.toolGroupsAdd.Size = new System.Drawing.Size(60, 22);
+            this.toolGroupsAdd.Text = "添加角色";
+            this.toolGroupsAdd.Click += new System.EventHandler(this.toolGroupsAdd_Click);
+            // 
+            // toolGroupsDel
+            // 
+            this.toolGroupsDel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolGroupsDel.Image = ((System.Drawing.Image)(resources.GetObject("toolGroupsDel.Image")));
+            this.toolGroupsDel.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolGroupsDel.Name = "toolGroupsDel";
+            this.toolGroupsDel.Size = new System.Drawing.Size(60, 22);
+            this.toolGroupsDel.Text = "删除角色";
+            this.toolGroupsDel.Click += new System.EventHandler(this.toolGroupsDel_Click);
+            // 
+            // toolGroupsSave
+            // 
+            this.toolGroupsSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolGroupsSave.Image = ((System.Drawing.Image)(resources.GetObject("toolGroupsSave.Image")));
+            this.toolGroupsSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolGroupsSave.Name = "toolGroupsSave";
+            this.toolGroupsSave.Size = new System.Drawing.Size(60, 22);
+            this.toolGroupsSave.Text = "保存角色";
+            this.toolGroupsSave.Click += new System.EventHandler(this.toolGroupsSave_Click);
             // 
             // panelRules
             // 
@@ -265,6 +313,11 @@ namespace AuthSystem.AuthForm
             this.menu_1_2.Text = "设置ItemsNo对象";
             this.menu_1_2.Click += new System.EventHandler(this.menu_1_2_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
             // AFAuthSet
             // 
             this.ClientSize = new System.Drawing.Size(1154, 693);
@@ -274,6 +327,7 @@ namespace AuthSystem.AuthForm
             this.Name = "AFAuthSet";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "权限管理";
+            this.Shown += new System.EventHandler(this.AFAuthSet_Shown);
             this.layoutMain.ResumeLayout(false);
             this.panelUsers.ResumeLayout(false);
             this.panelUsers.PerformLayout();
@@ -283,6 +337,8 @@ namespace AuthSystem.AuthForm
             this.panelGroups.ResumeLayout(false);
             this.panelGroups.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Groups)).EndInit();
+            this.toolGroups.ResumeLayout(false);
+            this.toolGroups.PerformLayout();
             this.panelRules.ResumeLayout(false);
             this.menuMain.ResumeLayout(false);
             this.menuMain.PerformLayout();
@@ -301,7 +357,6 @@ namespace AuthSystem.AuthForm
             AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMUsers);
             Users_DataTable = AP2SOpera.ReadPool(AuthPool.APPoolType.AMUsers); //从pool取DataTable
             dgv_Users.DataSource = Users_DataTable;                             //显示DataTable
-            tmpUsersAddRow = Users_DataTable.NewRow();
             //列重命名
             dgv_Users.Columns[0].Visible = false;
             dgv_Users.Columns[1].HeaderText = "ID";
@@ -335,33 +390,34 @@ namespace AuthSystem.AuthForm
         private void InitData_Groups()
         {
             AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMGroups);
-            Groups_DataTable = AP2SOpera.ReadPool(AuthPool.APPoolType.AMGroups);
-            dgv_Groups.DataSource = Groups_DataTable;
-            tmpGroupsAddRow = Groups_DataTable.NewRow();
-            dgv_Groups.Columns[0].Visible = false;
-            dgv_Groups.Columns[1].HeaderText = "ID";
-            dgv_Groups.Columns[1].Width = 30;
-            dgv_Groups.Columns[2].HeaderText = "角色名";
-            dgv_Groups.Columns[2].Width = 80;
-            dgv_Groups.Columns[3].HeaderText = "状态";
-            dgv_Groups.Columns[3].Width = 40;
-            dgv_Groups.Columns[4].HeaderText = "规则ID";
-            dgv_Groups.Columns[4].Width = 80;
-            dgv_Groups.Columns[5].HeaderText = "仓库ID";
+            DataGridViewCheckBoxColumn dgvcbc = new DataGridViewCheckBoxColumn(false); //第一列为checkbox;
+            dgv_Groups.Columns.Add(dgvcbc);
+            Groups_DataTable = AP2SOpera.ReadPool(AuthPool.APPoolType.AMGroups);//从池取数据
+            dgv_Groups.DataSource = Groups_DataTable; //绑定数据
+            dgv_Groups.Columns[0].HeaderText = "选择";
+            dgv_Groups.Columns[0].Width = 40;
+            dgv_Groups.Columns[1].Visible = false;
+            dgv_Groups.Columns[2].HeaderText = "ID";
+            dgv_Groups.Columns[2].Width = 30;
+            dgv_Groups.Columns[3].HeaderText = "角色名";
+            dgv_Groups.Columns[3].Width = 80;
+            dgv_Groups.Columns[4].HeaderText = "状态";
+            dgv_Groups.Columns[4].Width = 40;
+            dgv_Groups.Columns[5].HeaderText = "规则ID";
             dgv_Groups.Columns[5].Width = 80;
-            dgv_Groups.Columns[6].HeaderText = "菜单ID";
+            dgv_Groups.Columns[6].HeaderText = "仓库ID";
             dgv_Groups.Columns[6].Width = 80;
-            dgv_Groups.Columns[7].HeaderText = "备注";
-            dgv_Groups.Columns[7].Width = 150;
+            dgv_Groups.Columns[7].HeaderText = "菜单ID";
+            dgv_Groups.Columns[7].Width = 80;
+            dgv_Groups.Columns[8].HeaderText = "备注";
+            dgv_Groups.Columns[8].Width = 150;
         }
         /// <summary>
         /// 初始化规则数据
         /// </summary>
         private void InitData_Rules()
         {
-            AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMRules);
             Rules_DataTable = AP2SOpera.ReadPool(AuthPool.APPoolType.AMRules);
-            AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMRu2It);
             Ru2It_DataTable = AP2SOpera.ReadPool(AuthPool.APPoolType.AMRu2It);
         }
         
@@ -374,9 +430,17 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void toolUsersAdd_Click(object sender, EventArgs e)
         {
-            tmpUsersAddRow[0] = 0;
-            tmpUsersAddRow[8] = true;
-            Users_DataTable.Rows.Add(tmpUsersAddRow);
+            try
+            {
+                tmpUsersAddRow = Users_DataTable.NewRow();
+                tmpUsersAddRow[0] = 0;
+                tmpUsersAddRow[8] = true;
+                Users_DataTable.Rows.Add(tmpUsersAddRow);
+            }
+            catch (Exception x) 
+            {
+                MessageBox.Show(x.Message);
+            }
         }
         /// <summary>
         /// 删除用户行
@@ -399,16 +463,135 @@ namespace AuthSystem.AuthForm
         {
             try
             {
-                dgv_Users.DataSource = Users_DataTable;
+                dgv_Users.DataSource = null;
                 AP2SOpera.SavePool(Users_DataTable, AuthPool.APPoolType.AMUsers);
                 AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMUsers);
-                MessageBox.Show("保存成功!");
                 InitData_Users();
             }
-            catch (Exception)
+            catch (Exception x)
             {
-                MessageBox.Show("保存失败!");
-                throw;
+                MessageBox.Show(x.Message);
+                InitData_Users();
+            }
+        }
+        #endregion
+
+        #region 4--角色工具按钮操作
+        /// <summary>
+        /// 添加角色
+        /// </summary>
+        private void toolGroupsAdd_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                tmpGroupsAddRow = Groups_DataTable.NewRow();
+                tmpGroupsAddRow[3] = true;
+                Groups_DataTable.Rows.Add(tmpGroupsAddRow);
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show(x.Message);
+            }
+        }
+        /// <summary>
+        /// 删除角色
+        /// </summary>
+        private void toolGroupsDel_Click(object sender, EventArgs e)
+        {
+            if (dgv_Groups.SelectedRows.Count > 0)
+            {
+                dgv_Groups.Rows.RemoveAt(dgv_Groups.SelectedRows[0].Index);
+            }
+            else
+            {
+                MessageBox.Show("请选择要删除的行！");
+            }
+        }
+        /// <summary>
+        /// 保存角色的所有修改
+        /// </summary>
+        private void toolGroupsSave_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                dgv_Groups.DataSource = null;
+                dgv_Groups.Columns.Clear();
+                AP2SOpera.SavePool(Groups_DataTable, AuthPool.APPoolType.AMGroups);
+                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMGroups);
+                InitData_Groups();
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show(x.Message);
+                InitData_Groups();
+            }
+        }
+        #endregion
+
+        #region 8--其它事件处理
+        //-------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 表示窗体第一次显示时进行处理
+        /// </summary>
+        private void AFAuthSet_Shown(object sender, EventArgs e)
+        {
+            LoadOver = true;//所有数据加载完成
+        }
+
+        //-------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 用户单元格状态更改时处理提交表格数据
+        /// </summary>
+        private void dgv_Users_CellStateChange(object sender, EventArgs e)
+        {
+            if (this.dgv_Users.IsCurrentCellDirty)
+            {
+                this.dgv_Users.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 角色单元格状态更改时处理提交表格数据
+        /// </summary>
+        private void dgv_Groups_CellStateChange(object sender, EventArgs e)
+        {
+            if (this.dgv_Groups.IsCurrentCellDirty)
+            {
+                this.dgv_Groups.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+            
+        }
+
+        //-------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 选择用户，同步更改用户的角色为选择状态
+        /// </summary>
+        private void dgv_Users_SeleChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (LoadOver)
+                {
+                    //当前用户的User_Group
+                    string id = dgv_Users.CurrentRow.Cells["User_Group"].Value.ToString();
+                    //在Groups表中选择
+                    for (int x = 0; x < dgv_Groups.Rows.Count; x++)
+                    {
+                        if (dgv_Groups.Rows[x].Cells["ID"].Value.ToString() == id)
+                        {
+                            dgv_Groups.Rows[x].Cells[0].Value = true;
+                        }
+                        else
+                        {
+                            dgv_Groups.Rows[x].Cells[0].Value = false;
+                        }
+                    }
+                }
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show(x.Message);
             }
         }
         #endregion
@@ -432,15 +615,6 @@ namespace AuthSystem.AuthForm
             tmpFm.ShowDialog();
         }
         #endregion
-
-
-        private void dgv_Users_CellStateChange(object sender, EventArgs e)
-        {
-            if (this.dgv_Users.IsCurrentCellDirty)
-            {
-                this.dgv_Users.CommitEdit(DataGridViewDataErrorContexts.Commit);
-            }
-        }
 
     }
 }
