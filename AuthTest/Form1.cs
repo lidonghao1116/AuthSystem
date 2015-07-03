@@ -12,7 +12,7 @@ using AuthSystem.AuthPool2Soft;
 
 namespace AuthTest
 {
-    public partial class Form1 : Form
+    public partial class Form1 : AuthSystem.AuthForm.AFLogin
     {
         public Form1()
         {

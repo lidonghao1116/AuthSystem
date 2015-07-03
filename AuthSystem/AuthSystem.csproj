@@ -83,6 +83,7 @@
     <Compile Include="AuthModel\AMBase.cs" />
     <Compile Include="AuthModel\AMLogin.cs" />
     <Compile Include="AuthModel\AMSqlItems.cs" />
+    <Compile Include="AuthModel\AMSystemConfig.cs" />
     <Compile Include="AuthModel\AMUsers.cs" />
     <Compile Include="AuthModel\AMX2Y.cs" />
     <Compile Include="AuthPool2Db\AP2DBase.cs" />
