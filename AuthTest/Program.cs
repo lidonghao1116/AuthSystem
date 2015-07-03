@@ -14,6 +14,7 @@ namespace AuthTest
         static void Main()
         {
             AuthSystem.AuthPool.APSoftPool.poolSoftSqlConf = AuthSystem.AuthDao.ADConfig.LoadSqlConf();
+            AuthSystem.AuthPool.APSoftPool.poolSoftSqlConf.ConnString = @"Password=alwcel;Persist Security Info=True;User ID=sa;Initial Catalog=TestAuth;Data Source=JD-056-AC\ACSQL";
             //从数据库加载数据
             AuthSystem.AuthPool2Db.AP2DOpera.GetPool();
 

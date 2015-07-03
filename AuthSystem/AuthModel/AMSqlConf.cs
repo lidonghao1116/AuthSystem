@@ -16,14 +16,21 @@ namespace AuthSystem.AuthModel
         {
             //TODO：构造函数
         }
+
         private string _ConnString = "";//---------------------------------
         /// <summary>
         /// 连接数据库的连接字符串
         /// </summary>
         public string ConnString
         {
-            get { return _ConnString; }
-            set { _ConnString = value; }
+            get
+            {
+                return _ConnString;
+            }
+            set 
+            {
+                _ConnString = value;
+            }
         }
 
         //--------------------------------------------------------------------------------------

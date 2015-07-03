@@ -27,12 +27,14 @@ namespace AuthSystem.AuthDao
             AMSqlConf amsc = new AMSqlConf();
             try
             {
+                AuthDao.ADSecret ads=new ADSecret();
                 string FileName = Environment.CurrentDirectory + "\\SysConf.dat";
                 Stream fStr = new FileStream(FileName, FileMode.Open);
                 fStr.Position = 0;
                 BinaryFormatter bf = new BinaryFormatter();
                 amsc = (AMSqlConf)bf.Deserialize(fStr);
                 fStr.Close();
+                amsc.ConnString = ads.DesDecrypt(amsc.ConnString, "JinDi123");
                 return amsc;
             }
             catch (Exception e)
@@ -51,6 +53,9 @@ namespace AuthSystem.AuthDao
         {
             try
             {
+                AuthDao.ADSecret ads = new ADSecret();
+                amsc.ConnString = ads.DesEncrypt(amsc.ConnString, "JinDi123");
+                System.Windows.Forms.MessageBox.Show(amsc.ConnString);
                 string FileName=Environment.CurrentDirectory+"\\SysConf.dat";
                 Stream fStr=new FileStream(FileName,FileMode.Create);
                 BinaryFormatter bf = new BinaryFormatter();

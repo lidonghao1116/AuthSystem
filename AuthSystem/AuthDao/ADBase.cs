@@ -35,8 +35,5 @@ namespace AuthSystem.AuthDao
                 return 0;
             }
         }
-
-        
-
     }
 }

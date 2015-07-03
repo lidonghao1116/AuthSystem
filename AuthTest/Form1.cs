@@ -76,5 +76,30 @@ namespace AuthTest
             afas.ShowDialog();
         }
 
+        private void button10_Click(object sender, EventArgs e)
+        {
+            AuthSystem.AuthDao.ADSecret adser = new AuthSystem.AuthDao.ADSecret();
+            textBox2.Text = adser.DesEncrypt(textBox1.Text, "JinDi123");
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            AuthSystem.AuthDao.ADSecret adser = new AuthSystem.AuthDao.ADSecret();
+            textBox1.Text = adser.DesDecrypt(textBox2.Text, "JinDi123");
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            AuthSystem.AuthModel.AMSqlConf amsc=new AuthSystem.AuthModel.AMSqlConf();
+            amsc.ConnString=textBox3.Text;
+            AuthSystem.AuthDao.ADConfig.SetSqlConf(amsc);
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            AuthSystem.AuthModel.AMSqlConf amsc = AuthSystem.AuthDao.ADConfig.LoadSqlConf();
+            textBox3.Text = amsc.ConnString;
+        }
+
     }
 }
