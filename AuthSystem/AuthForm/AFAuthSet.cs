@@ -71,6 +71,7 @@ namespace AuthSystem.AuthForm
             this.toolUsersAdd = new System.Windows.Forms.ToolStripButton();
             this.toolUsersDel = new System.Windows.Forms.ToolStripButton();
             this.toolUsersSave = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.panelGroups = new System.Windows.Forms.Panel();
             this.dgv_Groups = new System.Windows.Forms.DataGridView();
             this.toolGroups = new System.Windows.Forms.ToolStrip();
@@ -83,7 +84,6 @@ namespace AuthSystem.AuthForm
             this.menu_1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_1_1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_1_2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.layoutMain.SuspendLayout();
             this.panelUsers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Users)).BeginInit();
@@ -189,6 +189,11 @@ namespace AuthSystem.AuthForm
             this.toolUsersSave.Text = "保存更改";
             this.toolUsersSave.Click += new System.EventHandler(this.toolUsersSave_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
             // panelGroups
             // 
             this.panelGroups.Controls.Add(this.dgv_Groups);
@@ -220,6 +225,7 @@ namespace AuthSystem.AuthForm
             this.dgv_Groups.Size = new System.Drawing.Size(579, 301);
             this.dgv_Groups.TabIndex = 1;
             this.dgv_Groups.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgv_Groups_CellStateChange);
+            this.dgv_Groups.SelectionChanged += new System.EventHandler(this.dgv_Groups_SeleChanged);
             // 
             // toolGroups
             // 
@@ -274,6 +280,7 @@ namespace AuthSystem.AuthForm
             // 
             // treeRules
             // 
+            this.treeRules.CheckBoxes = true;
             this.treeRules.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeRules.Location = new System.Drawing.Point(0, 0);
             this.treeRules.Name = "treeRules";
@@ -312,11 +319,6 @@ namespace AuthSystem.AuthForm
             this.menu_1_2.Size = new System.Drawing.Size(174, 22);
             this.menu_1_2.Text = "设置ItemsNo对象";
             this.menu_1_2.Click += new System.EventHandler(this.menu_1_2_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // AFAuthSet
             // 
@@ -417,8 +419,12 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void InitData_Rules()
         {
+            AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMRules);
+            AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMRu2It);
             Rules_DataTable = AP2SOpera.ReadPool(AuthPool.APPoolType.AMRules);
             Ru2It_DataTable = AP2SOpera.ReadPool(AuthPool.APPoolType.AMRu2It);
+            treeRules.Nodes.Clear();
+            treeRules.Nodes.AddRange(AP2SOpera.Rules2Tree(Rules_DataTable));
         }
         
         #endregion
@@ -574,11 +580,11 @@ namespace AuthSystem.AuthForm
                 if (LoadOver)
                 {
                     //当前用户的User_Group
-                    string id = dgv_Users.CurrentRow.Cells["User_Group"].Value.ToString();
+                    List<string> id = dgv_Users.CurrentRow.Cells["User_Group"].Value.ToString().Split(',').ToList<string>();
                     //在Groups表中选择
                     for (int x = 0; x < dgv_Groups.Rows.Count; x++)
                     {
-                        if (dgv_Groups.Rows[x].Cells["ID"].Value.ToString() == id)
+                        if (id.Contains(dgv_Groups.Rows[x].Cells["ID"].Value.ToString()))
                         {
                             dgv_Groups.Rows[x].Cells[0].Value = true;
                         }
@@ -592,6 +598,22 @@ namespace AuthSystem.AuthForm
             catch (Exception x)
             {
                 MessageBox.Show(x.Message);
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 选择角色，同步更改规则的状态
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgv_Groups_SeleChanged(object sender, EventArgs e)
+        {
+            if (LoadOver)//加载完成，显示窗口后才处理事件
+            {
+                //当前角色的Group_Rule_ID
+                string tmpGroup_Rule_ID = dgv_Groups.CurrentRow.Cells["Group_Rule_ID"].Value.ToString();
+                //取当前角色对应的所有规则
             }
         }
         #endregion
@@ -615,6 +637,5 @@ namespace AuthSystem.AuthForm
             tmpFm.ShowDialog();
         }
         #endregion
-
     }
 }
