@@ -276,8 +276,15 @@ namespace AuthSystem.AuthPool2Soft
             }
         }
 
-        public static TreeNode[] Rules2Tree(DataTable dtAMRules)
+        //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 把规则的DataTable转换成TreeView
+        /// </summary>
+        /// <param name="dtAMRules">规则DataTable</param>
+        /// <returns>TreeNode[]</returns>
+        public static TreeNode[] Rules2Tree()
         {
+            DataTable dtAMRules = ReadPool(APPoolType.AMRules);
             List<TreeNode> tmpTree = new List<TreeNode>();
             //添加一级菜单
             var miniUpID = (from tmp in dtAMRules.AsEnumerable() select tmp.Field<string>("Rule_Up_RuleID")).Min();
@@ -327,6 +334,28 @@ namespace AuthSystem.AuthPool2Soft
             }
 
             return tmpTree.ToArray();
+        }
+
+        //-----------------------------------------------------------------------------------------------
+        public static bool SetTreeViewCheckBox(TreeView TV, string Group_ID)
+        {
+            //取Group_ID的所有权限
+            DataSet DS = new DataSet();
+            DataTable dtGroups = ReadPool(APPoolType.AMGroups);
+            DataTable dtGr2Ru = ReadPool(APPoolType.AMGr2Ru);
+            DataTable dtRules = ReadPool(APPoolType.AMRules);
+            dtGroups.TableName="dtGroups";
+            dtRules.TableName="dtRules";
+            dtGr2Ru.TableName = "dtGr2Ru";
+            DS.Tables.Add(dtGroups);
+            DS.Tables.Add(dtRules);
+            DS.Tables.Add(dtGr2Ru);
+            DataRelation DR = new DataRelation("Gr2Ru", DS.Tables["dtGroups"].Columns["Group_Rule_ID"], dtGr2Ru.Columns["Group_Rule_ID"]);
+            DS.Relations.Add(DR);
+            DataView DV = DS.Tables[0].DefaultView;
+            DV.RowFilter = "DR.Group_Rule_ID=" + Group_ID + "";
+            MessageBox.Show(DV.Count.ToString());
+            return true;
         }
     }
 }

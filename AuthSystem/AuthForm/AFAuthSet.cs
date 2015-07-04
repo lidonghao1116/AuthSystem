@@ -424,7 +424,9 @@ namespace AuthSystem.AuthForm
             Rules_DataTable = AP2SOpera.ReadPool(AuthPool.APPoolType.AMRules);
             Ru2It_DataTable = AP2SOpera.ReadPool(AuthPool.APPoolType.AMRu2It);
             treeRules.Nodes.Clear();
-            treeRules.Nodes.AddRange(AP2SOpera.Rules2Tree(Rules_DataTable));
+            treeRules.Nodes.AddRange(AP2SOpera.Rules2Tree());
+            AP2SOpera.SetTreeViewCheckBox(treeRules, "1");
+            
         }
         
         #endregion
