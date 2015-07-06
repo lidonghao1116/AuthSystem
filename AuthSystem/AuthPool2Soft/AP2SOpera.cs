@@ -55,6 +55,9 @@ namespace AuthSystem.AuthPool2Soft
                     case APPoolType.AMItemsNo:
                         tmpDT = AuthPool.APDbPool.poolAll.Tables["poolAMItemsNo"].Copy();
                         break;
+                    case APPoolType.AMGroupsRules:
+                        tmpDT = AuthPool.APDbPool.poolAll.Tables["poolGroupsRules"].Copy();
+                        break;
                     default:
                         tmpDT = null;
                         break;
@@ -340,21 +343,10 @@ namespace AuthSystem.AuthPool2Soft
         public static bool SetTreeViewCheckBox(TreeView TV, string Group_ID)
         {
             //取Group_ID的所有权限
-            DataSet DS = new DataSet();
-            DataTable dtGroups = ReadPool(APPoolType.AMGroups);
-            DataTable dtGr2Ru = ReadPool(APPoolType.AMGr2Ru);
-            DataTable dtRules = ReadPool(APPoolType.AMRules);
-            dtGroups.TableName="dtGroups";
-            dtRules.TableName="dtRules";
-            dtGr2Ru.TableName = "dtGr2Ru";
-            DS.Tables.Add(dtGroups);
-            DS.Tables.Add(dtRules);
-            DS.Tables.Add(dtGr2Ru);
-            DataRelation DR = new DataRelation("Gr2Ru", DS.Tables["dtGroups"].Columns["Group_Rule_ID"], dtGr2Ru.Columns["Group_Rule_ID"]);
-            DS.Relations.Add(DR);
-            DataView DV = DS.Tables[0].DefaultView;
-            DV.RowFilter = "DR.Group_Rule_ID=" + Group_ID + "";
-            MessageBox.Show(DV.Count.ToString());
+            AuthPool2Db.AP2DOpera.GetPool(APPoolType.AMGroupsRules);
+            DataTable tmpDT = ReadPool(APPoolType.AMGroupsRules);
+            var request = from tmp in tmpDT.AsEnumerable() where tmp.Field<string>("Group_ID") == Group_ID select tmp;
+            
             return true;
         }
     }

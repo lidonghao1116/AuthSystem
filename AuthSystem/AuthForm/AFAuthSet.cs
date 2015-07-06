@@ -424,8 +424,8 @@ namespace AuthSystem.AuthForm
             Rules_DataTable = AP2SOpera.ReadPool(AuthPool.APPoolType.AMRules);
             Ru2It_DataTable = AP2SOpera.ReadPool(AuthPool.APPoolType.AMRu2It);
             treeRules.Nodes.Clear();
-            treeRules.Nodes.AddRange(AP2SOpera.Rules2Tree());
-            AP2SOpera.SetTreeViewCheckBox(treeRules, "1");
+            treeRules.Nodes.AddRange(AP2SOpera.Rules2Tree()); //显示所有规则
+            AP2SOpera.SetTreeViewCheckBox(treeRules, "1"); //勾选当前角色的规则
             
         }
         
