@@ -38,6 +38,7 @@ namespace AuthSystem.AuthPool2Db
             GetPoolAMItems();
             GetPoolAMItemsNo();
             GetPoolGroupsRules();
+            GetPoolGroupsItems();
         }
 
         //-----------------------------------------------------------------------------------------------
@@ -76,6 +77,9 @@ namespace AuthSystem.AuthPool2Db
                     break;
                 case APPoolType.AMGroupsRules:
                     GetPoolGroupsRules();
+                    break;
+                case APPoolType.AMGroupsItems:
+                    GetPoolGroupsItems();
                     break;
                 default:
                     break;
@@ -534,6 +538,27 @@ namespace AuthSystem.AuthPool2Db
                 {
                     APDbPool.poolAll.Tables["poolGroupsRules"].Clear();
                     tmpSDA.Fill(APDbPool.poolAll.Tables["poolGroupsRules"]);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 从数据库取角色对象视图
+        /// </summary>
+        private static void GetPoolGroupsItems()
+        {
+            try
+            {
+                string sql = @"select * from AuthGroupsItems";
+                using (SqlDataAdapter tmpSDA = GetDataAdapter(sql))
+                {
+                    APDbPool.poolAll.Tables["poolGroupsItems"].Clear();
+                    tmpSDA.Fill(APDbPool.poolAll.Tables["poolGroupsItems"]);
                 }
             }
             catch (Exception)

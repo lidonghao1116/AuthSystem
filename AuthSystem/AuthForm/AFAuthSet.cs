@@ -22,6 +22,7 @@ namespace AuthSystem.AuthForm
         private DataRow tmpUsersAddRow;
         private DataRow tmpGroupsAddRow;
         private ToolStripSeparator toolStripSeparator1;
+        private ToolStripButton toolSaveGroupRule;
         private bool LoadOver = false; //是否初始化完成
         #endregion
 
@@ -78,6 +79,7 @@ namespace AuthSystem.AuthForm
             this.toolGroupsAdd = new System.Windows.Forms.ToolStripButton();
             this.toolGroupsDel = new System.Windows.Forms.ToolStripButton();
             this.toolGroupsSave = new System.Windows.Forms.ToolStripButton();
+            this.toolSaveGroupRule = new System.Windows.Forms.ToolStripButton();
             this.panelRules = new System.Windows.Forms.Panel();
             this.treeRules = new System.Windows.Forms.TreeView();
             this.menuMain = new System.Windows.Forms.MenuStrip();
@@ -232,7 +234,8 @@ namespace AuthSystem.AuthForm
             this.toolGroups.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolGroupsAdd,
             this.toolGroupsDel,
-            this.toolGroupsSave});
+            this.toolGroupsSave,
+            this.toolSaveGroupRule});
             this.toolGroups.Location = new System.Drawing.Point(0, 0);
             this.toolGroups.Name = "toolGroups";
             this.toolGroups.Size = new System.Drawing.Size(579, 25);
@@ -268,6 +271,16 @@ namespace AuthSystem.AuthForm
             this.toolGroupsSave.Size = new System.Drawing.Size(60, 22);
             this.toolGroupsSave.Text = "保存角色";
             this.toolGroupsSave.Click += new System.EventHandler(this.toolGroupsSave_Click);
+            // 
+            // toolSaveGroupRule
+            // 
+            this.toolSaveGroupRule.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolSaveGroupRule.Image = ((System.Drawing.Image)(resources.GetObject("toolSaveGroupRule.Image")));
+            this.toolSaveGroupRule.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolSaveGroupRule.Name = "toolSaveGroupRule";
+            this.toolSaveGroupRule.Size = new System.Drawing.Size(84, 22);
+            this.toolSaveGroupRule.Text = "保存角色规则";
+            this.toolSaveGroupRule.Click += new System.EventHandler(this.toolSaveGroupRule_Click);
             // 
             // panelRules
             // 
@@ -425,7 +438,10 @@ namespace AuthSystem.AuthForm
             Ru2It_DataTable = AP2SOpera.ReadPool(AuthPool.APPoolType.AMRu2It);
             treeRules.Nodes.Clear();
             treeRules.Nodes.AddRange(AP2SOpera.Rules2Tree()); //显示所有规则
-            AP2SOpera.SetTreeViewCheckBox(treeRules, "1"); //勾选当前角色的规则
+            if (dgv_Groups.Rows.Count > 0)
+            {
+                AP2SOpera.SetTreeViewCheckBox(treeRules, dgv_Groups.Rows[0].Cells["Group_ID"].Value.ToString()); //勾选当前角色的规则
+            }
             
         }
         
@@ -433,6 +449,7 @@ namespace AuthSystem.AuthForm
         #endregion
 
         #region 3--用户工具按钮操作
+        //-------------------------------------------------------------------------------------------------------
         /// <summary>
         /// 添加用户行
         /// </summary>
@@ -450,6 +467,8 @@ namespace AuthSystem.AuthForm
                 MessageBox.Show(x.Message);
             }
         }
+
+        //-------------------------------------------------------------------------------------------------------
         /// <summary>
         /// 删除用户行
         /// </summary>
@@ -464,6 +483,8 @@ namespace AuthSystem.AuthForm
                 MessageBox.Show("请选择要删除的用户！");
             }
         }
+
+        //-------------------------------------------------------------------------------------------------------
         /// <summary>
         /// 保存用户表的更改
         /// </summary>
@@ -485,6 +506,7 @@ namespace AuthSystem.AuthForm
         #endregion
 
         #region 4--角色工具按钮操作
+        //-------------------------------------------------------------------------------------------------------
         /// <summary>
         /// 添加角色
         /// </summary>
@@ -501,6 +523,8 @@ namespace AuthSystem.AuthForm
                 MessageBox.Show(x.Message);
             }
         }
+
+        //-------------------------------------------------------------------------------------------------------
         /// <summary>
         /// 删除角色
         /// </summary>
@@ -515,6 +539,8 @@ namespace AuthSystem.AuthForm
                 MessageBox.Show("请选择要删除的行！");
             }
         }
+
+        //-------------------------------------------------------------------------------------------------------
         /// <summary>
         /// 保存角色的所有修改
         /// </summary>
@@ -533,6 +559,17 @@ namespace AuthSystem.AuthForm
                 MessageBox.Show(x.Message);
                 InitData_Groups();
             }
+        }
+
+        //-------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 保存当前角色规则
+        /// </summary>
+        private void toolSaveGroupRule_Click(object sender, EventArgs e)
+        {
+            AP2SOpera.saveGr2Ru_TreeView(treeRules, "1");
+            AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMGr2Ru);
+            AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMGr2Ru);
         }
         #endregion
 
@@ -616,11 +653,14 @@ namespace AuthSystem.AuthForm
                 //当前角色的Group_Rule_ID
                 string tmpGroup_Rule_ID = dgv_Groups.CurrentRow.Cells["Group_Rule_ID"].Value.ToString();
                 //取当前角色对应的所有规则
+                AP2SOpera.SetTreeViewCheckBox(treeRules, tmpGroup_Rule_ID); //勾选当前角色的规则
             }
         }
         #endregion
 
         #region 9--菜单操作
+
+        //-------------------------------------------------------------------------------------------------------
         /// <summary>
         /// 显示规则与对象绑定设置窗口
         /// </summary>
@@ -630,6 +670,7 @@ namespace AuthSystem.AuthForm
             tmpFm.ShowDialog();
         }
 
+        //-------------------------------------------------------------------------------------------------------
         /// <summary>
         /// 显示不做权限处理的对象设置窗口
         /// </summary>
@@ -639,5 +680,6 @@ namespace AuthSystem.AuthForm
             tmpFm.ShowDialog();
         }
         #endregion
+
     }
 }

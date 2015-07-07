@@ -73,9 +73,9 @@ namespace AuthSystem.AuthForm
             this.panel_Right.Controls.Add(this.dgv_Items);
             this.panel_Right.Controls.Add(this.RulestoolStrip);
             this.panel_Right.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_Right.Location = new System.Drawing.Point(585, 3);
+            this.panel_Right.Location = new System.Drawing.Point(468, 3);
             this.panel_Right.Name = "panel_Right";
-            this.panel_Right.Size = new System.Drawing.Size(576, 671);
+            this.panel_Right.Size = new System.Drawing.Size(693, 671);
             this.panel_Right.TabIndex = 1;
             // 
             // dgv_Items
@@ -93,7 +93,7 @@ namespace AuthSystem.AuthForm
             this.dgv_Items.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgv_Items.RowTemplate.Height = 23;
             this.dgv_Items.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_Items.Size = new System.Drawing.Size(576, 646);
+            this.dgv_Items.Size = new System.Drawing.Size(693, 646);
             this.dgv_Items.TabIndex = 1;
             // 
             // RulestoolStrip
@@ -104,7 +104,7 @@ namespace AuthSystem.AuthForm
             this.toolSaveItems});
             this.RulestoolStrip.Location = new System.Drawing.Point(0, 0);
             this.RulestoolStrip.Name = "RulestoolStrip";
-            this.RulestoolStrip.Size = new System.Drawing.Size(576, 25);
+            this.RulestoolStrip.Size = new System.Drawing.Size(693, 25);
             this.RulestoolStrip.TabIndex = 0;
             this.RulestoolStrip.Text = "toolStrip1";
             // 
@@ -144,7 +144,7 @@ namespace AuthSystem.AuthForm
             this.panel_Left.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_Left.Location = new System.Drawing.Point(3, 3);
             this.panel_Left.Name = "panel_Left";
-            this.panel_Left.Size = new System.Drawing.Size(576, 671);
+            this.panel_Left.Size = new System.Drawing.Size(459, 671);
             this.panel_Left.TabIndex = 0;
             // 
             // dgv_Rules
@@ -162,7 +162,7 @@ namespace AuthSystem.AuthForm
             this.dgv_Rules.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgv_Rules.RowTemplate.Height = 23;
             this.dgv_Rules.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_Rules.Size = new System.Drawing.Size(576, 646);
+            this.dgv_Rules.Size = new System.Drawing.Size(459, 646);
             this.dgv_Rules.TabIndex = 1;
             this.dgv_Rules.SelectionChanged += new System.EventHandler(this.dgv_Rules_SeleChanged);
             // 
@@ -175,7 +175,7 @@ namespace AuthSystem.AuthForm
             this.toolSaveRu2It});
             this.ItemstoolStrip.Location = new System.Drawing.Point(0, 0);
             this.ItemstoolStrip.Name = "ItemstoolStrip";
-            this.ItemstoolStrip.Size = new System.Drawing.Size(576, 25);
+            this.ItemstoolStrip.Size = new System.Drawing.Size(459, 25);
             this.ItemstoolStrip.TabIndex = 0;
             this.ItemstoolStrip.Text = "toolStrip2";
             // 
@@ -222,8 +222,8 @@ namespace AuthSystem.AuthForm
             // layoutMain
             // 
             this.layoutMain.ColumnCount = 2;
-            this.layoutMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.layoutMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.layoutMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.layoutMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.layoutMain.Controls.Add(this.panel_Left, 0, 0);
             this.layoutMain.Controls.Add(this.panel_Right, 1, 0);
             this.layoutMain.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -231,7 +231,6 @@ namespace AuthSystem.AuthForm
             this.layoutMain.Name = "layoutMain";
             this.layoutMain.RowCount = 1;
             this.layoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.layoutMain.Size = new System.Drawing.Size(1164, 677);
             this.layoutMain.TabIndex = 2;
             // 
@@ -271,12 +270,15 @@ namespace AuthSystem.AuthForm
             dgv_Rules.Columns[0].Visible = false;
             dgv_Rules.Columns[1].HeaderText = "ID";
             dgv_Rules.Columns[1].Width = 30;
-            dgv_Rules.Columns[2].HeaderText="Rule名字";
-            dgv_Rules.Columns[2].Width = 100;
-            dgv_Rules.Columns[3].HeaderText = "上级RuleID";
+            dgv_Rules.Columns[2].HeaderText="规则名字";
+            dgv_Rules.Columns[2].Width = 150;
+           // dgv_Rules.Columns[3].Visible = false;
+            dgv_Rules.Columns[3].HeaderText = "规则对应";
             dgv_Rules.Columns[3].Width = 100;
-            dgv_Rules.Columns[4].HeaderText = "备注";
-            dgv_Rules.Columns[4].Width = 200;
+            dgv_Rules.Columns[4].HeaderText = "上级规则";
+            dgv_Rules.Columns[4].Width = 80;
+            dgv_Rules.Columns[5].HeaderText = "备注";
+            dgv_Rules.Columns[5].Width = 250;
         }
 
         //2-初始化Items数据表内容-------------------------------------------------------------------------------------
@@ -296,9 +298,9 @@ namespace AuthSystem.AuthForm
             dgv_Items.Columns[1].Visible = false;
             dgv_Items.Columns[2].Width = 30;
             dgv_Items.Columns[2].HeaderText = "ID";
-            dgv_Items.Columns[3].Width = 100;
+            dgv_Items.Columns[3].Width = 130;
             dgv_Items.Columns[3].HeaderText = "Item名字";
-            dgv_Items.Columns[4].Width = 300;
+            dgv_Items.Columns[4].Width = 350;
             dgv_Items.Columns[4].HeaderText = "Item路径";
             dgv_Items.Columns[5].Width = 100;
             dgv_Items.Columns[5].HeaderText = "备注";
@@ -484,6 +486,7 @@ namespace AuthSystem.AuthForm
                 
                 //更新池到数据库
                 AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMRu2It);
+                AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMRu2It);
 
             }
             else

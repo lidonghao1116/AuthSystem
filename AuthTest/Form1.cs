@@ -10,13 +10,14 @@ using System.Data.SqlClient;
 using AuthSystem.AuthPool2Soft;
 
 
-namespace AuthTest
+namespace AuthTest.login
 {
-    public partial class Form1 : AuthSystem.AuthForm.AFLogin
+    public partial class Form1 : Form
     {
         public Form1()
         {
             InitializeComponent();
+            AuthSystem.AuthAction.RunAuthAction(this.Controls);
             //AuthSystem.AuthPool2Db.AP2DOpera.GetPool();//初始化所有数据池！
         }
         private DataTable tmpDt;

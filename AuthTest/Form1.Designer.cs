@@ -1,4 +1,4 @@
-﻿namespace AuthTest
+﻿namespace AuthTest.login
 {
     partial class Form1
     {

@@ -299,7 +299,7 @@ namespace AuthSystem.AuthPool2Soft
                 {
                     TreeNode d1CreateNode =(TreeNode)Activator.CreateInstance(typeof(TreeNode),true);
                     d1CreateNode.Text = x["Rule_Name"].ToString();
-                    d1CreateNode.Name = x["Rule_Name"].ToString();
+                    d1CreateNode.Name = x["Rule_ID"].ToString();
                     tmpTree.Add(d1CreateNode);
                     //添加2级菜单
                     var twoNodes = from tmp in dtAMRules.AsEnumerable() where tmp.Field<string>("Rule_Up_RuleID") == x["Rule_ID"].ToString() select tmp;//显示当前1级菜单的2级菜单
@@ -307,7 +307,7 @@ namespace AuthSystem.AuthPool2Soft
                     {
                         TreeNode d2CreateNode = (TreeNode)Activator.CreateInstance(typeof(TreeNode), true);
                         d2CreateNode.Text = y["Rule_Name"].ToString();
-                        d2CreateNode.Name = y["Rule_name"].ToString();
+                        d2CreateNode.Name = y["Rule_ID"].ToString();
                         d1CreateNode.Nodes.Add(d2CreateNode);
                         //添加3级菜单
                         var threeNodes = from tmp in dtAMRules.AsEnumerable() where tmp.Field<string>("Rule_Up_RuleID") == y["Rule_ID"].ToString() select tmp;//显示当前2级菜单的3级菜单
@@ -315,7 +315,7 @@ namespace AuthSystem.AuthPool2Soft
                         {
                             TreeNode d3CreateNode = (TreeNode)Activator.CreateInstance(typeof(TreeNode), true);
                             d3CreateNode.Text = z["Rule_Name"].ToString();
-                            d3CreateNode.Name = z["Rule_Name"].ToString();
+                            d3CreateNode.Name = z["Rule_ID"].ToString();
                             d2CreateNode.Nodes.Add(d3CreateNode);
                             //添加4级菜单
                             var fourNodes = from tmp in dtAMRules.AsEnumerable() where tmp.Field<string>("Rule_Up_RuleID") == z["Rule_ID"].ToString() select tmp;//显示当前3级菜单的4级菜单
@@ -323,7 +323,7 @@ namespace AuthSystem.AuthPool2Soft
                             {
                                 TreeNode d4CreateNode = (TreeNode)Activator.CreateInstance(typeof(TreeNode), true);
                                 d4CreateNode.Text = z4["Rule_Name"].ToString();
-                                d4CreateNode.Name = z4["Rule_Name"].ToString();
+                                d4CreateNode.Name = z4["Rule_ID"].ToString();
                                 d3CreateNode.Nodes.Add(d4CreateNode);
                                 //添加5级菜单（暂未添加）
                             }
@@ -340,14 +340,196 @@ namespace AuthSystem.AuthPool2Soft
         }
 
         //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 根据角色ID，把指定的TreeView的checkBox进行更改
+        /// </summary>
+        /// <param name="TV">TreeView</param>
+        /// <param name="Group_ID">Group_ID</param>
+        /// <returns>bool</returns>
         public static bool SetTreeViewCheckBox(TreeView TV, string Group_ID)
         {
-            //取Group_ID的所有权限
-            AuthPool2Db.AP2DOpera.GetPool(APPoolType.AMGroupsRules);
-            DataTable tmpDT = ReadPool(APPoolType.AMGroupsRules);
-            var request = from tmp in tmpDT.AsEnumerable() where tmp.Field<string>("Group_ID") == Group_ID select tmp;
-            
+            try
+            {
+                //取Group_ID的所有权限
+                AuthPool2Db.AP2DOpera.GetPool(APPoolType.AMGroupsRules);
+                DataTable tmpDT = ReadPool(APPoolType.AMGroupsRules);
+                var request = from tmp in tmpDT.AsEnumerable() where tmp.Field<string>("Group_ID") == Group_ID select tmp;
+                List<string> tmpRuleIDs = new List<string>();
+                foreach (DataRow x in request)
+                {
+                    tmpRuleIDs.Add(x["Rule_ID"].ToString());
+                }
+
+                foreach (TreeNode x1 in TV.Nodes)//1级
+                {
+                    if (tmpRuleIDs.Contains(x1.Name))
+                    {
+                        x1.Checked = true;
+                    }
+                    else
+                    {
+                        x1.Checked = false;
+                    }
+
+                    if (x1.Nodes.Count > 0)
+                    {
+                        foreach (TreeNode x2 in x1.Nodes)//2级
+                        {
+                            if (tmpRuleIDs.Contains(x2.Name))
+                            {
+                                x2.Checked = true;
+                            }
+                            else
+                            {
+                                x2.Checked = false;
+                            }
+                            if (x2.Nodes.Count > 0)
+                            {
+                                foreach (TreeNode x3 in x2.Nodes)//3级
+                                {
+                                    if (tmpRuleIDs.Contains(x3.Name))
+                                    {
+                                        x3.Checked = true;
+                                    }
+                                    else
+                                    {
+                                        x3.Checked = false;
+                                    }
+                                    if (x3.Nodes.Count > 0)
+                                    {
+                                        foreach (TreeNode x4 in x3.Nodes)//4级
+                                        {
+                                            if (tmpRuleIDs.Contains(x4.Name))
+                                            {
+                                                x4.Checked = true;
+                                            }
+                                            else
+                                            {
+                                                x4.Checked = false;
+                                            }
+                                            if (x4.Nodes.Count > 0)
+                                            {
+                                                //5级（暂未添加）
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+                throw;
+            }
+        }
+
+        //-----------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 保存指定角色的规则
+        /// </summary>
+        /// <param name="TV">选定的规则表</param>
+        /// <param name="Group_Rule_ID">角色ID</param>
+        /// <returns>bool</returns>
+        public static bool saveGr2Ru_TreeView(TreeView TV, string Group_Rule_ID)
+        {
+            DataTable tmpGr2Ru = ReadPool(APPoolType.AMGr2Ru);//取角色与规则对应表
+            DataTable tmpGr2RuNotes = tmpGr2Ru.Clone(); //根据TreeView生成DataTable
+            DataRow tmpRow;
+            foreach (TreeNode x1 in TV.Nodes)//1级
+            {
+                if (x1.Checked)
+                {
+                    tmpRow = tmpGr2RuNotes.NewRow();
+                    tmpRow[1] = Group_Rule_ID;
+                    tmpRow[2] = x1.Name;
+                    tmpGr2RuNotes.Rows.Add(tmpRow);
+                    if (x1.Nodes.Count > 0)
+                    {
+                        foreach (TreeNode x2 in x1.Nodes)//2级
+                        {
+                            if (x2.Checked)
+                            {
+                                tmpRow = tmpGr2RuNotes.NewRow();
+                                tmpRow[1] = Group_Rule_ID;
+                                tmpRow[2] = x2.Name;
+                                tmpGr2RuNotes.Rows.Add(tmpRow);
+                                if (x2.Nodes.Count > 0)
+                                {
+                                    foreach (TreeNode x3 in x2.Nodes)//3级
+                                    {
+                                        if (x3.Checked)
+                                        {
+                                            tmpRow = tmpGr2RuNotes.NewRow();
+                                            tmpRow[1] = Group_Rule_ID;
+                                            tmpRow[2] = x3.Name;
+                                            tmpGr2RuNotes.Rows.Add(tmpRow);
+                                            if (x3.Nodes.Count > 0)
+                                            {
+                                                foreach (TreeNode x4 in x3.Nodes)//4级
+                                                {
+                                                    if (x4.Checked)
+                                                    {
+                                                        tmpRow = tmpGr2RuNotes.NewRow();
+                                                        tmpRow[1] = Group_Rule_ID;
+                                                        tmpRow[2] = x3.Name;
+                                                        tmpGr2RuNotes.Rows.Add(tmpRow);
+                                                        if (x4.Nodes.Count > 0)
+                                                        {
+                                                            //5级，（暂未做）
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (DataRow x in tmpGr2Ru.AsEnumerable())
+            {
+                if (x["Group_Rule_ID"].ToString() == Group_Rule_ID)
+                {
+                    x.Delete();
+                }
+            }
+
+            tmpGr2Ru.Merge(tmpGr2RuNotes, true);
+            SavePool(tmpGr2Ru, APPoolType.AMGr2Ru);
             return true;
+        }
+
+        //-----------------------------------------------------------------------------------------------
+        public static DataTable GetGroupItems(string[] group_ID, string namespace_name)
+        {
+            try
+            {
+                DataTable request = new DataTable();
+                DataTable tmpDT = ReadPool(APPoolType.AMGroupsItems);
+                foreach (string x in group_ID)
+                {
+                    var requ = from tmp in tmpDT.AsEnumerable() where tmp.Field<string>("Item_NameSpace") == namespace_name && tmp.Field<string>("Group_ID") == x select tmp;
+                    foreach (DataRow y in requ)
+                    {
+                        if (!request.Rows.Contains(y))
+                        {
+                            request.Rows.Add(y);
+                        }
+                    }
+                }
+                return request;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

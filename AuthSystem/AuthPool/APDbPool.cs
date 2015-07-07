@@ -30,6 +30,7 @@ namespace AuthSystem.AuthPool
             poolAll.Tables.Add(poolAMItems);
             poolAll.Tables.Add(poolAMItemsNo);
             poolAll.Tables.Add(poolGroupsRules);
+            poolAll.Tables.Add(poolGroupsItems);
         }
         public static DataSet poolAll = new DataSet("poolALL");
         private static DataTable poolAMUsers = new DataTable("poolAMUsers");         //所有用户
@@ -48,6 +49,7 @@ namespace AuthSystem.AuthPool
 
         //以下为SQL中的视图
         private static DataTable poolGroupsRules = new DataTable("poolGroupsRules");//角色与规则的视图
+        private static DataTable poolGroupsItems = new DataTable("poolGroupsItems");//角色与对象的视图
     }
 
     /// <summary>
@@ -63,6 +65,7 @@ namespace AuthSystem.AuthPool
         AMRu2It,
         AMItems,
         AMItemsNo,
-        AMGroupsRules
+        AMGroupsRules,
+        AMGroupsItems
     }
 }
