@@ -5,7 +5,6 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data;
 using AuthSystem.AuthModel;
-using AuthSystem.AuthPool2Soft;
 
 namespace AuthSystem.AuthForm
 {
@@ -264,8 +263,8 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void InitRules()
         {
-            AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMRules);
-            tmpDtRules = AP2SOpera.ReadPool(AuthPool.APPoolType.AMRules);
+            AuthPool2Db.AP2DOpera.GetPool(AuthPool.PoolType.AMRules);
+            tmpDtRules = AP2SOpera.ReadPool(AuthPool.PoolType.AMRules);
             dgv_Rules.DataSource = tmpDtRules;
             dgv_Rules.Columns[0].Visible = false;
             dgv_Rules.Columns[1].HeaderText = "ID";
@@ -287,8 +286,8 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void InitItems()
         {
-            AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMItems);
-            tmpDtItems = AP2SOpera.ReadPool(AuthPool.APPoolType.AMItems);
+            AuthPool2Db.AP2DOpera.GetPool(AuthPool.PoolType.AMItems);
+            tmpDtItems = AP2SOpera.ReadPool(AuthPool.PoolType.AMItems);
             DataGridViewCheckBoxColumn ItemsDGVCBC = new DataGridViewCheckBoxColumn(false);  //定义在表前要添加的checkBox列
             ItemsDGVCBC.Name = "SeleItem";
             dgv_Items.Columns.Add(ItemsDGVCBC);
@@ -351,8 +350,8 @@ namespace AuthSystem.AuthForm
             try
             {
                 dgv_Rules.DataSource = null;
-                AP2SOpera.SavePool(tmpDtRules, AuthPool.APPoolType.AMRules);
-                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMRules);
+                AP2SOpera.SavePool(tmpDtRules, AuthPool.PoolType.AMRules);
+                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.PoolType.AMRules);
                 InitRules();
             }
             catch (Exception x)
@@ -405,8 +404,8 @@ namespace AuthSystem.AuthForm
             try
             {
                 dgv_Items.DataSource = null;
-                AP2SOpera.SavePool(tmpDtItems, AuthPool.APPoolType.AMItems);
-                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMItems);
+                AP2SOpera.SavePool(tmpDtItems, AuthPool.PoolType.AMItems);
+                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.PoolType.AMItems);
                 InitItems();
             }
             catch (Exception)
@@ -476,8 +475,8 @@ namespace AuthSystem.AuthForm
                 }
                 //循环List.String,删除没勾选行
                 AP2SOpera.DelRowPool_Ru2It(tmpRule_Item_ID);
-                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMRu2It);
-                AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMRu2It);
+                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.PoolType.AMRu2It);
+                AuthPool2Db.AP2DOpera.GetPool(AuthPool.PoolType.AMRu2It);
                 //循环List.String，添加Row到poolRu2It
                 foreach (string x in tmpItemID)
                 {
@@ -485,8 +484,8 @@ namespace AuthSystem.AuthForm
                 }
                 
                 //更新池到数据库
-                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMRu2It);
-                AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMRu2It);
+                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.PoolType.AMRu2It);
+                AuthPool2Db.AP2DOpera.GetPool(AuthPool.PoolType.AMRu2It);
 
             }
             else

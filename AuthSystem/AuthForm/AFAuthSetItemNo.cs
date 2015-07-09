@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
-using AuthSystem.AuthPool2Soft;
 using System.Windows.Forms;
 
 namespace AuthSystem.AuthForm
@@ -121,9 +120,9 @@ namespace AuthSystem.AuthForm
         #region 数据初始化
         private void InitData()
         {
-            AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMItemsNo);
+            AuthPool2Db.AP2DOpera.GetPool(AuthPool.PoolType.AMItemsNo);
             //从数据池取数据
-            tmpDtItemNo = AP2SOpera.ReadPool(AuthPool.APPoolType.AMItemsNo);
+            tmpDtItemNo = AP2SOpera.ReadPool(AuthPool.PoolType.AMItemsNo);
             dgv_ItemsNo.DataSource = tmpDtItemNo;
             dgv_ItemsNo.Columns[0].Visible = false;
             dgv_ItemsNo.Columns[1].HeaderText = "ID";
@@ -181,8 +180,8 @@ namespace AuthSystem.AuthForm
             try
             {
                 dgv_ItemsNo.DataSource = null;
-                AP2SOpera.SavePool(tmpDtItemNo, AuthPool.APPoolType.AMItemsNo);//保存到数据池
-                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMItemsNo);//提交数据池更新
+                AP2SOpera.SavePool(tmpDtItemNo, AuthPool.PoolType.AMItemsNo);//保存到数据池
+                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.PoolType.AMItemsNo);//提交数据池更新
                 InitData();
             }
             catch (Exception)

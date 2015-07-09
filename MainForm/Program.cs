@@ -13,6 +13,14 @@ namespace MainForm
         [STAThread]
         static void Main()
         {
+            //定义公共数据
+            AuthSystem.AuthData.ADConfig tmpADC = new AuthSystem.AuthData.ADConfig();
+            string ConnString;
+            bool b;
+            tmpADC.ReadConfig(AuthSystem.AuthModel.ConfigItem.ConnectionString, out ConnString, out b);
+            AuthSystem.AuthPool.APPoolGlobal.GlobalAMSystemConfig.ConnectionString = ConnString;
+
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());

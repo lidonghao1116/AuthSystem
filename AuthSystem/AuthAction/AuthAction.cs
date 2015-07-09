@@ -129,7 +129,7 @@ namespace AuthSystem
                 DataTable tmpGroupItems;//定义当前角色的所有对象表
                 System.Windows.Forms.MessageBox.Show("a");
                 //1-取当前con所在的窗口的namespace + "." + FormClassName;
-                string[] tmpGroupIDs = AuthPool.APSoftPool.poolSoftAMUser.User_Group.Split(','); //当前用户的角色
+                string[] tmpGroupIDs = AuthPool.APPoolGlobal.GlobalAMUser.User_Group.Split(','); //当前用户的角色
                 string tmpNameSpace = con.Owner.GetType().FullName;
                 tmpGroupItems = AuthPool2Soft.AP2SOpera.GetGroupItems(tmpGroupIDs, tmpNameSpace);
                 System.Windows.Forms.MessageBox.Show(tmpGroupItems.Rows.Count.ToString()+",");

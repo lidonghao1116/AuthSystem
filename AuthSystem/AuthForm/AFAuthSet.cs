@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.Windows.Forms;
-using AuthSystem.AuthPool2Soft;
 
 
 namespace AuthSystem.AuthForm
@@ -369,8 +368,8 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void InitData_Users()
         {
-            AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMUsers);
-            Users_DataTable = AP2SOpera.ReadPool(AuthPool.APPoolType.AMUsers); //从pool取DataTable
+            AuthPool2Db.AP2DOpera.GetPool(AuthPool.PoolType.AMUsers);
+            Users_DataTable = AP2SOpera.ReadPool(AuthPool.PoolType.AMUsers); //从pool取DataTable
             dgv_Users.DataSource = Users_DataTable;                             //显示DataTable
             //列重命名
             dgv_Users.Columns[0].Visible = false;
@@ -404,10 +403,10 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void InitData_Groups()
         {
-            AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMGroups);
+            AuthPool2Db.AP2DOpera.GetPool(AuthPool.PoolType.AMGroups);
             DataGridViewCheckBoxColumn dgvcbc = new DataGridViewCheckBoxColumn(false); //第一列为checkbox;
             dgv_Groups.Columns.Add(dgvcbc);
-            Groups_DataTable = AP2SOpera.ReadPool(AuthPool.APPoolType.AMGroups);//从池取数据
+            Groups_DataTable = AP2SOpera.ReadPool(AuthPool.PoolType.AMGroups);//从池取数据
             dgv_Groups.DataSource = Groups_DataTable; //绑定数据
             dgv_Groups.Columns[0].HeaderText = "选择";
             dgv_Groups.Columns[0].Width = 40;
@@ -432,10 +431,10 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void InitData_Rules()
         {
-            AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMRules);
-            AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMRu2It);
-            Rules_DataTable = AP2SOpera.ReadPool(AuthPool.APPoolType.AMRules);
-            Ru2It_DataTable = AP2SOpera.ReadPool(AuthPool.APPoolType.AMRu2It);
+            AuthPool2Db.AP2DOpera.GetPool(AuthPool.PoolType.AMRules);
+            AuthPool2Db.AP2DOpera.GetPool(AuthPool.PoolType.AMRu2It);
+            Rules_DataTable = AP2SOpera.ReadPool(AuthPool.PoolType.AMRules);
+            Ru2It_DataTable = AP2SOpera.ReadPool(AuthPool.PoolType.AMRu2It);
             treeRules.Nodes.Clear();
             treeRules.Nodes.AddRange(AP2SOpera.Rules2Tree()); //显示所有规则
             if (dgv_Groups.Rows.Count > 0)
@@ -493,8 +492,8 @@ namespace AuthSystem.AuthForm
             try
             {
                 dgv_Users.DataSource = null;
-                AP2SOpera.SavePool(Users_DataTable, AuthPool.APPoolType.AMUsers);
-                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMUsers);
+                AP2SOpera.SavePool(Users_DataTable, AuthPool.PoolType.AMUsers);
+                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.PoolType.AMUsers);
                 InitData_Users();
             }
             catch (Exception x)
@@ -550,8 +549,8 @@ namespace AuthSystem.AuthForm
             {
                 dgv_Groups.DataSource = null;
                 dgv_Groups.Columns.Clear();
-                AP2SOpera.SavePool(Groups_DataTable, AuthPool.APPoolType.AMGroups);
-                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMGroups);
+                AP2SOpera.SavePool(Groups_DataTable, AuthPool.PoolType.AMGroups);
+                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.PoolType.AMGroups);
                 InitData_Groups();
             }
             catch (Exception x)
@@ -568,8 +567,8 @@ namespace AuthSystem.AuthForm
         private void toolSaveGroupRule_Click(object sender, EventArgs e)
         {
             AP2SOpera.saveGr2Ru_TreeView(treeRules, "1");
-            AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.APPoolType.AMGr2Ru);
-            AuthPool2Db.AP2DOpera.GetPool(AuthPool.APPoolType.AMGr2Ru);
+            AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.PoolType.AMGr2Ru);
+            AuthPool2Db.AP2DOpera.GetPool(AuthPool.PoolType.AMGr2Ru);
         }
         #endregion
 
