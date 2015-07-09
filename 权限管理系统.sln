@@ -3,14 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "权限管理系统", "权限管理系统\权限管理系统.csproj", "{47E97B88-A38D-4C1C-8745-21FCAF88753D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{DB8A784C-EE3D-4992-8EBE-913FC5BD8A5D} = {DB8A784C-EE3D-4992-8EBE-913FC5BD8A5D}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthSystem", "AuthSystem\AuthSystem.csproj", "{DB8A784C-EE3D-4992-8EBE-913FC5BD8A5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthTest", "AuthTest\AuthTest.csproj", "{1956240F-2109-4D7B-A388-33EE22809E36}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainForm", "MainForm\MainForm.csproj", "{A88BA2B9-E981-4A1E-AE81-DDF5EC134BBC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{DB8A784C-EE3D-4992-8EBE-913FC5BD8A5D} = {DB8A784C-EE3D-4992-8EBE-913FC5BD8A5D}
 	EndProjectSection
@@ -21,18 +16,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{47E97B88-A38D-4C1C-8745-21FCAF88753D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{47E97B88-A38D-4C1C-8745-21FCAF88753D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{47E97B88-A38D-4C1C-8745-21FCAF88753D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{47E97B88-A38D-4C1C-8745-21FCAF88753D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DB8A784C-EE3D-4992-8EBE-913FC5BD8A5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DB8A784C-EE3D-4992-8EBE-913FC5BD8A5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB8A784C-EE3D-4992-8EBE-913FC5BD8A5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB8A784C-EE3D-4992-8EBE-913FC5BD8A5D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1956240F-2109-4D7B-A388-33EE22809E36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1956240F-2109-4D7B-A388-33EE22809E36}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1956240F-2109-4D7B-A388-33EE22809E36}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1956240F-2109-4D7B-A388-33EE22809E36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A88BA2B9-E981-4A1E-AE81-DDF5EC134BBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A88BA2B9-E981-4A1E-AE81-DDF5EC134BBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A88BA2B9-E981-4A1E-AE81-DDF5EC134BBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A88BA2B9-E981-4A1E-AE81-DDF5EC134BBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

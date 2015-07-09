@@ -42,18 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthAction\AuthAction.cs" />
-    <Compile Include="AuthControl\ACPrintView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="AuthControl\ACPrintView.Designer.cs">
-      <DependentUpon>ACPrintView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AuthControl\ACRu2It.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="AuthControl\ACRu2It.Designer.cs">
-      <DependentUpon>ACRu2It.cs</DependentUpon>
-    </Compile>
     <Compile Include="AuthDao\ADAuthOpera.cs" />
     <Compile Include="AuthDao\ADConfig.cs" />
     <Compile Include="AuthDao\ADBase.cs" />
@@ -75,7 +63,6 @@
     <Compile Include="AuthForm\AFLogin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AuthGlobal.cs" />
     <Compile Include="AuthModel\AMGroup.cs" />
     <Compile Include="AuthModel\AMItem.cs" />
     <Compile Include="AuthModel\AMMenu.cs" />
@@ -87,10 +74,6 @@
     <Compile Include="AuthModel\AMSystemConfig.cs" />
     <Compile Include="AuthModel\AMUsers.cs" />
     <Compile Include="AuthModel\AMX2Y.cs" />
-    <Compile Include="AuthPool2Db\AP2DBase.cs" />
-    <Compile Include="AuthPool2Db\AP2DOpera.cs" />
-    <Compile Include="AuthPool2Soft\AP2SBase.cs" />
-    <Compile Include="AuthPool2Soft\AP2SOpera.cs" />
     <Compile Include="AuthPool\APBase.cs" />
     <Compile Include="AuthPool\APDbPool.cs" />
     <Compile Include="AuthPool\APSoftPool.cs" />
@@ -102,12 +85,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AuthControl\ACPrintView.resx">
-      <DependentUpon>ACPrintView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AuthControl\ACRu2It.resx">
-      <DependentUpon>ACRu2It.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="AuthForm\AFAuthRuleBinding.resx">
       <DependentUpon>AFAuthRuleBinding.cs</DependentUpon>
     </EmbeddedResource>

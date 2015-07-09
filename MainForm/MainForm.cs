@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace AuthSystem.AuthControl
+namespace MainForm
 {
-    public partial class ACRu2It : UserControl
+    public partial class MainForm : Form
     {
-        public ACRu2It()
+        public MainForm()
         {
             InitializeComponent();
         }

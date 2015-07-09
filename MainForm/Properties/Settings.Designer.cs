@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace 权限管理系统.Properties
+namespace MainForm.Properties
 {
 
 
