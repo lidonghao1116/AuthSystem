@@ -732,6 +732,7 @@ namespace AuthSystem.AuthForm
         }
         
         #endregion
+
         #region 8--其它事件处理
         //-------------------------------------------------------------------------------------------------------
         /// <summary>
@@ -790,8 +791,6 @@ namespace AuthSystem.AuthForm
             tmpFm.ShowDialog();
         }
         #endregion
-
-        
 
     }
 }
