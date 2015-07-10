@@ -39,9 +39,13 @@
             this.ReadConfig = new System.Windows.Forms.Button();
             this.SaveConfig = new System.Windows.Forms.Button();
             this.tb_Conn = new System.Windows.Forms.TextBox();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.Form_RuleItem = new System.Windows.Forms.Button();
+            this.Form_AuthSet = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -52,6 +56,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel2, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.panel3, 2, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -64,6 +69,7 @@
             // 
             // panel1
             // 
+            this.panel1.BackColor = System.Drawing.Color.MistyRose;
             this.panel1.Controls.Add(this.button1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 3);
@@ -83,6 +89,7 @@
             // 
             // panel2
             // 
+            this.panel2.BackColor = System.Drawing.SystemColors.ButtonShadow;
             this.panel2.Controls.Add(this.cb_isSave);
             this.panel2.Controls.Add(this.tb_password);
             this.panel2.Controls.Add(this.tb_Username);
@@ -158,6 +165,37 @@
             this.tb_Conn.TabIndex = 0;
             this.tb_Conn.Text = "ConnString";
             // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.RosyBrown;
+            this.panel3.Controls.Add(this.Form_AuthSet);
+            this.panel3.Controls.Add(this.Form_RuleItem);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel3.Location = new System.Drawing.Point(631, 3);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(310, 203);
+            this.panel3.TabIndex = 2;
+            // 
+            // Form_RuleItem
+            // 
+            this.Form_RuleItem.Location = new System.Drawing.Point(18, 9);
+            this.Form_RuleItem.Name = "Form_RuleItem";
+            this.Form_RuleItem.Size = new System.Drawing.Size(132, 23);
+            this.Form_RuleItem.TabIndex = 0;
+            this.Form_RuleItem.Text = "规则对象对应设置";
+            this.Form_RuleItem.UseVisualStyleBackColor = true;
+            this.Form_RuleItem.Click += new System.EventHandler(this.Form_RuleItem_Click);
+            // 
+            // Form_AuthSet
+            // 
+            this.Form_AuthSet.Location = new System.Drawing.Point(18, 38);
+            this.Form_AuthSet.Name = "Form_AuthSet";
+            this.Form_AuthSet.Size = new System.Drawing.Size(75, 23);
+            this.Form_AuthSet.TabIndex = 1;
+            this.Form_AuthSet.Text = "权限设置";
+            this.Form_AuthSet.UseVisualStyleBackColor = true;
+            this.Form_AuthSet.Click += new System.EventHandler(this.Form_AuthSet_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -171,6 +209,7 @@
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.panel3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -188,6 +227,9 @@
         private System.Windows.Forms.CheckBox cb_isSave;
         private System.Windows.Forms.TextBox tb_password;
         private System.Windows.Forms.TextBox tb_Username;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Button Form_RuleItem;
+        private System.Windows.Forms.Button Form_AuthSet;
     }
 }
 

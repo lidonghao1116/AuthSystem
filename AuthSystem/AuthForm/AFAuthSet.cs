@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.Windows.Forms;
-
+using AuthSystem.AuthForm;
+using AuthSystem.AuthData;
+using AuthSystem.AuthPool;
 
 namespace AuthSystem.AuthForm
 {
@@ -13,16 +15,38 @@ namespace AuthSystem.AuthForm
     /// </summary>
     public class AFAuthSet:AFBase
     {
+        #region 0-------清理资源
+        /// <summary>
+        /// 必需的设计器变量。
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+        /// <summary>
+        /// 清理所有正在使用的资源。
+        /// </summary>
+        /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+        #endregion
+
         #region 0-----公共变量
-        private DataTable Users_DataTable;
-        private DataTable Groups_DataTable;
-        private DataTable Rules_DataTable;
+        private DataTable Users_DataTable; //用户DataTable
+        private DataTable Groups_DataTable;//角色DataTable
+        private DataTable Rules_DataTable;//规则DataTable
         private DataTable Ru2It_DataTable;
-        private DataRow tmpUsersAddRow;
-        private DataRow tmpGroupsAddRow;
+        private DataTable Us2Gr_DataTable;//用户对应角色DataTable
+        private DataTable Gr2Ru_DataTable;//角色对应规则DataTable
+        private DataRow tmpUsersAddRow; //缓存要添加的用户表行
+        private DataRow tmpGroupsAddRow;//缓存要添加的角色表行
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripButton toolSaveGroupRule;
         private bool LoadOver = false; //是否初始化完成
+        private ADAction ADAct = new ADAction();
         #endregion
 
         #region 1-----初始化
@@ -31,11 +55,13 @@ namespace AuthSystem.AuthForm
         /// </summary>
         public AFAuthSet()
         {
+            ADAct.ConnString = APPoolGlobal.GlobalAMSystemConfig.ConnectionString; //设置连接字符串
             InitializeComponent();  //界面初始化
             InitData_Users();       //用户初始化
+            InitData_Us2Gr();
             InitData_Groups();      //角色初始化
+            InitData_Gr2Ru();
             InitData_Rules();       //规则初始化
-            
         }
         
         #region 0--界面初始化
@@ -225,6 +251,7 @@ namespace AuthSystem.AuthForm
             this.dgv_Groups.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_Groups.Size = new System.Drawing.Size(579, 301);
             this.dgv_Groups.TabIndex = 1;
+            this.dgv_Groups.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_Groups_CellMouseUp);
             this.dgv_Groups.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgv_Groups_CellStateChange);
             this.dgv_Groups.SelectionChanged += new System.EventHandler(this.dgv_Groups_SeleChanged);
             // 
@@ -368,80 +395,79 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void InitData_Users()
         {
-            AuthPool2Db.AP2DOpera.GetPool(AuthPool.PoolType.AMUsers);
-            Users_DataTable = AP2SOpera.ReadPool(AuthPool.PoolType.AMUsers); //从pool取DataTable
+            ADAct.ReadToPool(PoolType.Users);
+            Users_DataTable = ADAct.ReadPool(PoolType.Users);
+
             dgv_Users.DataSource = Users_DataTable;                             //显示DataTable
             //列重命名
-            dgv_Users.Columns[0].Visible = false;
-            dgv_Users.Columns[1].HeaderText = "ID";
-            dgv_Users.Columns[1].Width = 30;
-            dgv_Users.Columns[2].HeaderText = "登陆名";
+            dgv_Users.Columns[0].HeaderText = "ID";
+            dgv_Users.Columns[0].Width = 30;
+            dgv_Users.Columns[1].HeaderText = "用户名";
+            dgv_Users.Columns[1].Width = 80;
+            dgv_Users.Columns[2].HeaderText = "名字";
             dgv_Users.Columns[2].Width = 80;
-            dgv_Users.Columns[3].HeaderText = "名字";
+            dgv_Users.Columns[3].HeaderText = "密码";
             dgv_Users.Columns[3].Width = 80;
-            dgv_Users.Columns[4].HeaderText = "密码";
-            dgv_Users.Columns[4].Width = 80;
+            dgv_Users.Columns[4].HeaderText = "状态";
+            dgv_Users.Columns[4].Width = 40;
             dgv_Users.Columns[5].HeaderText = "电话";
             dgv_Users.Columns[5].Width = 80;
             dgv_Users.Columns[6].HeaderText = "QQ";
             dgv_Users.Columns[6].Width = 80;
             dgv_Users.Columns[7].HeaderText = "Email";
-            dgv_Users.Columns[7].Width = 80;
-            dgv_Users.Columns[8].HeaderText = "状态";
-            dgv_Users.Columns[8].Width = 40;
-            dgv_Users.Columns[8].ValueType = typeof(bool);
-            dgv_Users.Columns[9].HeaderText = "角色";
-            dgv_Users.Columns[9].Width = 60;
-            dgv_Users.Columns[10].HeaderText = "仓库";
-            dgv_Users.Columns[10].Width = 80;
-            dgv_Users.Columns[11].HeaderText = "备注";
-            dgv_Users.Columns[11].Width = 100;
-            
+            dgv_Users.Columns[7].Width = 100;
+            dgv_Users.Columns[8].HeaderText = "备注";
+            dgv_Users.Columns[8].Width = 200;
         }
         /// <summary>
         /// 初始化角色数据
         /// </summary>
         private void InitData_Groups()
         {
-            AuthPool2Db.AP2DOpera.GetPool(AuthPool.PoolType.AMGroups);
+            ADAct.ReadToPool(PoolType.Groups);
+            Groups_DataTable = ADAct.ReadPool(PoolType.Groups);
+
             DataGridViewCheckBoxColumn dgvcbc = new DataGridViewCheckBoxColumn(false); //第一列为checkbox;
             dgv_Groups.Columns.Add(dgvcbc);
-            Groups_DataTable = AP2SOpera.ReadPool(AuthPool.PoolType.AMGroups);//从池取数据
             dgv_Groups.DataSource = Groups_DataTable; //绑定数据
+
             dgv_Groups.Columns[0].HeaderText = "选择";
             dgv_Groups.Columns[0].Width = 40;
-            dgv_Groups.Columns[1].Visible = false;
-            dgv_Groups.Columns[2].HeaderText = "ID";
-            dgv_Groups.Columns[2].Width = 30;
-            dgv_Groups.Columns[3].HeaderText = "角色名";
-            dgv_Groups.Columns[3].Width = 80;
-            dgv_Groups.Columns[4].HeaderText = "状态";
+            dgv_Groups.Columns[1].HeaderText = "ID";
+            dgv_Groups.Columns[1].Width = 30;
+            dgv_Groups.Columns[2].HeaderText = "角色名";
+            dgv_Groups.Columns[2].Width = 80;
+            dgv_Groups.Columns[3].HeaderText = "状态";
+            dgv_Groups.Columns[3].Width = 40;
+            dgv_Groups.Columns[4].HeaderText = "Sup";
             dgv_Groups.Columns[4].Width = 40;
-            dgv_Groups.Columns[5].HeaderText = "规则ID";
-            dgv_Groups.Columns[5].Width = 80;
-            dgv_Groups.Columns[6].HeaderText = "仓库ID";
-            dgv_Groups.Columns[6].Width = 80;
-            dgv_Groups.Columns[7].HeaderText = "菜单ID";
-            dgv_Groups.Columns[7].Width = 80;
-            dgv_Groups.Columns[8].HeaderText = "备注";
-            dgv_Groups.Columns[8].Width = 150;
+            dgv_Groups.Columns[5].HeaderText = "备注";
+            dgv_Groups.Columns[5].Width = 150;
         }
         /// <summary>
         /// 初始化规则数据
         /// </summary>
         private void InitData_Rules()
         {
-            AuthPool2Db.AP2DOpera.GetPool(AuthPool.PoolType.AMRules);
-            AuthPool2Db.AP2DOpera.GetPool(AuthPool.PoolType.AMRu2It);
-            Rules_DataTable = AP2SOpera.ReadPool(AuthPool.PoolType.AMRules);
-            Ru2It_DataTable = AP2SOpera.ReadPool(AuthPool.PoolType.AMRu2It);
-            treeRules.Nodes.Clear();
+            ADAct.ReadToPool(PoolType.Rules);
+            Rules_DataTable = ADAct.ReadPool(PoolType.Rules);
+
+            /*treeRules.Nodes.Clear();
             treeRules.Nodes.AddRange(AP2SOpera.Rules2Tree()); //显示所有规则
             if (dgv_Groups.Rows.Count > 0)
             {
                 AP2SOpera.SetTreeViewCheckBox(treeRules, dgv_Groups.Rows[0].Cells["Group_ID"].Value.ToString()); //勾选当前角色的规则
-            }
+            }*/
             
+        }
+        private void InitData_Gr2Ru()
+        {
+            ADAct.ReadToPool(PoolType.Gr2Ru);
+            Ru2It_DataTable = ADAct.ReadPool(PoolType.Gr2Ru);
+        }
+        private void InitData_Us2Gr()
+        {
+            ADAct.ReadToPool(PoolType.Us2Gr);
         }
         
         #endregion
@@ -492,8 +518,8 @@ namespace AuthSystem.AuthForm
             try
             {
                 dgv_Users.DataSource = null;
-                AP2SOpera.SavePool(Users_DataTable, AuthPool.PoolType.AMUsers);
-                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.PoolType.AMUsers);
+                ADAct.SavePool(PoolType.Users, Users_DataTable);
+                ADAct.UpdatePool(PoolType.Users);
                 InitData_Users();
             }
             catch (Exception x)
@@ -549,8 +575,8 @@ namespace AuthSystem.AuthForm
             {
                 dgv_Groups.DataSource = null;
                 dgv_Groups.Columns.Clear();
-                AP2SOpera.SavePool(Groups_DataTable, AuthPool.PoolType.AMGroups);
-                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.PoolType.AMGroups);
+                ADAct.SavePool(PoolType.Groups, Groups_DataTable);
+                ADAct.UpdatePool(PoolType.Groups);
                 InitData_Groups();
             }
             catch (Exception x)
@@ -566,12 +592,146 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void toolSaveGroupRule_Click(object sender, EventArgs e)
         {
+            /*
             AP2SOpera.saveGr2Ru_TreeView(treeRules, "1");
             AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.PoolType.AMGr2Ru);
             AuthPool2Db.AP2DOpera.GetPool(AuthPool.PoolType.AMGr2Ru);
+            */
         }
         #endregion
 
+        #region 5--选择用户，同步勾选角色
+        //-------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 选择用户，同步更改角色的勾选状态
+        /// </summary>
+        private void dgv_Users_SeleChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (LoadOver)
+                {
+                    if (dgv_Users.SelectedRows.Count > 0)
+                    {
+                        string CurrUserID = dgv_Users.SelectedRows[0].Cells["User_ID"].Value.ToString();
+                        //取User的对应数据
+                        List<string> CurrGroupsID = ADAct.ReadPoolUs2Gr(CurrUserID);
+                        for (int i = 0; i < dgv_Groups.Rows.Count; i++)
+                        {
+                            if (CurrGroupsID.Contains(dgv_Groups.Rows[i].Cells["Group_ID"].Value.ToString()))
+                            {
+                                dgv_Groups.Rows[i].Cells[0].Value = true;
+                            }
+                            else
+                            {
+                                dgv_Groups.Rows[i].Cells[0].Value = false;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show(x.Message);
+            }
+        }
+        #endregion
+
+        #region 6--选择角色，同步勾选规则
+        //-------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 选择角色，同步更改规则的勾选状态
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgv_Groups_SeleChanged(object sender, EventArgs e)
+        {
+            /*
+            if (LoadOver)//加载完成，显示窗口后才处理事件
+            {
+                //当前角色的Group_Rule_ID
+                string tmpGroup_Rule_ID = dgv_Groups.CurrentRow.Cells["Group_Rule_ID"].Value.ToString();
+                //取当前角色对应的所有规则
+                AP2SOpera.SetTreeViewCheckBox(treeRules, tmpGroup_Rule_ID); //勾选当前角色的规则
+            }*/
+        }
+        #endregion
+
+        #region 7--点击Groups的选择框进行的处理
+        private void dgv_Groups_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            try
+            {
+                switch (e.ColumnIndex)
+                {
+                    case 0://点击的是第一列，处理的方法
+                        #region 点击的是第一列
+                        if (dgv_Users.SelectedRows.Count > 0)//只有选择了用户，才进行处理
+                        {
+                            //取当前点击的Items的Cell
+                            DataGridViewCell tmpCell = dgv_Groups.Rows[e.RowIndex].Cells[0];
+                            int tmpUserID = Convert.ToInt32(dgv_Users.SelectedRows[0].Cells["User_ID"].Value);
+                            int tmpGroupID = Convert.ToInt32(dgv_Groups.Rows[e.RowIndex].Cells["Group_ID"].Value);
+                            //MessageBox.Show(tmpUserID.ToString() + ":" + tmpGroupID.ToString());
+                            ADAct.ReadToPool(PoolType.Us2Gr);
+                            DataTable tmpDt = ADAct.ReadPool(PoolType.Us2Gr);
+
+                            if ((bool)tmpCell.Value)
+                            {
+                                //添加行
+                                bool tmpIsAdd = true;
+                                for (int i = 0; i < tmpDt.Rows.Count; i++)
+                                {
+                                    if (tmpDt.Rows[i]["User_ID"].ToString() == tmpUserID.ToString() && tmpDt.Rows[i]["Group_ID"].ToString() == tmpGroupID.ToString())
+                                    {
+                                        tmpIsAdd = false;
+                                    }
+                                }
+                                if (tmpIsAdd)
+                                {
+                                    DataRow tmpRowAdd = tmpDt.NewRow();
+                                    tmpRowAdd[0] = tmpUserID;
+                                    tmpRowAdd[1] = tmpGroupID;
+                                    tmpDt.Rows.Add(tmpRowAdd);
+                                }
+                            }
+                            else
+                            {
+                                //删除行
+                                int tmpIndex = 999999;
+                                for (int i = 0; i < tmpDt.Rows.Count; i++)
+                                {
+                                    if (tmpDt.Rows[i]["User_ID"].ToString() == tmpUserID.ToString() && tmpDt.Rows[i]["Group_ID"].ToString() == tmpGroupID.ToString())
+                                    {
+                                        tmpIndex = i;
+                                    }
+                                }
+                                if (!(tmpIndex == 999999))
+                                {
+                                    tmpDt.Rows[tmpIndex].Delete();
+                                }
+                            }
+                            ADAct.SavePool(PoolType.Us2Gr, tmpDt);
+                            ADAct.UpdatePool(PoolType.Us2Gr);
+                            InitData_Us2Gr();
+                        }
+                        else
+                        {
+                            MessageBox.Show("没有选择用户，或者用户表为空,请先添加用户");
+                        }
+                        #endregion
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        
+        #endregion
         #region 8--其它事件处理
         //-------------------------------------------------------------------------------------------------------
         /// <summary>
@@ -606,55 +766,6 @@ namespace AuthSystem.AuthForm
             }
             
         }
-
-        //-------------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// 选择用户，同步更改用户的角色为选择状态
-        /// </summary>
-        private void dgv_Users_SeleChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (LoadOver)
-                {
-                    //当前用户的User_Group
-                    List<string> id = dgv_Users.CurrentRow.Cells["User_Group"].Value.ToString().Split(',').ToList<string>();
-                    //在Groups表中选择
-                    for (int x = 0; x < dgv_Groups.Rows.Count; x++)
-                    {
-                        if (id.Contains(dgv_Groups.Rows[x].Cells["ID"].Value.ToString()))
-                        {
-                            dgv_Groups.Rows[x].Cells[0].Value = true;
-                        }
-                        else
-                        {
-                            dgv_Groups.Rows[x].Cells[0].Value = false;
-                        }
-                    }
-                }
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show(x.Message);
-            }
-        }
-
-        //-------------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// 选择角色，同步更改规则的状态
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void dgv_Groups_SeleChanged(object sender, EventArgs e)
-        {
-            if (LoadOver)//加载完成，显示窗口后才处理事件
-            {
-                //当前角色的Group_Rule_ID
-                string tmpGroup_Rule_ID = dgv_Groups.CurrentRow.Cells["Group_Rule_ID"].Value.ToString();
-                //取当前角色对应的所有规则
-                AP2SOpera.SetTreeViewCheckBox(treeRules, tmpGroup_Rule_ID); //勾选当前角色的规则
-            }
-        }
         #endregion
 
         #region 9--菜单操作
@@ -679,6 +790,8 @@ namespace AuthSystem.AuthForm
             tmpFm.ShowDialog();
         }
         #endregion
+
+        
 
     }
 }

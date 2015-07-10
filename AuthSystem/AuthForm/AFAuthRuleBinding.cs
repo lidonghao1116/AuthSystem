@@ -4,43 +4,74 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data;
+
 using AuthSystem.AuthModel;
+using AuthSystem.AuthData;
+using AuthSystem.AuthPool;
+using AuthSystem.AuthForm;
 
 namespace AuthSystem.AuthForm
 {
     public class AFAuthRuleBinding : AFBase
     {
+        #region 0-------清理资源
+        /// <summary>
+        /// 必需的设计器变量。
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+        /// <summary>
+        /// 清理所有正在使用的资源。
+        /// </summary>
+        /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+        #endregion
+
         #region 0-------定义公共变量
         private DataTable tmpDtItems;   //所有Items数据
         private DataTable tmpDtRules;   //所有Rules数据
-        private ToolStripButton toolSaveItems;
-        private ToolStripButton toolRuleAdd;
-        private ToolStripButton toolRuleDel;
-        private ToolStripButton toolRuleSave;
-        private TableLayoutPanel layoutMain;        //当前选择的Rule
-        private bool LoadOver = false;              //是否初始化完成
+        private bool LoadOver1 = false;              //是否初始化完成
+        private bool LoadOver2 = false;              //是否加载成功窗口
         private DataRow tmpRuleRow;                 //临时row
-        private DataRow tmpItemRow;                 //临时row
+        private DataRow tmpItemRow;
+        private ToolStripButton toolMoveItemsNo;
+        
+        private ADAction ADAct = new ADAction();       //数据与pool操作类        
         #endregion
 
         #region 1-------初始化
         public AFAuthRuleBinding()
         {
+            ADAct.ConnString = APPoolGlobal.GlobalAMSystemConfig.ConnectionString; //设置连接字符串
             InitializeComponent(); //初始化界面
+            
             InitRules();  //初始化规则表
             InitItems();  //初始化对象表
-            LoadOver = true;//表示初始化完成
+            InitRu2It();
+            LoadOver1 = true;//表示初始化完成
         }
         #region 初始化界面
         private System.Windows.Forms.Panel panel_Left;
         private System.Windows.Forms.ToolStrip ItemstoolStrip;
-        private System.Windows.Forms.ToolStripButton toolSaveRu2It;
         private System.Windows.Forms.Panel panel_Right;
         private System.Windows.Forms.ToolStrip RulestoolStrip;
         private System.Windows.Forms.DataGridView dgv_Items;
         private System.Windows.Forms.ToolStripButton toolDelItem;
         private System.Windows.Forms.DataGridView dgv_Rules;
         private System.Windows.Forms.ToolStripButton toolAddItem;
+        private ToolStripButton toolSaveItems;
+        private ToolStripButton toolRuleAdd;
+        private ToolStripButton toolRuleDel;
+        private ToolStripButton toolRuleSave;
+        private TableLayoutPanel layoutMain;
+        private ToolStripButton toolManageItemsNo;
+
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AFAuthRuleBinding));
@@ -50,14 +81,15 @@ namespace AuthSystem.AuthForm
             this.toolAddItem = new System.Windows.Forms.ToolStripButton();
             this.toolDelItem = new System.Windows.Forms.ToolStripButton();
             this.toolSaveItems = new System.Windows.Forms.ToolStripButton();
+            this.toolManageItemsNo = new System.Windows.Forms.ToolStripButton();
             this.panel_Left = new System.Windows.Forms.Panel();
             this.dgv_Rules = new System.Windows.Forms.DataGridView();
             this.ItemstoolStrip = new System.Windows.Forms.ToolStrip();
             this.toolRuleAdd = new System.Windows.Forms.ToolStripButton();
             this.toolRuleDel = new System.Windows.Forms.ToolStripButton();
             this.toolRuleSave = new System.Windows.Forms.ToolStripButton();
-            this.toolSaveRu2It = new System.Windows.Forms.ToolStripButton();
             this.layoutMain = new System.Windows.Forms.TableLayoutPanel();
+            this.toolMoveItemsNo = new System.Windows.Forms.ToolStripButton();
             this.panel_Right.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Items)).BeginInit();
             this.RulestoolStrip.SuspendLayout();
@@ -94,13 +126,17 @@ namespace AuthSystem.AuthForm
             this.dgv_Items.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_Items.Size = new System.Drawing.Size(693, 646);
             this.dgv_Items.TabIndex = 1;
+            this.dgv_Items.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_Items_CellMouseUp);
+            this.dgv_Items.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgv_Items_DirtyStateChanged);
             // 
             // RulestoolStrip
             // 
             this.RulestoolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolAddItem,
             this.toolDelItem,
-            this.toolSaveItems});
+            this.toolSaveItems,
+            this.toolManageItemsNo,
+            this.toolMoveItemsNo});
             this.RulestoolStrip.Location = new System.Drawing.Point(0, 0);
             this.RulestoolStrip.Name = "RulestoolStrip";
             this.RulestoolStrip.Size = new System.Drawing.Size(693, 25);
@@ -136,6 +172,17 @@ namespace AuthSystem.AuthForm
             this.toolSaveItems.Text = "保存";
             this.toolSaveItems.Click += new System.EventHandler(this.toolSaveItems_Click);
             // 
+            // toolManageItemsNo
+            // 
+            this.toolManageItemsNo.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolManageItemsNo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolManageItemsNo.Image = ((System.Drawing.Image)(resources.GetObject("toolManageItemsNo.Image")));
+            this.toolManageItemsNo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolManageItemsNo.Name = "toolManageItemsNo";
+            this.toolManageItemsNo.Size = new System.Drawing.Size(156, 22);
+            this.toolManageItemsNo.Text = "管理不用做权限处理的对象";
+            this.toolManageItemsNo.Click += new System.EventHandler(this.toolManageItemsNo_Click);
+            // 
             // panel_Left
             // 
             this.panel_Left.Controls.Add(this.dgv_Rules);
@@ -170,8 +217,7 @@ namespace AuthSystem.AuthForm
             this.ItemstoolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolRuleAdd,
             this.toolRuleDel,
-            this.toolRuleSave,
-            this.toolSaveRu2It});
+            this.toolRuleSave});
             this.ItemstoolStrip.Location = new System.Drawing.Point(0, 0);
             this.ItemstoolStrip.Name = "ItemstoolStrip";
             this.ItemstoolStrip.Size = new System.Drawing.Size(459, 25);
@@ -208,16 +254,6 @@ namespace AuthSystem.AuthForm
             this.toolRuleSave.Text = "保存Rule";
             this.toolRuleSave.Click += new System.EventHandler(this.toolRuleSave_Click);
             // 
-            // toolSaveRu2It
-            // 
-            this.toolSaveRu2It.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolSaveRu2It.Image = ((System.Drawing.Image)(resources.GetObject("toolSaveRu2It.Image")));
-            this.toolSaveRu2It.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolSaveRu2It.Name = "toolSaveRu2It";
-            this.toolSaveRu2It.Size = new System.Drawing.Size(60, 22);
-            this.toolSaveRu2It.Text = "保存关系";
-            this.toolSaveRu2It.Click += new System.EventHandler(this.toolSaveRu2It_Click);
-            // 
             // layoutMain
             // 
             this.layoutMain.ColumnCount = 2;
@@ -233,6 +269,16 @@ namespace AuthSystem.AuthForm
             this.layoutMain.Size = new System.Drawing.Size(1164, 677);
             this.layoutMain.TabIndex = 2;
             // 
+            // toolMoveItemsNo
+            // 
+            this.toolMoveItemsNo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolMoveItemsNo.Image = ((System.Drawing.Image)(resources.GetObject("toolMoveItemsNo.Image")));
+            this.toolMoveItemsNo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolMoveItemsNo.Name = "toolMoveItemsNo";
+            this.toolMoveItemsNo.Size = new System.Drawing.Size(98, 22);
+            this.toolMoveItemsNo.Text = "转移到ItemsNo";
+            this.toolMoveItemsNo.Click += new System.EventHandler(this.toolMoveItemsNo_Click);
+            // 
             // AFAuthRuleBinding
             // 
             this.ClientSize = new System.Drawing.Size(1164, 677);
@@ -240,6 +286,7 @@ namespace AuthSystem.AuthForm
             this.Name = "AFAuthRuleBinding";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "设置规则与对象对应关系";
+            this.Shown += new System.EventHandler(this.Form_Shown);
             this.panel_Right.ResumeLayout(false);
             this.panel_Right.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Items)).EndInit();
@@ -257,27 +304,29 @@ namespace AuthSystem.AuthForm
         #endregion
 
         #region 初始化数据
+        private void InitRu2It()
+        {
+            ADAct.ReadToPool(PoolType.Ru2It);
+        }
         //1-初始化Rules数据表内容-------------------------------------------------------------------------------------
         /// <summary>
         /// 初始化Rules数据表内容
         /// </summary>
         private void InitRules()
         {
-            AuthPool2Db.AP2DOpera.GetPool(AuthPool.PoolType.AMRules);
-            tmpDtRules = AP2SOpera.ReadPool(AuthPool.PoolType.AMRules);
+            ADAct.ReadToPool(PoolType.Rules);//从数据库更新数据
+            tmpDtRules = ADAct.ReadPool(PoolType.Rules);//取数据
+
             dgv_Rules.DataSource = tmpDtRules;
-            dgv_Rules.Columns[0].Visible = false;
-            dgv_Rules.Columns[1].HeaderText = "ID";
-            dgv_Rules.Columns[1].Width = 30;
-            dgv_Rules.Columns[2].HeaderText="规则名字";
-            dgv_Rules.Columns[2].Width = 150;
-           // dgv_Rules.Columns[3].Visible = false;
-            dgv_Rules.Columns[3].HeaderText = "规则对应";
-            dgv_Rules.Columns[3].Width = 100;
-            dgv_Rules.Columns[4].HeaderText = "上级规则";
-            dgv_Rules.Columns[4].Width = 80;
-            dgv_Rules.Columns[5].HeaderText = "备注";
-            dgv_Rules.Columns[5].Width = 250;
+
+            dgv_Rules.Columns[0].HeaderText = "ID";
+            dgv_Rules.Columns[0].Width = 30;
+            dgv_Rules.Columns[1].HeaderText="规则名字";
+            dgv_Rules.Columns[1].Width = 150;
+            dgv_Rules.Columns[2].HeaderText = "上级规则";
+            dgv_Rules.Columns[2].Width = 80;
+            dgv_Rules.Columns[3].HeaderText = "备注";
+            dgv_Rules.Columns[3].Width = 250;
         }
 
         //2-初始化Items数据表内容-------------------------------------------------------------------------------------
@@ -286,21 +335,23 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void InitItems()
         {
-            AuthPool2Db.AP2DOpera.GetPool(AuthPool.PoolType.AMItems);
-            tmpDtItems = AP2SOpera.ReadPool(AuthPool.PoolType.AMItems);
+            ADAct.ReadToPool(PoolType.Items);//从数据库更新数据
+            tmpDtItems = ADAct.ReadPool(PoolType.Items);//取数据
+
             DataGridViewCheckBoxColumn ItemsDGVCBC = new DataGridViewCheckBoxColumn(false);  //定义在表前要添加的checkBox列
             ItemsDGVCBC.Name = "SeleItem";
             dgv_Items.Columns.Add(ItemsDGVCBC);
             dgv_Items.DataSource = tmpDtItems;
             dgv_Items.Columns[0].HeaderText = "选择";
             dgv_Items.Columns[0].Width = 40;
-            dgv_Items.Columns[1].Visible = false;
-            dgv_Items.Columns[2].Width = 30;
-            dgv_Items.Columns[2].HeaderText = "ID";
-            dgv_Items.Columns[3].Width = 130;
-            dgv_Items.Columns[3].HeaderText = "Item名字";
-            dgv_Items.Columns[4].Width = 350;
-            dgv_Items.Columns[4].HeaderText = "Item路径";
+            dgv_Items.Columns[1].Width = 30;
+            dgv_Items.Columns[1].HeaderText = "ID";
+            dgv_Items.Columns[2].Width = 130;
+            dgv_Items.Columns[2].HeaderText = "Item名字";
+            dgv_Items.Columns[3].Width = 350;
+            dgv_Items.Columns[3].HeaderText = "Item路径";
+            dgv_Items.Columns[4].Width = 100;
+            dgv_Items.Columns[4].HeaderText = "Item类型";
             dgv_Items.Columns[5].Width = 100;
             dgv_Items.Columns[5].HeaderText = "备注";
         }
@@ -350,8 +401,8 @@ namespace AuthSystem.AuthForm
             try
             {
                 dgv_Rules.DataSource = null;
-                AP2SOpera.SavePool(tmpDtRules, AuthPool.PoolType.AMRules);
-                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.PoolType.AMRules);
+                ADAct.SavePool(PoolType.Rules, tmpDtRules);
+                ADAct.UpdatePool(PoolType.Rules);
                 InitRules();
             }
             catch (Exception x)
@@ -404,8 +455,9 @@ namespace AuthSystem.AuthForm
             try
             {
                 dgv_Items.DataSource = null;
-                AP2SOpera.SavePool(tmpDtItems, AuthPool.PoolType.AMItems);
-                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.PoolType.AMItems);
+                dgv_Items.Columns.Clear();
+                ADAct.SavePool(PoolType.Items, tmpDtItems);
+                ADAct.UpdatePool(PoolType.Items);
                 InitItems();
             }
             catch (Exception)
@@ -424,19 +476,19 @@ namespace AuthSystem.AuthForm
         /// <param name="e"></param>
         private void dgv_Rules_SeleChanged(object sender, EventArgs e)
         {
-            if (LoadOver)
+            if (LoadOver2)
             {
                 if (dgv_Rules.SelectedRows.Count > 0)
                 {
                     //当前选中Rule
                     //currAMRuleIndex = dgv_Rules.SelectedRows[0].Index; //当前被选中行
-                    string currAMRule_Item_ID = dgv_Rules.SelectedRows[0].Cells["Rule_Item_ID"].Value.ToString();
+                    string currAMRule_ID = dgv_Rules.SelectedRows[0].Cells["Rule_ID"].Value.ToString();
                     //取Rule的对应数据
-                    List<string> currItemsID = AuthPool2Soft.AP2SOpera.ReadPool_Ru2It(currAMRule_Item_ID);
+                    List<string> currItemsID = ADAct.ReadPoolRu2It(currAMRule_ID);
                     //勾选数据
                     for (int x = 0; x < dgv_Items.Rows.Count; x++)
                     {
-                        if (currItemsID.Contains(dgv_Items.Rows[x].Cells[2].Value.ToString()))
+                        if (currItemsID.Contains(dgv_Items.Rows[x].Cells["Item_ID"].Value.ToString()))
                         {
                             dgv_Items.Rows[x].Cells[0].Value = true;
                         }
@@ -449,51 +501,169 @@ namespace AuthSystem.AuthForm
             }
         }
         #endregion
-
+        
+        
         #region 保存对应关系
-        private void toolSaveRu2It_Click(object sender, EventArgs e)
+        /// <summary>
+        /// 鼠标点击Cell后的处理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgv_Items_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
         {
-            dgv_Items.CommitEdit(DataGridViewDataErrorContexts.Commit);
-            //判断是否有选择Rule
-            if (dgv_Rules.SelectedRows.Count > 0)
+            try
             {
-                //当前选择的Rule的Rule_Item_ID
-                string tmpRule_Item_ID = dgv_Rules.SelectedRows[0].Cells["Rule_Item_ID"].Value.ToString();
-                //循环dgv_Items，勾选的项加入List.String
-                List<string> tmpItemID = new List<string>();
-                List<string> tmpItemIDdel = new List<string>();
-                for (int i = 0; i < dgv_Items.Rows.Count; i++)
+                if (dgv_Rules.SelectedRows.Count > 0)//只有选择了Rule才会进行处理
                 {
-                    if ((bool)dgv_Items.Rows[i].Cells[0].Value)
+                    if (e.ColumnIndex == 0)//点击第1列时才会处理下面事件
                     {
-                        tmpItemID.Add(dgv_Items.Rows[i].Cells["Item_ID"].Value.ToString());
+                        DataGridViewCell tmpCell = dgv_Items.Rows[e.RowIndex].Cells[e.ColumnIndex]; //取当前点击的Items的Cell
+                        //取当前选择的RuleID
+                        int tmpSeleRuleID = Convert.ToInt32(dgv_Rules.SelectedRows[0].Cells["Rule_ID"].Value);
+                        //当前选择的ItemID
+                        int tmpSeleItemID = Convert.ToInt32(dgv_Items.Rows[e.RowIndex].Cells["Item_ID"].Value);
+
+                        if ((bool)tmpCell.Value)
+                        {
+                            ChangeRu2It(Ru2ItAction.Add, tmpSeleRuleID, tmpSeleItemID);
+                        }
+                        else
+                        {
+                            ChangeRu2It(Ru2ItAction.Del, tmpSeleRuleID, tmpSeleItemID);
+                        }
                     }
                     else
                     {
-                        tmpItemIDdel.Add(dgv_Items.Rows[i].Cells["Item_ID"].Value.ToString());
+                        //处理其它列
                     }
                 }
-                //循环List.String,删除没勾选行
-                AP2SOpera.DelRowPool_Ru2It(tmpRule_Item_ID);
-                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.PoolType.AMRu2It);
-                AuthPool2Db.AP2DOpera.GetPool(AuthPool.PoolType.AMRu2It);
-                //循环List.String，添加Row到poolRu2It
-                foreach (string x in tmpItemID)
-                {
-                    AP2SOpera.AddRowPool_Ru2It(tmpRule_Item_ID, x);
-                }
-                
-                //更新池到数据库
-                AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.PoolType.AMRu2It);
-                AuthPool2Db.AP2DOpera.GetPool(AuthPool.PoolType.AMRu2It);
-
             }
-            else
+            catch (Exception)
             {
-                MessageBox.Show("请选择要保存数据的Rule");
+                throw;
             }
         }
+        /// <summary>
+        /// 添加删除对应处理
+        /// </summary>
+        /// <param name="act"></param>
+        /// <param name="RuleID"></param>
+        /// <param name="ItemID"></param>
+        private void ChangeRu2It(Ru2ItAction act, int RuleID, int ItemID)
+        {
+            try
+            {
+                ADAct.ReadToPool(PoolType.Ru2It);
+                DataTable tmpDt = ADAct.ReadPool(PoolType.Ru2It);
+                switch (act)
+                {
+
+                    case Ru2ItAction.Add:
+                        bool tmpIsAdd = true;
+                        for (int i = 0; i < tmpDt.Rows.Count; i++)
+                        {
+                            if (tmpDt.Rows[i]["Rule_ID"].ToString() == RuleID.ToString() && tmpDt.Rows[i]["Item_ID"].ToString() == ItemID.ToString())
+                            {
+                                tmpIsAdd = false;
+                            }
+                        }
+                        if (tmpIsAdd)
+                        {
+                            DataRow tmpRowAdd = tmpDt.NewRow();
+                            tmpRowAdd[0] = RuleID;
+                            tmpRowAdd[1] = ItemID;
+                            tmpDt.Rows.Add(tmpRowAdd);
+                        }
+                        break;
+                    case Ru2ItAction.Del:
+                        int tmpIndex = 999999;
+                        for (int i = 0; i < tmpDt.Rows.Count; i++)
+                        {
+                            if (tmpDt.Rows[i]["Rule_ID"].ToString() == RuleID.ToString() && tmpDt.Rows[i]["Item_ID"].ToString() == ItemID.ToString())
+                            {
+                                tmpIndex = i;
+                            }
+                        }
+                        if (!(tmpIndex == 999999))
+                        {
+                            tmpDt.Rows[tmpIndex].Delete();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                ADAct.SavePool(PoolType.Ru2It, tmpDt);
+                ADAct.UpdatePool(PoolType.Ru2It);
+                InitRu2It();
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+        private enum Ru2ItAction
+        {
+            Add,
+            Del
+        }
+       
+        #endregion
+        
+        #region 一些其它处理
+        /// <summary>
+        /// 窗体第一次显示时，设置LoadOver2=true
+        /// </summary>
+        private void Form_Shown(object sender, EventArgs e)
+        {
+            LoadOver2 = true;
+
+            //加载时，默认Items的选择状态
+            if (dgv_Rules.SelectedRows.Count > 0)
+            {
+                //当前选中Rule
+                //currAMRuleIndex = dgv_Rules.SelectedRows[0].Index; //当前被选中行
+                string currAMRule_ID = dgv_Rules.SelectedRows[0].Cells["Rule_ID"].Value.ToString();
+                //取Rule的对应数据
+                List<string> currItemsID = ADAct.ReadPoolRu2It(currAMRule_ID);
+                //勾选数据
+                for (int x = 0; x < dgv_Items.Rows.Count; x++)
+                {
+                    if (currItemsID.Contains(dgv_Items.Rows[x].Cells["Item_ID"].Value.ToString()))
+                    {
+                        dgv_Items.Rows[x].Cells[0].Value = true;
+                    }
+                    else
+                    {
+                        dgv_Items.Rows[x].Cells[0].Value = false;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 实时提交dgv_items更改
+        /// </summary>
+        private void dgv_Items_DirtyStateChanged(object sender, EventArgs e)
+        {
+            if (dgv_Items.IsCurrentCellDirty)
+            {
+                dgv_Items.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }  
         #endregion
 
+        #region 不做权限处理相关
+        private void toolManageItemsNo_Click(object sender, EventArgs e)
+        {
+            AFAuthSetItemNo tmpForm = new AFAuthSetItemNo();
+            tmpForm.ShowDialog();
+        }
+
+        private void toolMoveItemsNo_Click(object sender, EventArgs e)
+        {
+            
+        }
+        #endregion
     }
 }

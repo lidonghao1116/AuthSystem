@@ -604,6 +604,12 @@ namespace AuthSystem.AuthData
         #endregion
 
         #region 3------从数据池读取数据到软件
+        //==================================================================================================
+        /// <summary>
+        /// 从Pool读取指定类型数据到DataTable
+        /// </summary>
+        /// <param name="poolType">数据类型</param>
+        /// <returns>DataTable</returns>
         public DataTable ReadPool(PoolType poolType)
         {
             try
@@ -654,6 +660,112 @@ namespace AuthSystem.AuthData
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
+
+        //==================================================================================================
+        /// <summary>
+        /// 从数据池读取列数据，指定类型与列序号
+        /// </summary>
+        /// <param name="poolType">数据类型</param>
+        /// <param name="index">列序号</param>
+        /// <returns>List.String</returns>
+        public List<string> ReadPoolSigItems(PoolType poolType, int index)
+        {
+            try
+            {
+                List<string> tmpData = new List<string>();//缓存数据
+                DataTable tmpDt=ReadPool(poolType);
+                var requ = from tmp in tmpDt.AsEnumerable() select tmp.Field<string>(index);
+                foreach (string x in requ)
+                {
+                    tmpData.Add(x);
+                }
+                return tmpData;
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+
+        //==================================================================================================
+        /// <summary>
+        /// 从数据池读取数据，指定类型与列名称
+        /// </summary>
+        /// <param name="poolType">数据类型</param>
+        /// <param name="ColumnsName">列名称</param>
+        /// <returns>List.String</returns>
+        public List<string> ReadPoolSigItems(PoolType poolType, string ColumnsName)
+        {
+            try
+            {
+                List<string> tmpData = new List<string>();//缓存数据
+                DataTable tmpDt = ReadPool(poolType);
+                var requ = from tmp in tmpDt.AsEnumerable() select tmp.Field<string>(ColumnsName);
+                foreach (string x in requ)
+                {
+                    tmpData.Add(x);
+                }
+                return tmpData;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        //==================================================================================================
+        /// <summary>
+        /// 从数据池读取数据，指定规则ID,取对应的ItemID列表
+        /// </summary>
+        /// <param name="RuleID"></param>
+        /// <returns></returns>
+        public List<string> ReadPoolRu2It(string RuleID)
+        {
+            try
+            {
+                List<string> tmpData = new List<string>();
+                DataTable tmpDt = ReadPool(PoolType.Ru2It);
+                var requ = from tmp in tmpDt.AsEnumerable() where tmp.Field<object>("Rule_ID").ToString() == RuleID select tmp.Field<object>("Item_ID");
+                foreach (object x in requ)
+                {
+                    tmpData.Add(x.ToString());
+                }
+                return tmpData;
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+
+        //==================================================================================================
+        /// <summary>
+        /// 从数据池读取数据，指定用户ID,取对应的角色ID
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public List<string> ReadPoolUs2Gr(string UserID)
+        {
+            try
+            {
+                List<string> tmpData = new List<string>();
+                DataTable tmpDt = ReadPool(PoolType.Us2Gr);
+                var requ = from tmp in tmpDt.AsEnumerable() where tmp.Field<object>("User_ID").ToString() == UserID select tmp.Field<object>("Group_ID");
+                foreach (object x in requ)
+                {
+                    tmpData.Add(x.ToString());
+                }
+                return tmpData;
+            }
+            catch (Exception)
+            {
+                
                 throw;
             }
         }

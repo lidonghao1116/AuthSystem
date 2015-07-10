@@ -54,5 +54,17 @@ namespace MainForm
             tb_Username.Text = amsc.LoginUserNames;
             cb_isSave.Checked = amsc.LoginSavePass;
         }
+
+        private void Form_RuleItem_Click(object sender, EventArgs e)
+        {
+            AuthSystem.AuthForm.AFAuthRuleBinding tmpForm = new AuthSystem.AuthForm.AFAuthRuleBinding();
+            tmpForm.ShowDialog();
+        }
+
+        private void Form_AuthSet_Click(object sender, EventArgs e)
+        {
+            AuthSystem.AuthForm.AFAuthSet tmpForm = new AuthSystem.AuthForm.AFAuthSet();
+            tmpForm.ShowDialog();
+        }
     }
 }
