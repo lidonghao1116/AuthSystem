@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.Data.SqlClient;
+using System.Windows.Forms;
+
 using AuthSystem.AuthPool;
 
 namespace AuthSystem.AuthData
@@ -832,6 +834,23 @@ namespace AuthSystem.AuthData
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
+        #endregion
+
+        #region 5------处理规则Tree
+        public string SetTreeView(TreeView TV, DataTable DT)
+        {
+            try
+            {
+
+
+                return "true";
+            }
+            catch (Exception x)
+            {
+                //return "SetTreeView:" + x.Message;
                 throw;
             }
         }
