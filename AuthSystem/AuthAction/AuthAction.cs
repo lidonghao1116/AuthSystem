@@ -123,7 +123,7 @@ namespace AuthSystem
         #region 9---窗口的权限处理
         public static string RunAuthAction(System.Windows.Forms.Control.ControlCollection con)
         {
-
+            /*
                 #region 0---公共变量
                 string tmpStr = null;//定义方法要返回的数据
                 DataTable tmpGroupItems;//定义当前角色的所有对象表
@@ -147,7 +147,8 @@ namespace AuthSystem
 
                 #endregion
                 return tmpStr;
-
+            */
+            return "1";
             
         }
         #endregion

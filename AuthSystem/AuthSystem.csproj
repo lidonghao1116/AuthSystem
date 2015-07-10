@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthAction\AuthAction.cs" />
     <Compile Include="AuthDao\ADBase.cs" />
     <Compile Include="AuthDao\ADSecret.cs" />
     <Compile Include="AuthData\ADAction.cs" />
@@ -107,7 +108,6 @@
     <None Include="Properties\DataSources\AuthSystem.AuthModel.AMUsers.datasource" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="AuthAction\" />
     <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

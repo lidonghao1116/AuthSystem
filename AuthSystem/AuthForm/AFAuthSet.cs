@@ -450,8 +450,9 @@ namespace AuthSystem.AuthForm
         private void InitData_Rules()
         {
             ADAct.ReadToPool(PoolType.Rules);
-            Rules_DataTable = ADAct.ReadPool(PoolType.Rules);
-
+            //Rules_DataTable = ADAct.ReadPool(PoolType.Rules);
+            treeRules.Nodes.Clear();
+            treeRules.Nodes.AddRange(ADAct.SetTreeViewData());
             /*treeRules.Nodes.Clear();
             treeRules.Nodes.AddRange(AP2SOpera.Rules2Tree()); //显示所有规则
             if (dgv_Groups.Rows.Count > 0)
@@ -646,14 +647,13 @@ namespace AuthSystem.AuthForm
         /// <param name="e"></param>
         private void dgv_Groups_SeleChanged(object sender, EventArgs e)
         {
-            /*
             if (LoadOver)//加载完成，显示窗口后才处理事件
             {
-                //当前角色的Group_Rule_ID
-                string tmpGroup_Rule_ID = dgv_Groups.CurrentRow.Cells["Group_Rule_ID"].Value.ToString();
+                //当前角色的ID
+                long tmpGroupID = (long)dgv_Groups.CurrentRow.Cells["Group_ID"].Value;
                 //取当前角色对应的所有规则
-                AP2SOpera.SetTreeViewCheckBox(treeRules, tmpGroup_Rule_ID); //勾选当前角色的规则
-            }*/
+                ADAct.SetTreeViewCheckBox(treeRules, tmpGroupID);
+            }
         }
         #endregion
 
