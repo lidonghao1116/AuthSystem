@@ -919,8 +919,8 @@ namespace AuthSystem.AuthData
             try
             {
                 //取Group_ID的所有权限
-                ReadToPool(PoolType.GroupsItems);
-                DataTable tmpDT = ReadPool(PoolType.GroupsItems);
+                ReadToPool(PoolType.GroupsRules);
+                DataTable tmpDT = ReadPool(PoolType.GroupsRules);
                 var request = from tmp in tmpDT.AsEnumerable() where tmp.Field<long>("Group_ID") == Group_ID select tmp;
                 List<long> tmpRuleIDs = new List<long>();
                 foreach (DataRow x in request)
@@ -991,6 +991,104 @@ namespace AuthSystem.AuthData
                 throw;
             }
         }
+
+        public void SetTreeViewCheckedSave(TreeView TV,long Group_ID)
+        {
+            try
+            {
+                DataTable tmpGr2Ru = ReadPool(PoolType.Gr2Ru);//取角色与规则对应表
+                DataTable tmpGr2RuNotes = tmpGr2Ru.Clone(); //根据TreeView生成DataTable
+                DataRow tmpRow;
+                foreach (TreeNode x1 in TV.Nodes)//1级
+                {
+                    if (x1.Checked)
+                    {
+                        tmpRow = tmpGr2RuNotes.NewRow();
+                        tmpRow[0] = Group_ID;
+                        tmpRow[1] = Convert.ToInt64(x1.Name);
+                        tmpGr2RuNotes.Rows.Add(tmpRow);
+                        if (x1.Nodes.Count > 0)
+                        {
+                            foreach (TreeNode x2 in x1.Nodes)//2级
+                            {
+                                if (x2.Checked)
+                                {
+                                    tmpRow = tmpGr2RuNotes.NewRow();
+                                    tmpRow[0] = Group_ID;
+                                    tmpRow[1] = Convert.ToInt64(x2.Name);
+                                    tmpGr2RuNotes.Rows.Add(tmpRow);
+                                    if (x2.Nodes.Count > 0)
+                                    {
+                                        foreach (TreeNode x3 in x2.Nodes)//3级
+                                        {
+                                            if (x3.Checked)
+                                            {
+                                                tmpRow = tmpGr2RuNotes.NewRow();
+                                                tmpRow[0] = Group_ID;
+                                                tmpRow[1] = Convert.ToInt64(x3.Name);
+                                                tmpGr2RuNotes.Rows.Add(tmpRow);
+                                                if (x3.Nodes.Count > 0)
+                                                {
+                                                    foreach (TreeNode x4 in x3.Nodes)//4级
+                                                    {
+                                                        if (x4.Checked)
+                                                        {
+                                                            tmpRow = tmpGr2RuNotes.NewRow();
+                                                            tmpRow[0] = Group_ID;
+                                                            tmpRow[1] = Convert.ToInt64(x4.Name);
+                                                            tmpGr2RuNotes.Rows.Add(tmpRow);
+                                                            if (x4.Nodes.Count > 0)
+                                                            {
+                                                                //5级，（暂未做）
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                foreach (DataRow x in tmpGr2Ru.AsEnumerable())
+                {
+                    if (Convert.ToInt64(x["Group_ID"]) == Group_ID)
+                    {
+                        x.Delete();
+                    }
+                }
+
+                tmpGr2Ru.Merge(tmpGr2RuNotes, true);
+                SavePool(PoolType.Gr2Ru,tmpGr2Ru);
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+        #endregion
+
+        #region 9------一些其它方法
+        #region 1--密码转换
+        //==================================================================================================
+        /// <summary>
+        /// 把密码进行MD5加密
+        /// </summary>
+        /// <param name="souPass">密码明文</param>
+        /// <returns>string</returns>
+        public string SecToMd5(string souPass)
+        {
+            string Md5Pass = "";
+            AuthDao.ADSecret ads = new AuthDao.ADSecret();
+            Md5Pass = ads.MD5Encrypt(souPass);
+            ads = null;
+            return Md5Pass;
+        }
+        #endregion
         #endregion
     }
 }

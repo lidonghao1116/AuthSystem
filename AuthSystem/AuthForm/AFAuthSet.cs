@@ -45,7 +45,8 @@ namespace AuthSystem.AuthForm
         private DataRow tmpGroupsAddRow;//缓存要添加的角色表行
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripButton toolSaveGroupRule;
-        private bool LoadOver = false; //是否初始化完成
+        private bool LoadOver = false;
+        private ToolStripButton toolUsersSetPass; //是否初始化完成
         private ADAction ADAct = new ADAction();
         #endregion
 
@@ -111,6 +112,7 @@ namespace AuthSystem.AuthForm
             this.menu_1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_1_1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_1_2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolUsersSetPass = new System.Windows.Forms.ToolStripButton();
             this.layoutMain.SuspendLayout();
             this.panelUsers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Users)).BeginInit();
@@ -179,7 +181,8 @@ namespace AuthSystem.AuthForm
             this.toolUsersAdd,
             this.toolUsersDel,
             this.toolUsersSave,
-            this.toolStripSeparator1});
+            this.toolStripSeparator1,
+            this.toolUsersSetPass});
             this.toolUsers.Location = new System.Drawing.Point(0, 0);
             this.toolUsers.Name = "toolUsers";
             this.toolUsers.Size = new System.Drawing.Size(560, 25);
@@ -304,8 +307,8 @@ namespace AuthSystem.AuthForm
             this.toolSaveGroupRule.Image = ((System.Drawing.Image)(resources.GetObject("toolSaveGroupRule.Image")));
             this.toolSaveGroupRule.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolSaveGroupRule.Name = "toolSaveGroupRule";
-            this.toolSaveGroupRule.Size = new System.Drawing.Size(84, 22);
-            this.toolSaveGroupRule.Text = "保存角色规则";
+            this.toolSaveGroupRule.Size = new System.Drawing.Size(108, 22);
+            this.toolSaveGroupRule.Text = "保存当前角色权限";
             this.toolSaveGroupRule.Click += new System.EventHandler(this.toolSaveGroupRule_Click);
             // 
             // panelRules
@@ -321,10 +324,12 @@ namespace AuthSystem.AuthForm
             // 
             this.treeRules.CheckBoxes = true;
             this.treeRules.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeRules.LineColor = System.Drawing.Color.LightGray;
             this.treeRules.Location = new System.Drawing.Point(0, 0);
             this.treeRules.Name = "treeRules";
             this.treeRules.Size = new System.Drawing.Size(579, 327);
             this.treeRules.TabIndex = 0;
+            this.treeRules.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeRules_AfterCheck);
             // 
             // menuMain
             // 
@@ -358,6 +363,16 @@ namespace AuthSystem.AuthForm
             this.menu_1_2.Size = new System.Drawing.Size(174, 22);
             this.menu_1_2.Text = "设置ItemsNo对象";
             this.menu_1_2.Click += new System.EventHandler(this.menu_1_2_Click);
+            // 
+            // toolUsersSetPass
+            // 
+            this.toolUsersSetPass.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolUsersSetPass.Image = ((System.Drawing.Image)(resources.GetObject("toolUsersSetPass.Image")));
+            this.toolUsersSetPass.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolUsersSetPass.Name = "toolUsersSetPass";
+            this.toolUsersSetPass.Size = new System.Drawing.Size(60, 22);
+            this.toolUsersSetPass.Text = "更改密码";
+            this.toolUsersSetPass.Click += new System.EventHandler(this.toolUsersSetPass_Click);
             // 
             // AFAuthSet
             // 
@@ -408,6 +423,7 @@ namespace AuthSystem.AuthForm
             dgv_Users.Columns[2].Width = 80;
             dgv_Users.Columns[3].HeaderText = "密码";
             dgv_Users.Columns[3].Width = 80;
+            dgv_Users.Columns[3].ReadOnly = true;
             dgv_Users.Columns[4].HeaderText = "状态";
             dgv_Users.Columns[4].Width = 40;
             dgv_Users.Columns[5].HeaderText = "电话";
@@ -453,13 +469,6 @@ namespace AuthSystem.AuthForm
             //Rules_DataTable = ADAct.ReadPool(PoolType.Rules);
             treeRules.Nodes.Clear();
             treeRules.Nodes.AddRange(ADAct.SetTreeViewData());
-            /*treeRules.Nodes.Clear();
-            treeRules.Nodes.AddRange(AP2SOpera.Rules2Tree()); //显示所有规则
-            if (dgv_Groups.Rows.Count > 0)
-            {
-                AP2SOpera.SetTreeViewCheckBox(treeRules, dgv_Groups.Rows[0].Cells["Group_ID"].Value.ToString()); //勾选当前角色的规则
-            }*/
-            
         }
         private void InitData_Gr2Ru()
         {
@@ -484,8 +493,7 @@ namespace AuthSystem.AuthForm
             try
             {
                 tmpUsersAddRow = Users_DataTable.NewRow();
-                tmpUsersAddRow[0] = 0;
-                tmpUsersAddRow[8] = true;
+                tmpUsersAddRow[4] = true;
                 Users_DataTable.Rows.Add(tmpUsersAddRow);
             }
             catch (Exception x) 
@@ -527,6 +535,30 @@ namespace AuthSystem.AuthForm
             {
                 MessageBox.Show(x.Message);
                 InitData_Users();
+            }
+        }
+        //-------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// 设置密码
+        /// </summary>
+        private void toolUsersSetPass_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string tmpUserName = dgv_Users.CurrentRow.Cells["User_Name"].Value.ToString();
+                AFSetPassword afsp = new AFSetPassword(tmpUserName);
+                if (afsp.ShowDialog(this) == DialogResult.OK)
+                {
+                    dgv_Users.CurrentRow.Cells["User_Password"].Value = afsp.PassWord;
+                    //调用保存
+                    this.toolUsersSave_Click(sender, e);
+                }
+
+                //string passWord=SetPassword(string UserName)
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
         #endregion
@@ -593,6 +625,15 @@ namespace AuthSystem.AuthForm
         /// </summary>
         private void toolSaveGroupRule_Click(object sender, EventArgs e)
         {
+            if (dgv_Groups.CurrentRow != null)
+            {
+                MessageBox.Show("save");
+                long tmpGroupID = (long)dgv_Groups.CurrentRow.Cells["Group_ID"].Value;
+                ADAct.SetTreeViewCheckedSave(treeRules, tmpGroupID);
+                ADAct.UpdatePool(PoolType.Gr2Ru);
+                InitData_Gr2Ru();
+            }
+
             /*
             AP2SOpera.saveGr2Ru_TreeView(treeRules, "1");
             AuthPool2Db.AP2DOpera.UpdatePool(AuthPool.PoolType.AMGr2Ru);
@@ -741,6 +782,25 @@ namespace AuthSystem.AuthForm
         private void AFAuthSet_Shown(object sender, EventArgs e)
         {
             LoadOver = true;//所有数据加载完成
+            //初始化dgv_Groups的选择状态
+            if (dgv_Users.SelectedRows.Count > 0)
+            {
+                string CurrUserID = dgv_Users.SelectedRows[0].Cells["User_ID"].Value.ToString();
+                //取User的对应数据
+                List<string> CurrGroupsID = ADAct.ReadPoolUs2Gr(CurrUserID);
+                for (int i = 0; i < dgv_Groups.Rows.Count; i++)
+                {
+                    if (CurrGroupsID.Contains(dgv_Groups.Rows[i].Cells["Group_ID"].Value.ToString()))
+                    {
+                        dgv_Groups.Rows[i].Cells[0].Value = true;
+                    }
+                    else
+                    {
+                        dgv_Groups.Rows[i].Cells[0].Value = false;
+                    }
+                }
+            }
+            //初始化ruleTree的选择状态
         }
 
         //-------------------------------------------------------------------------------------------------------
@@ -791,6 +851,72 @@ namespace AuthSystem.AuthForm
             tmpFm.ShowDialog();
         }
         #endregion
+
+        #region 10-RuleTree的选择状态同步更改
+        private void treeRules_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            if (e.Action != TreeViewAction.Unknown)
+            {
+                if (e.Node != null && !Convert.IsDBNull(e.Node))
+                {
+                    CheckParentNode(e.Node);
+                    if (e.Node.Nodes.Count > 0)
+                    {
+                        CheckAllChildNodes(e.Node, e.Node.Checked);
+                    }
+
+                }
+            }
+        }
+        /// <summary>
+        /// 改变父节点的选中状态，此处为所有子节点不选中时才取消父节点选中，可以根据需要修改
+        /// </summary>
+        /// <param name="curNode"></param>
+        private void CheckParentNode(TreeNode curNode)
+        {
+            bool bChecked = false;
+
+            if (curNode.Parent != null)
+            {
+                foreach (TreeNode node in curNode.Parent.Nodes)
+                {
+                    if (node.Checked)
+                    {
+                        bChecked = true;
+                        break;
+                    }
+                }
+
+                if (bChecked)
+                {
+                    curNode.Parent.Checked = true;
+                    CheckParentNode(curNode.Parent);
+                }
+                else
+                {
+                    curNode.Parent.Checked = false;
+                    CheckParentNode(curNode.Parent);
+                }
+            }
+        }
+        /// <summary>
+        /// //改变所有子节点的状态
+        /// </summary>
+        private void CheckAllChildNodes(TreeNode pn, bool IsChecked)
+        {
+            foreach (TreeNode tn in pn.Nodes)
+            {
+                tn.Checked = IsChecked;
+
+                if (tn.Nodes.Count > 0)
+                {
+                    CheckAllChildNodes(tn, IsChecked);
+                }
+            }
+        }
+        #endregion
+
+        
 
     }
 }

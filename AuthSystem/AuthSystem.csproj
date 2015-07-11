@@ -62,6 +62,12 @@
     <Compile Include="AuthForm\AFLogin.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="AuthForm\AFSetPassword.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AuthForm\AFSetPassword.Designer.cs">
+      <DependentUpon>AFSetPassword.cs</DependentUpon>
+    </Compile>
     <Compile Include="AuthModel\AMGroup.cs" />
     <Compile Include="AuthModel\AMItem.cs" />
     <Compile Include="AuthModel\AMMenu.cs" />
@@ -98,6 +104,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AuthForm\AFLogin.resx">
       <DependentUpon>AFLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AuthForm\AFSetPassword.resx">
+      <DependentUpon>AFSetPassword.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
