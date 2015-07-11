@@ -40,12 +40,35 @@
             this.SaveConfig = new System.Windows.Forms.Button();
             this.tb_Conn = new System.Windows.Forms.TextBox();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.Form_RuleItem = new System.Windows.Forms.Button();
             this.Form_AuthSet = new System.Windows.Forms.Button();
+            this.Form_RuleItem = new System.Windows.Forms.Button();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.系统设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.权限管理ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.用户管理ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.连接设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.设置密码ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.基本资料ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.成色资料ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.款式资料ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.属性资料ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.供应商资料ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.品牌资料ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.仓库资料ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.商品分类ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.石料ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.查询ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.修改ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bt_SetPass = new System.Windows.Forms.Button();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.panel4.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -57,6 +80,8 @@
             this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel2, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel3, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.panel4, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.listBox1, 1, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -176,16 +201,6 @@
             this.panel3.Size = new System.Drawing.Size(310, 203);
             this.panel3.TabIndex = 2;
             // 
-            // Form_RuleItem
-            // 
-            this.Form_RuleItem.Location = new System.Drawing.Point(18, 9);
-            this.Form_RuleItem.Name = "Form_RuleItem";
-            this.Form_RuleItem.Size = new System.Drawing.Size(132, 23);
-            this.Form_RuleItem.TabIndex = 0;
-            this.Form_RuleItem.Text = "规则对象对应设置";
-            this.Form_RuleItem.UseVisualStyleBackColor = true;
-            this.Form_RuleItem.Click += new System.EventHandler(this.Form_RuleItem_Click);
-            // 
             // Form_AuthSet
             // 
             this.Form_AuthSet.Location = new System.Drawing.Point(18, 38);
@@ -196,12 +211,183 @@
             this.Form_AuthSet.UseVisualStyleBackColor = true;
             this.Form_AuthSet.Click += new System.EventHandler(this.Form_AuthSet_Click);
             // 
+            // Form_RuleItem
+            // 
+            this.Form_RuleItem.Location = new System.Drawing.Point(18, 9);
+            this.Form_RuleItem.Name = "Form_RuleItem";
+            this.Form_RuleItem.Size = new System.Drawing.Size(132, 23);
+            this.Form_RuleItem.TabIndex = 0;
+            this.Form_RuleItem.Text = "规则对象对应设置";
+            this.Form_RuleItem.UseVisualStyleBackColor = true;
+            this.Form_RuleItem.Click += new System.EventHandler(this.Form_RuleItem_Click);
+            // 
+            // panel4
+            // 
+            this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.panel4.Controls.Add(this.bt_SetPass);
+            this.panel4.Controls.Add(this.menuStrip1);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel4.Location = new System.Drawing.Point(3, 212);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(308, 203);
+            this.panel4.TabIndex = 3;
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.系统设置ToolStripMenuItem,
+            this.基本资料ToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(308, 25);
+            this.menuStrip1.TabIndex = 0;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // 系统设置ToolStripMenuItem
+            // 
+            this.系统设置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.权限管理ToolStripMenuItem,
+            this.用户管理ToolStripMenuItem,
+            this.连接设置ToolStripMenuItem,
+            this.设置密码ToolStripMenuItem});
+            this.系统设置ToolStripMenuItem.Name = "系统设置ToolStripMenuItem";
+            this.系统设置ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
+            this.系统设置ToolStripMenuItem.Text = "系统设置";
+            // 
+            // 权限管理ToolStripMenuItem
+            // 
+            this.权限管理ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.查询ToolStripMenuItem,
+            this.修改ToolStripMenuItem});
+            this.权限管理ToolStripMenuItem.Name = "权限管理ToolStripMenuItem";
+            this.权限管理ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.权限管理ToolStripMenuItem.Text = "权限管理";
+            // 
+            // 用户管理ToolStripMenuItem
+            // 
+            this.用户管理ToolStripMenuItem.Name = "用户管理ToolStripMenuItem";
+            this.用户管理ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.用户管理ToolStripMenuItem.Text = "用户管理";
+            // 
+            // 连接设置ToolStripMenuItem
+            // 
+            this.连接设置ToolStripMenuItem.Name = "连接设置ToolStripMenuItem";
+            this.连接设置ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.连接设置ToolStripMenuItem.Text = "连接设置";
+            // 
+            // 设置密码ToolStripMenuItem
+            // 
+            this.设置密码ToolStripMenuItem.Name = "设置密码ToolStripMenuItem";
+            this.设置密码ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.设置密码ToolStripMenuItem.Text = "设置密码";
+            // 
+            // 基本资料ToolStripMenuItem
+            // 
+            this.基本资料ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.成色资料ToolStripMenuItem,
+            this.款式资料ToolStripMenuItem,
+            this.属性资料ToolStripMenuItem,
+            this.供应商资料ToolStripMenuItem,
+            this.品牌资料ToolStripMenuItem,
+            this.仓库资料ToolStripMenuItem,
+            this.商品分类ToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.石料ToolStripMenuItem});
+            this.基本资料ToolStripMenuItem.Name = "基本资料ToolStripMenuItem";
+            this.基本资料ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
+            this.基本资料ToolStripMenuItem.Text = "基本资料";
+            // 
+            // 成色资料ToolStripMenuItem
+            // 
+            this.成色资料ToolStripMenuItem.Name = "成色资料ToolStripMenuItem";
+            this.成色资料ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.成色资料ToolStripMenuItem.Text = "成色资料";
+            // 
+            // 款式资料ToolStripMenuItem
+            // 
+            this.款式资料ToolStripMenuItem.Name = "款式资料ToolStripMenuItem";
+            this.款式资料ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.款式资料ToolStripMenuItem.Text = "款式资料";
+            // 
+            // 属性资料ToolStripMenuItem
+            // 
+            this.属性资料ToolStripMenuItem.Name = "属性资料ToolStripMenuItem";
+            this.属性资料ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.属性资料ToolStripMenuItem.Text = "属性资料";
+            // 
+            // 供应商资料ToolStripMenuItem
+            // 
+            this.供应商资料ToolStripMenuItem.Name = "供应商资料ToolStripMenuItem";
+            this.供应商资料ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.供应商资料ToolStripMenuItem.Text = "供应商资料";
+            // 
+            // 品牌资料ToolStripMenuItem
+            // 
+            this.品牌资料ToolStripMenuItem.Name = "品牌资料ToolStripMenuItem";
+            this.品牌资料ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.品牌资料ToolStripMenuItem.Text = "品牌资料";
+            // 
+            // 仓库资料ToolStripMenuItem
+            // 
+            this.仓库资料ToolStripMenuItem.Name = "仓库资料ToolStripMenuItem";
+            this.仓库资料ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.仓库资料ToolStripMenuItem.Text = "仓库资料";
+            // 
+            // 商品分类ToolStripMenuItem
+            // 
+            this.商品分类ToolStripMenuItem.Name = "商品分类ToolStripMenuItem";
+            this.商品分类ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.商品分类ToolStripMenuItem.Text = "商品分类";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            // 
+            // 石料ToolStripMenuItem
+            // 
+            this.石料ToolStripMenuItem.Name = "石料ToolStripMenuItem";
+            this.石料ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.石料ToolStripMenuItem.Text = "石料";
+            // 
+            // 查询ToolStripMenuItem
+            // 
+            this.查询ToolStripMenuItem.Name = "查询ToolStripMenuItem";
+            this.查询ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.查询ToolStripMenuItem.Text = "查询";
+            // 
+            // 修改ToolStripMenuItem
+            // 
+            this.修改ToolStripMenuItem.Name = "修改ToolStripMenuItem";
+            this.修改ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.修改ToolStripMenuItem.Text = "修改";
+            // 
+            // bt_SetPass
+            // 
+            this.bt_SetPass.Location = new System.Drawing.Point(9, 40);
+            this.bt_SetPass.Name = "bt_SetPass";
+            this.bt_SetPass.Size = new System.Drawing.Size(75, 23);
+            this.bt_SetPass.TabIndex = 1;
+            this.bt_SetPass.Text = "设置密码";
+            this.bt_SetPass.UseVisualStyleBackColor = true;
+            // 
+            // listBox1
+            // 
+            this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 12;
+            this.listBox1.Location = new System.Drawing.Point(317, 212);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(308, 203);
+            this.listBox1.TabIndex = 4;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(944, 628);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultBounds;
             this.Text = "权限测试程序";
@@ -210,6 +396,10 @@
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.panel3.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -230,6 +420,27 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Button Form_RuleItem;
         private System.Windows.Forms.Button Form_AuthSet;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem 系统设置ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 权限管理ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 查询ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 修改ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 用户管理ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 连接设置ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 设置密码ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 基本资料ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 成色资料ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 款式资料ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 属性资料ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 供应商资料ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 品牌资料ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 仓库资料ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 商品分类ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem 石料ToolStripMenuItem;
+        private System.Windows.Forms.Button bt_SetPass;
+        private System.Windows.Forms.ListBox listBox1;
     }
 }
 

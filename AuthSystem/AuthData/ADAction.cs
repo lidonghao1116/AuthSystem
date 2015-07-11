@@ -110,6 +110,58 @@ namespace AuthSystem.AuthData
         }
 
         //==================================================================================================
+        /// <summary>
+        /// 读取指定用户与命名空间的Items表
+        /// (不进入缓存)
+        /// </summary>
+        /// <param name="NameSpace">命名空间</param>
+        /// <param name="UserID">用户ID</param>
+        /// <returns>DataTable</returns>
+        public DataTable ReadUserItems(string NameSpace, string UserID)
+        {
+            try
+            {
+                DataTable tmpDt = new DataTable();
+                long UID = Convert.ToInt64(UserID);
+                string sql = @"select * from AuthUsersItems where Item_NameSpace='" + NameSpace + "' and User_ID=" + UID;
+                using (SqlDataAdapter tmpSDA = GetDataAdapter(sql))
+                {
+                    tmpSDA.Fill(tmpDt);
+                }
+                return tmpDt;
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+        //==================================================================================================
+        /// <summary>
+        /// 读取指定命名空间的ItemsNo表
+        /// (不进入缓存)
+        /// </summary>
+        /// <param name="NameSpace">命名空间</param>
+        /// <returns>DataTable</returns>
+        public DataTable ReadUserItemsNo(string NameSpace)
+        {
+            try
+            {
+                DataTable tmpDt = new DataTable();
+                string sql = @"select * from AuthItemsNo where Item_NameSpace='" + NameSpace + "'";
+                using (SqlDataAdapter tmpSDA = GetDataAdapter(sql))
+                {
+                    tmpSDA.Fill(tmpDt);
+                }
+                return tmpDt;
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+        //==================================================================================================
         #region 单个方法
         private void ReadAuthUsers()
         {
@@ -771,6 +823,9 @@ namespace AuthSystem.AuthData
                 throw;
             }
         }
+
+
+
         #endregion
 
         #region 4------把数据保存到数据池

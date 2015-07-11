@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.Data;
+using System.Windows.Forms;
+using AuthSystem.AuthData;
 
 namespace AuthSystem
 {
@@ -13,11 +15,16 @@ namespace AuthSystem
     /// </summary>
     public class AuthAction
     {
+        #region 0---定义公共变量
+        private ADAction ADAct = new ADAction();
+        #endregion
         public AuthAction()
         {
-            //Init
+            ADAct.ConnString = AuthPool.APPoolGlobal.GlobalAMSystemConfig.ConnectionString;
+            ADAct.ReadToPool(AuthPool.PoolType.ItemsNo);
         }
         #region 0---取窗口数据
+        private List<object> tmpObj = new List<object>();
         //---------------------------------------------------------------------------------------------------------
         /// <summary>
         /// 返回当前用户的窗口的所有控件对象;
@@ -27,42 +34,13 @@ namespace AuthSystem
         /// </summary>
         /// <param name="con">当前窗口的controls</param>
         /// <returns>List.Object</returns>
-        public static List<object> GetWindowsContrul(System.Windows.Forms.Control.ControlCollection con)
+        public List<object> GetWindowsControl(System.Windows.Forms.Control.ControlCollection con)
         {
             try
             {
-                List<object> tmpObject = new List<object>();
-                for (int x = 0; x < con.Count; x++)
-                {
-                    if (con[x].GetType() == typeof(System.Windows.Forms.MenuStrip))  //去掉菜单获取
-                    {
-                        continue;
-                    }
-                    if (con[x].Controls.Count > 0)
-                    {
-                        tmpObject.Add(con[x]);
-                        for (int y = 0; y < con[x].Controls.Count; y++)
-                        {
-                            if (con[x].Controls[y].Controls.Count > 0)
-                            {
-                                tmpObject.Add(con[x].Controls[y]);
-                                for (int z = 0; z < con[x].Controls[y].Controls.Count; z++)
-                                {
-                                    tmpObject.Add(con[x].Controls[y].Controls[z]);
-                                }
-                            }
-                            else
-                            {
-                                tmpObject.Add(con[x].Controls[y]);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        tmpObject.Add(con[x]);
-                    }
-                }
-                return tmpObject;
+                tmpObj.Clear();
+                TraverControl(con);
+                return tmpObj;
             }
             catch (Exception)
             {
@@ -77,7 +55,7 @@ namespace AuthSystem
         /// </summary>
         /// <param name="con">当前窗口的controls</param>
         /// <returns>List.Object</returns>
-        public static List<object> GetWindowsMenu(System.Windows.Forms.Control.ControlCollection con)
+        public List<object> GetWindowsMenu(Control.ControlCollection con)
         {
             try
             {
@@ -118,38 +96,100 @@ namespace AuthSystem
             }
         }
 
+        public void GetFormObject(Control.ControlCollection con,out List<object> FormControls,out List<object> FormMenus)
+        {
+            try
+            {
+                List<object> tmpCons = new List<object>();
+                List<object> tmpMenus = new List<object>();
+                FormControls = tmpCons;
+                FormMenus = tmpMenus;
+                Assembly ass = con.GetType().Assembly;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public void TraverControl(Control.ControlCollection Con)
+        {
+            foreach (Control c in Con)
+            {
+
+                tmpObj.Add("\n" + "  " + c.Name + "  " + "\n");
+                //用于显示窗体中包含的所有的控件名，首先显示的是最外层的控件
+
+                if (c.Controls.Count == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    Control.ControlCollection C = c.Controls;
+
+                    TraverControl(C); //递归调用
+                }
+            }
+        }
         #endregion
 
         #region 9---窗口的权限处理
-        public static string RunAuthAction(System.Windows.Forms.Control.ControlCollection con)
+        public string RunAuthAction(Control.ControlCollection con,string User_ID)
         {
-            /*
-                #region 0---公共变量
-                string tmpStr = null;//定义方法要返回的数据
-                DataTable tmpGroupItems;//定义当前角色的所有对象表
-                System.Windows.Forms.MessageBox.Show("a");
-                //1-取当前con所在的窗口的namespace + "." + FormClassName;
-                string[] tmpGroupIDs = AuthPool.APPoolGlobal.GlobalAMUser.User_Group.Split(','); //当前用户的角色
-                string tmpNameSpace = con.Owner.GetType().FullName;
-                tmpGroupItems = AuthPool2Soft.AP2SOpera.GetGroupItems(tmpGroupIDs, tmpNameSpace);
-                System.Windows.Forms.MessageBox.Show(tmpGroupItems.Rows.Count.ToString()+",");
-
-                #endregion
-
-                #region 2---菜单权限处理
-                #endregion
-
-                #region 3---控件权限处理
-                //1-当前用户对应的所有Items
-                
-
-                //2-不用做权限处理的所有Items
-
-                #endregion
-                return tmpStr;
-            */
-            return "1";
             
+            #region 0---公共变量
+            string tmpStr="";//定义方法要返回的数据
+            string tmpNameSpace = con.Owner.GetType().FullName; //当前con的路径
+            DataTable tmpUserItems = ADAct.ReadUserItems(tmpNameSpace, User_ID);//本用户有权限的对象
+            DataTable tmpUserItemsNo = ADAct.ReadUserItemsNo(tmpNameSpace);//不做权限管理的对象
+            if (tmpUserItems.Rows.Count == 0)
+            {
+                tmpStr= "没有任何权限，无法打开窗口!";
+                return tmpStr;
+            }
+            #endregion
+
+            #region 2---控件权限处理
+            List<object> tmpControls = GetWindowsControl(con);//窗口所有控件，不包括菜单
+            //取ItemsName列表
+            List<string> LsItemsName = new List<string>();
+            foreach (DataRow x in tmpUserItems.AsEnumerable())
+            {
+                LsItemsName.Add(x["Item_Name"].ToString());
+            }
+
+            List<string> LsItemsNoName=new List<string>();
+            foreach (DataRow x in tmpUserItemsNo.AsEnumerable())
+            {
+                LsItemsNoName.Add(x["Item_Name"].ToString());
+            }
+            foreach (var x in tmpControls)
+            {
+                if (LsItemsName.Contains(((System.Windows.Forms.Control)x).Name))
+                {
+                    ((System.Windows.Forms.Control)x).Enabled = true;
+                }
+                else
+                {
+                    ((System.Windows.Forms.Control)x).Enabled = false;
+                }
+            }
+            foreach (var x in tmpControls)
+            {
+                if (LsItemsNoName.Contains(((System.Windows.Forms.Control)x).Name))
+                {
+                    ((System.Windows.Forms.Control)x).Enabled = true;
+                }
+            }
+
+            //2-不用做权限处理的所有Items
+
+            #endregion
+
+            #region 2---菜单权限处理
+            #endregion
+            return tmpStr;
         }
         #endregion
     }
