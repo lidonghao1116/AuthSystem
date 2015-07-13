@@ -9,15 +9,11 @@ namespace AuthSystem.AuthModel
     /// 基础AuthModel类
     /// </summary>
     [Serializable]
-    public class AMBase:IDisposable
+    public class AMBase
     {
         public AMBase()
         {
             //TODO:初始化
-        }
-        public virtual void Dispose()
-        {
-            //
         }
     }
 }

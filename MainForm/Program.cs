@@ -18,6 +18,7 @@ namespace MainForm
             string ConnString;
             bool b;
             tmpADC.ReadConfig(AuthSystem.AuthModel.ConfigItem.ConnectionString, out ConnString, out b);
+            //ConnString = @"Password=alwcel;Persist Security Info=True;User ID=sa;Initial Catalog=NewAuth;Data Source=JD-056-AC\ACSQL";
             AuthSystem.AuthPool.APPoolGlobal.GlobalAMSystemConfig.ConnectionString = ConnString;
 
 

@@ -63,10 +63,10 @@ namespace AuthSystem.AuthForm
         #endregion
         #region 2-------本程序中用到的API函数
         [DllImport("user32.dll")]
-        public static extern bool ReleaseCapture();  //用来释放被当前线程中某个窗口捕获的光标
+        private static extern bool ReleaseCapture();  //用来释放被当前线程中某个窗口捕获的光标
 
         [DllImport("user32.dll")]
-        public static extern bool SendMessage(IntPtr hwdn, int wMsg, int mParam, int lParam);//向指定的窗体发送Windows消息
+        private static extern bool SendMessage(IntPtr hwdn, int wMsg, int mParam, int lParam);//向指定的窗体发送Windows消息
         #endregion
         #region 3-------本程序中需要声明的变量
         public const int WM_SYSCOMMAND = 0x0112;

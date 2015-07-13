@@ -26,9 +26,9 @@ namespace AuthSystem.AuthData
                 SqlConnection tmpSqlConn = new SqlConnection(ConnString);
                 return tmpSqlConn;
             }
-            catch (Exception x)
+            catch (Exception)
             {
-                throw x;
+                throw;
             }
         }
 
