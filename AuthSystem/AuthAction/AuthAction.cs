@@ -24,123 +24,135 @@ namespace AuthSystem
             ADAct.ReadToPool(AuthPool.PoolType.ItemsNo);
         }
         #region 0---取窗口数据
-        private List<object> tmpObj = new List<object>();
-        //---------------------------------------------------------------------------------------------------------
+        private List<object> tmpAllObj = new List<object>(); //1级的所有Controls
+        private List<object> tmpMenuStripObj = new List<object>(); //菜单项，不包含主名称
+        private List<object> tmpStatusStripObj = new List<object>();//状态栏项
+        private List<object> tmpToolStripObj = new List<object>();//工具栏
+
         /// <summary>
-        /// 返回当前用户的窗口的所有控件对象;
-        /// 
-        /// (只遍历三层对象容器)
-        /// (不会处理菜单项，菜单用另一个方法进行处理)
+        /// 取窗体所有控件，不包含有子控件
         /// </summary>
-        /// <param name="con">当前窗口的controls</param>
-        /// <returns>List.Object</returns>
-        public List<object> GetWindowsControl(System.Windows.Forms.Control.ControlCollection con)
+        /// <param name="Ctl"></param>
+        private void TraverControl(Control Ctl)
         {
-            try
+            foreach (Control c in Ctl.Controls)
             {
-                tmpObj.Clear();
-                TraverControl(con);
-                return tmpObj;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        //---------------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// 返回当前窗口的所有菜单项;
-        /// (只遍历三层菜单！)
-        /// </summary>
-        /// <param name="con">当前窗口的controls</param>
-        /// <returns>List.Object</returns>
-        public List<object> GetWindowsMenu(Control.ControlCollection con)
-        {
-            try
-            {
-                List<object> tmpLobj = new List<object>();
-                System.Windows.Forms.MenuStrip tmpMenu = new System.Windows.Forms.MenuStrip();
-                foreach (object x in con) //取MenuStrip对象
-                {
-                    if (x.GetType() == typeof(System.Windows.Forms.MenuStrip))
-                    {
-                        tmpMenu = (System.Windows.Forms.MenuStrip)x;
-                        break;
-                    }
-                }
-                for (int x = 0; x < tmpMenu.Items.Count; x++)
-                {
-                    tmpLobj.Add(tmpMenu.Items[x]);
-                    if (((System.Windows.Forms.ToolStripMenuItem)tmpMenu.Items[x]).DropDownItems.Count > 0)
-                    {
-                        for (int y = 0; y < ((System.Windows.Forms.ToolStripMenuItem)tmpMenu.Items[x]).DropDownItems.Count; y++)
-                        {
-                            tmpLobj.Add(((System.Windows.Forms.ToolStripMenuItem)tmpMenu.Items[x]).DropDownItems[y]);
-                            if (((System.Windows.Forms.ToolStripMenuItem)(((System.Windows.Forms.ToolStripMenuItem)tmpMenu.Items[x]).DropDownItems[y])).DropDownItems.Count > 0)
-                            {
-                                for (int z = 0; z < ((System.Windows.Forms.ToolStripMenuItem)(((System.Windows.Forms.ToolStripMenuItem)tmpMenu.Items[x]).DropDownItems[y])).DropDownItems.Count; z++)
-                                {
-                                    tmpLobj.Add(((System.Windows.Forms.ToolStripMenuItem)(((System.Windows.Forms.ToolStripMenuItem)tmpMenu.Items[x]).DropDownItems[y])).DropDownItems[z]);
-                                }
-                            }
-                        }
-                    }
-                }
-                return tmpLobj;
-            }
-            catch (Exception e)
-            {
-
-                throw e;
-            }
-        }
-
-        public void GetFormObject(Control.ControlCollection con,out List<object> FormControls,out List<object> FormMenus)
-        {
-            try
-            {
-                List<object> tmpCons = new List<object>();
-                List<object> tmpMenus = new List<object>();
-                FormControls = tmpCons;
-                FormMenus = tmpMenus;
-                Assembly ass = con.GetType().Assembly;
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-        public void TraverControl(Control.ControlCollection Con)
-        {
-            foreach (Control c in Con)
-            {
-
-                tmpObj.Add("\n" + "  " + c.Name + "  " + "\n");
-                //用于显示窗体中包含的所有的控件名，首先显示的是最外层的控件
-
+                tmpAllObj.Add(c);
                 if (c.Controls.Count == 0)
                 {
                     continue;
                 }
                 else
                 {
-                    Control.ControlCollection C = c.Controls;
+                    Control C = c;
 
                     TraverControl(C); //递归调用
                 }
             }
         }
+        /// <summary>
+        /// 根据取到的所有控件，遍历包含的子控件
+        /// </summary>
+        /// <param name="ctl"></param>
+        public void GetAllObj(Control ctl)
+        {
+            foreach (var x in tmpAllObj)
+            {
+                if (x.GetType() == typeof(MenuStrip))
+                {
+                    GetMenuStripObj(((MenuStrip)x).Items);
+                }
+                else if (x.GetType() == typeof(StatusStrip))
+                {
+                    GetStatusStripObj(((StatusStrip)x).Items);
+                }
+                else if (x.GetType() == typeof(ToolStrip))
+                {
+                    GetToolStripObj(((ToolStrip)x).Items);
+                }
+                else
+                {
+                    continue;
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// 取菜单的子控件
+        /// </summary>
+        /// <param name="ms"></param>
+        private void GetMenuStripObj(ToolStripItemCollection tsic)
+        {
+            foreach (ToolStripItem x in tsic)
+            {
+                tmpMenuStripObj.Add(x);
+                if (!x.IsOnDropDown)
+                {
+                    continue;
+                }
+                else
+                {
+                    GetMenuStripObj(((ToolStripMenuItem)x).DropDownItems);
+                }
+            }
+        }
+        private void GetStatusStripObj(ToolStripItemCollection tsic)
+        {
+            foreach (ToolStripItem x in tsic)
+            {
+                tmpStatusStripObj.Add(x);
+                if (!x.IsOnDropDown)
+                {
+                    continue;
+                }
+                else
+                {
+                    MessageBox.Show("error:Status");
+                }
+            }
+        }
+        private void GetToolStripObj(ToolStripItemCollection tsic)
+        {
+            foreach (ToolStripItem x in tsic)
+            {
+                tmpToolStripObj.Add(x);
+                if (!x.IsOnDropDown)
+                {
+                    continue;
+                }
+                else
+                {
+                    MessageBox.Show("error:Tool");
+                }
+            }
+        }
+        /// <summary>
+        /// 遍历指定窗口的所有控件
+        /// </summary>
+        /// <param name="control"></param>
+        /// <returns></returns>
+        public List<object> MainGetObj(Control control)
+        {
+            List<object> tmpObj = new List<object>();
+            tmpAllObj.Clear();
+            TraverControl(control);
+            GetAllObj(control);
+            tmpObj.AddRange(tmpAllObj);
+            tmpObj.AddRange(tmpMenuStripObj);
+            tmpObj.AddRange(tmpStatusStripObj);
+            tmpObj.AddRange(tmpToolStripObj);
+            return tmpObj;
+        }
         #endregion
 
         #region 9---窗口的权限处理
-        public string RunAuthAction(Control.ControlCollection con,string User_ID)
+        public string RunAuthAction(Control con,string User_ID)
         {
             
             #region 0---公共变量
             string tmpStr="";//定义方法要返回的数据
-            string tmpNameSpace = con.Owner.GetType().FullName; //当前con的路径
+            string tmpNameSpace = con.Controls.Owner.GetType().FullName; //当前con的路径
             DataTable tmpUserItems = ADAct.ReadUserItems(tmpNameSpace, User_ID);//本用户有权限的对象
             DataTable tmpUserItemsNo = ADAct.ReadUserItemsNo(tmpNameSpace);//不做权限管理的对象
             if (tmpUserItems.Rows.Count == 0)
@@ -151,7 +163,7 @@ namespace AuthSystem
             #endregion
 
             #region 2---控件权限处理
-            List<object> tmpControls = GetWindowsControl(con);//窗口所有控件，不包括菜单
+            List<object> tmpControls = MainGetObj(con);//窗口所有控件，不包括菜单
             //取ItemsName列表
             List<string> LsItemsName = new List<string>();
             foreach (DataRow x in tmpUserItems.AsEnumerable())
@@ -166,29 +178,27 @@ namespace AuthSystem
             }
             foreach (var x in tmpControls)
             {
-                if (LsItemsName.Contains(((System.Windows.Forms.Control)x).Name))
+                if (LsItemsName.Contains(x.GetType().GetProperty("Name").GetValue(x,null).ToString()))
                 {
-                    ((System.Windows.Forms.Control)x).Enabled = true;
+                    x.GetType().GetProperty("Enabled").SetValue(x, true, null);
                 }
                 else
                 {
-                    ((System.Windows.Forms.Control)x).Enabled = false;
+                    x.GetType().GetProperty("Enabled").SetValue(x, false, null);
                 }
             }
             foreach (var x in tmpControls)
             {
-                if (LsItemsNoName.Contains(((System.Windows.Forms.Control)x).Name))
+                if (LsItemsNoName.Contains(x.GetType().GetProperty("Name").GetValue(x, null).ToString()))
                 {
-                    ((System.Windows.Forms.Control)x).Enabled = true;
+                    x.GetType().GetProperty("Enabled").SetValue(x, true, null);
                 }
             }
 
             //2-不用做权限处理的所有Items
 
             #endregion
-
-            #region 2---菜单权限处理
-            #endregion
+            tmpStr = "true";
             return tmpStr;
         }
         #endregion

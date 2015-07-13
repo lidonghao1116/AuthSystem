@@ -17,7 +17,7 @@ namespace MainForm
         {
             AuthSystem.AuthAction act = new AuthSystem.AuthAction();
             InitializeComponent();
-            act.RunAuthAction(this.Controls,"1");
+            act.RunAuthAction(this,"1");
         }
 
         private void button1_Click(object sender, EventArgs e)
