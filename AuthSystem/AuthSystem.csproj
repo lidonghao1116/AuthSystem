@@ -47,6 +47,7 @@
     <Compile Include="AuthData\ADAction.cs" />
     <Compile Include="AuthData\ADBase.cs" />
     <Compile Include="AuthData\ADConfig.cs" />
+    <Compile Include="AuthData\XmlConfig.cs" />
     <Compile Include="AuthForm\AFAuthRuleBinding.cs">
       <SubType>Form</SubType>
     </Compile>
