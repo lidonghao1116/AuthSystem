@@ -106,10 +106,6 @@ namespace AuthSystem
                 return false;
             }
         }
-        /// <summary>
-        /// 新建配置文件，在指定路径
-        /// </summary>
-        /// <returns>返回Bool</returns>
         public static bool AddFile()
         {
             try
