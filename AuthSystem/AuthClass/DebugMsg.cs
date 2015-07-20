@@ -13,7 +13,7 @@ namespace AuthSystem
         static DebugMsg()
         {
         }
-        public static bool CloseDebugMsg;04189
+        public static bool CloseDebugMsg;
         /// <summary>
         /// 默认路径与文件名
         /// </summary>
