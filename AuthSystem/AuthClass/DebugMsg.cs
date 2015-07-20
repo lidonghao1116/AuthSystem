@@ -14,7 +14,7 @@ namespace AuthSystem
         {
         }
         /// <summary>
-        /// 获取或设置是否写入DebguMsg信息到磁盘
+        /// 获取或设置是否写入DebguMsg信息到磁盘 
         /// </summary>
         public static bool CloseDebugMsg;
         /// <summary>
