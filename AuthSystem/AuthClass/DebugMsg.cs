@@ -13,6 +13,9 @@ namespace AuthSystem
         static DebugMsg()
         {
         }
+        /// <summary>
+        /// 获取或设置是否写入DebguMsg信息到磁盘
+        /// </summary>
         public static bool CloseDebugMsg;
         /// <summary>
         /// 默认路径与文件名
@@ -35,16 +38,19 @@ namespace AuthSystem
         {
             try
             {
-                if (!hasFile())
+                if (!CloseDebugMsg)
                 {
-                    AddFile();
+                    if (!hasFile())
+                    {
+                        AddFile();
+                    }
+                    System.IO.FileStream fs = System.IO.File.Open(filePath, System.IO.FileMode.Open);
+                    byte[] tmpData = System.Text.Encoding.Default.GetBytes("[" + DateTime.Now.ToString() + "] ||| [" + ClassName + "]  [" + debugMessage + "]\r\n");
+                    fs.Position = fs.Length;
+                    fs.Write(tmpData, 0, tmpData.Length);
+                    fs.Flush();
+                    fs.Close();
                 }
-                System.IO.FileStream fs = System.IO.File.Open(filePath, System.IO.FileMode.Open);
-                byte[] tmpData = System.Text.Encoding.Default.GetBytes("[" + DateTime.Now.ToString() + "] ||| [" + ClassName + "]  [" + debugMessage + "]\r\n");
-                fs.Position = fs.Length;
-                fs.Write(tmpData, 0, tmpData.Length);
-                fs.Flush();
-                fs.Close();
             }
             catch (Exception x)
             {

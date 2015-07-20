@@ -17,7 +17,7 @@ namespace MainForm
         {
             AuthSystem.AuthAction act = new AuthSystem.AuthAction();
             InitializeComponent();
-            act.RunAuthAction(this,"1");
+            //act.RunAuthAction(this,"1");
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -67,6 +67,11 @@ namespace MainForm
         {
             AuthSystem.AuthForm.AFAuthSet tmpForm = new AuthSystem.AuthForm.AFAuthSet();
             tmpForm.ShowDialog();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            AuthSystem.DebugMsg.Add("alwcel");
         }
         
     }

@@ -43,9 +43,12 @@
             this.Form_AuthSet = new System.Windows.Forms.Button();
             this.Form_RuleItem = new System.Windows.Forms.Button();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.bt_SetPass = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.系统设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.权限管理ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.查询ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.修改ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.用户管理ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.连接设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.设置密码ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,10 +62,8 @@
             this.商品分类ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.石料ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.查询ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.修改ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bt_SetPass = new System.Windows.Forms.Button();
             this.listBox1 = new System.Windows.Forms.ListBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -82,6 +83,7 @@
             this.tableLayoutPanel1.Controls.Add(this.panel3, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel4, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.listBox1, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.button2, 2, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -232,6 +234,15 @@
             this.panel4.Size = new System.Drawing.Size(308, 203);
             this.panel4.TabIndex = 3;
             // 
+            // bt_SetPass
+            // 
+            this.bt_SetPass.Location = new System.Drawing.Point(9, 40);
+            this.bt_SetPass.Name = "bt_SetPass";
+            this.bt_SetPass.Size = new System.Drawing.Size(75, 23);
+            this.bt_SetPass.TabIndex = 1;
+            this.bt_SetPass.Text = "设置密码";
+            this.bt_SetPass.UseVisualStyleBackColor = true;
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -260,25 +271,37 @@
             this.查询ToolStripMenuItem,
             this.修改ToolStripMenuItem});
             this.权限管理ToolStripMenuItem.Name = "权限管理ToolStripMenuItem";
-            this.权限管理ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.权限管理ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.权限管理ToolStripMenuItem.Text = "权限管理";
+            // 
+            // 查询ToolStripMenuItem
+            // 
+            this.查询ToolStripMenuItem.Name = "查询ToolStripMenuItem";
+            this.查询ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.查询ToolStripMenuItem.Text = "查询";
+            // 
+            // 修改ToolStripMenuItem
+            // 
+            this.修改ToolStripMenuItem.Name = "修改ToolStripMenuItem";
+            this.修改ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.修改ToolStripMenuItem.Text = "修改";
             // 
             // 用户管理ToolStripMenuItem
             // 
             this.用户管理ToolStripMenuItem.Name = "用户管理ToolStripMenuItem";
-            this.用户管理ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.用户管理ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.用户管理ToolStripMenuItem.Text = "用户管理";
             // 
             // 连接设置ToolStripMenuItem
             // 
             this.连接设置ToolStripMenuItem.Name = "连接设置ToolStripMenuItem";
-            this.连接设置ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.连接设置ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.连接设置ToolStripMenuItem.Text = "连接设置";
             // 
             // 设置密码ToolStripMenuItem
             // 
             this.设置密码ToolStripMenuItem.Name = "设置密码ToolStripMenuItem";
-            this.设置密码ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.设置密码ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.设置密码ToolStripMenuItem.Text = "设置密码";
             // 
             // 基本资料ToolStripMenuItem
@@ -300,76 +323,55 @@
             // 成色资料ToolStripMenuItem
             // 
             this.成色资料ToolStripMenuItem.Name = "成色资料ToolStripMenuItem";
-            this.成色资料ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.成色资料ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.成色资料ToolStripMenuItem.Text = "成色资料";
             // 
             // 款式资料ToolStripMenuItem
             // 
             this.款式资料ToolStripMenuItem.Name = "款式资料ToolStripMenuItem";
-            this.款式资料ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.款式资料ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.款式资料ToolStripMenuItem.Text = "款式资料";
             // 
             // 属性资料ToolStripMenuItem
             // 
             this.属性资料ToolStripMenuItem.Name = "属性资料ToolStripMenuItem";
-            this.属性资料ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.属性资料ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.属性资料ToolStripMenuItem.Text = "属性资料";
             // 
             // 供应商资料ToolStripMenuItem
             // 
             this.供应商资料ToolStripMenuItem.Name = "供应商资料ToolStripMenuItem";
-            this.供应商资料ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.供应商资料ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.供应商资料ToolStripMenuItem.Text = "供应商资料";
             // 
             // 品牌资料ToolStripMenuItem
             // 
             this.品牌资料ToolStripMenuItem.Name = "品牌资料ToolStripMenuItem";
-            this.品牌资料ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.品牌资料ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.品牌资料ToolStripMenuItem.Text = "品牌资料";
             // 
             // 仓库资料ToolStripMenuItem
             // 
             this.仓库资料ToolStripMenuItem.Name = "仓库资料ToolStripMenuItem";
-            this.仓库资料ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.仓库资料ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.仓库资料ToolStripMenuItem.Text = "仓库资料";
             // 
             // 商品分类ToolStripMenuItem
             // 
             this.商品分类ToolStripMenuItem.Name = "商品分类ToolStripMenuItem";
-            this.商品分类ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.商品分类ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.商品分类ToolStripMenuItem.Text = "商品分类";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(133, 6);
             // 
             // 石料ToolStripMenuItem
             // 
             this.石料ToolStripMenuItem.Name = "石料ToolStripMenuItem";
-            this.石料ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.石料ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.石料ToolStripMenuItem.Text = "石料";
-            // 
-            // 查询ToolStripMenuItem
-            // 
-            this.查询ToolStripMenuItem.Name = "查询ToolStripMenuItem";
-            this.查询ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.查询ToolStripMenuItem.Text = "查询";
-            // 
-            // 修改ToolStripMenuItem
-            // 
-            this.修改ToolStripMenuItem.Name = "修改ToolStripMenuItem";
-            this.修改ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.修改ToolStripMenuItem.Text = "修改";
-            // 
-            // bt_SetPass
-            // 
-            this.bt_SetPass.Location = new System.Drawing.Point(9, 40);
-            this.bt_SetPass.Name = "bt_SetPass";
-            this.bt_SetPass.Size = new System.Drawing.Size(75, 23);
-            this.bt_SetPass.TabIndex = 1;
-            this.bt_SetPass.Text = "设置密码";
-            this.bt_SetPass.UseVisualStyleBackColor = true;
             // 
             // listBox1
             // 
@@ -380,6 +382,16 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(308, 203);
             this.listBox1.TabIndex = 4;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(631, 212);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 5;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // MainForm
             // 
@@ -441,6 +453,7 @@
         private System.Windows.Forms.ToolStripMenuItem 石料ToolStripMenuItem;
         private System.Windows.Forms.Button bt_SetPass;
         private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.Button button2;
     }
 }
 
